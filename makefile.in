@@ -8,10 +8,11 @@ exec_prefix = @exec_prefix@
 VPATH = @srcdir@
 
 CC = @CC@
-LIBS = count_bits.o pack_bytes.o msb_index.o # msb_index.x86.o
+LIBS = clz.o
+GENTABS = gentab_sincos gentab_atan2
 
 INCLUDE_HEADERS = \
-	src/liquid.fpm.h
+	src/fpm.h
 
 AUTOTESTS = 
 
@@ -49,6 +50,16 @@ libliquidfpm.dylib: $(LIBS)
 libliquidfpm.so: $(LIBS)
 	$(CC) -shared -Xlinker -soname=$@ -o $@ -Wl,-whole-archive $^ -Wl,-no-whole-archive @CLIB@
 
+# 
+# LIBRARIES
+#
+
+# generate tables
+$(GENTABS) : % : src/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+	./$< > src/$<.lut.c
+
+# library objects
 $(LIBS) : %.o : src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -93,3 +104,4 @@ clean: check-clean bench-clean
 distclean: clean
 	rm -f config.log config.cache config.status config.h makefile
 	rm -rf autom4te.cache
+

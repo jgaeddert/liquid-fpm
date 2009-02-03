@@ -3,7 +3,7 @@ dnl Liquid fixed-point math library configure
 dnl Process with autoconf to generate configure script
 dnl
 
-AC_INIT(src/liquid.fpm.h)
+AC_INIT(src/fpm.h)
 SO_NAME=0
 VERSION=0.1.0
 AC_SUBST(SO_NAME)
