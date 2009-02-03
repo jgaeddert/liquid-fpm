@@ -2,6 +2,9 @@
 // Liquid fixed-point math (FPM) library
 //
 
+#ifndef __LIQUID_FPM_H__
+#define __LIQUID_FPM_H__
+
 #include <types.h>
 
 typedef int32_t q32_t;
@@ -33,3 +36,4 @@ q32_t cimag_q32(cq32_t _y);
 void cexp_q32(cq32_t _theta, cq32_t * _y);
 void carg_q32(cq32_t _theta, cq32_t * _y);
 
+#endif // __LIQUID_FPM_H__
