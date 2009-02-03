@@ -21,19 +21,26 @@ q32_t atan2_q32(q32_t _y, q32_t _x);
 //q32_t exp_q32(q32_t _x);
 //q32_t log_q32(q32_t _x);
 q32_t log2_q32(q32_t _x);
+q32_t sqrt_q32(q32_t _x);
 
 //
 // Complex math
 //
-void cadd_q32(cq32_t _x, cq32_t _y, cq32_t * _sum);
-void csub_q32(cq32_t _x, cq32_t _y, cq32_t * _diff);
-void cmul_q32(cq32_t _x, cq32_t _y, cq32_t * _prod);
-void cdiv_q32(cq32_t _x, cq32_t _y, cq32_t * _quot);
+void cadd_q32(cq32_t _x, cq32_t _y, cq32_t _sum);
+void csub_q32(cq32_t _x, cq32_t _y, cq32_t _diff);
+void cmul_q32(cq32_t _x, cq32_t _y, cq32_t _prod);
+void cdiv_q32(cq32_t _x, cq32_t _y, cq32_t _quot);
 
-q32_t creal_q32(cq32_t _x);
-q32_t cimag_q32(cq32_t _y);
+//q32_t creal_q32(cq32_t _x);
+//q32_t cimag_q32(cq32_t _y);
+#define creal_q32(X) (X[0])
+#define cimag_q32(X) (X[1])
+
+void conj_q32(cq32_t _x);
 
 void cexp_q32(cq32_t _theta, cq32_t * _y);
 void carg_q32(cq32_t _theta, cq32_t * _y);
+q32_t cabs_q32(cq32_t _x);
+q32_t cabs2_q32(cq32_t _x);
 
 #endif // __LIQUID_FPM_H__

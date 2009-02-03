@@ -19,7 +19,7 @@
 
 #define FPM_Q32_1_BY_SQRT_2 0x0B504F33 ///< \f$ 1/sqrt(2) \f$
 
-//#define sigprocc_angle_fixed_to_double(x) (mad_f_todouble(x) / mad_f_todouble(FPM_Q32_PI) * M_PI)
+//#define fpm_angle_fixed_to_double(x) (mad_f_todouble(x) / mad_f_todouble(FPM_Q32_PI) * M_PI)
 
 extern const q32_t sin_table_q32_256[256];
 
