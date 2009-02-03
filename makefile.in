@@ -8,7 +8,12 @@ exec_prefix = @exec_prefix@
 VPATH = @srcdir@
 
 CC = @CC@
-LIBS = clz.o
+LIBS = clz.o msb_index.o trig.o \
+	sin_table_q32_256.o \
+	log2_fraction_table_32.o \
+	log2_fraction_table_256.o \
+	atan_table_q32_32_8.o
+
 GENTABS = gentab_sincos gentab_atan2
 
 INCLUDE_HEADERS = \

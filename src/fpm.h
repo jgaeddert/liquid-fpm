@@ -5,21 +5,21 @@
 #ifndef __LIQUID_FPM_H__
 #define __LIQUID_FPM_H__
 
-#include <types.h>
+#include <sys/types.h>
 
 typedef int32_t q32_t;
 //typedef int64_t cq32_t;
-typedef q32_t[2] cq32_t;
+typedef q32_t cq32_t[2];
 
 // trig functions
 q32_t sin_q32(q32_t _theta);
 q32_t cos_q32(q32_t _theta);
 void sincos_q32(q32_t _theta, q32_t * _sin, q32_t * _cos);
-q32_t atan2_q32(q32_t _r);
+q32_t atan2_q32(q32_t _y, q32_t _x);
 
 // logarithmic functions
-q32_t exp_q32(q32_t _x);
-q32_t log_q32(q32_t _x);
+//q32_t exp_q32(q32_t _x);
+//q32_t log_q32(q32_t _x);
 q32_t log2_q32(q32_t _x);
 
 //
