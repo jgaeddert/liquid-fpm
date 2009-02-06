@@ -8,7 +8,7 @@ exec_prefix = @exec_prefix@
 VPATH = @srcdir@
 
 CC = @CC@
-LIBS = clz.o msb_index.o trig.o \
+LIBS = clz.o msb_index.o trig.o libmad_fixed.o \
 	sin_table_q32_256.o \
 	log2_fraction_table_32.o \
 	log2_fraction_table_256.o \
@@ -23,8 +23,8 @@ AUTOTESTS =
 
 BENCHMARKS = 
 
-CFLAGS = -g -O2 -Wall -I. @ARCH_OPTION@ @PROFILE_OPTION@ @DEBUG_OPTION@
-BENCH_FLAGS = -g -Wall -pthread @ARCH_OPTION@ @PROFILE_OPTION@ @DEBUG_OPTION@
+CFLAGS = -g -O2 -Wall -I. @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_OPTION@
+BENCH_FLAGS = -g -Wall -pthread @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_OPTION@
 AUTOTEST_FLAGS = $(CFLAGS)
 LDFLAGS = -lm
 
@@ -51,7 +51,6 @@ libliquidfpm.dylib: $(LIBS)
 	$(CC) -dynamiclib -install_name $@ -o $@ $^
 
 # linux, et al
-#   CLIB: -lc_p (--enable-profile), -lc (--disable-profile)
 libliquidfpm.so: $(LIBS)
 	$(CC) -shared -Xlinker -soname=$@ -o $@ -Wl,-whole-archive $^ -Wl,-no-whole-archive @CLIB@
 

@@ -13,7 +13,6 @@
 //  0x80000000  :   32
 //
 
-#include "config.h"
 #include "fpm_internal.h"
 
 unsigned int msb_index(unsigned int _x)
@@ -35,8 +34,8 @@ unsigned int msb_index(unsigned int _x)
 #else
     // look for first non-zero byte
     unsigned int i, b;
-    bits = 8*SIZEOF_UNSIGNED_INT;
-    for (i=SIZEOF_UNSIGNED_INT*8; i>0; i-=8) {
+    bits = 8*SIZEOF_INT;
+    for (i=SIZEOF_INT*8; i>0; i-=8) {
         b = (_x >> (i-8)) & 0xFF;
         if ( b )
             return bits - lz8[b];
