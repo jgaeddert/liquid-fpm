@@ -48,8 +48,11 @@ void  X(_sincos)(X(_t) _theta, X(_t) * _sin, X(_t) * _cos);         \
 X(_t) X(_tan)(X(_t) _theta);                                        \
 X(_t) X(_atan2)(X(_t) _x, X(_t) _y);                                \
                                                                     \
-/* log */                                                           \
-X(_t) X(_log2)(X(_t) _x);
+/* log, etc. */                                                     \
+X(_t) X(_log2)(X(_t) _x);                                           \
+X(_t) X(_exp) (X(_t) _x);                                           \
+X(_t) X(_sqrt)(X(_t) _x);                                           \
+X(_t) X(_pow) (X(_t) _x);
 
 
 LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)
@@ -59,11 +62,24 @@ LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)
  * X        :   name-mangling macro (complex)
  * Q        :   name-mangling macro (real)
  */
-#define LIQUIDFPM_DEFINE_COMPLEX_API(X,Q)               \
-typedef struct {Q(_t) real; Q(_t) imag;} X(_t);         \
-inline Q(_t) X(_real)(X(_t) _a) {return _a.real;};      \
-inline Q(_t) X(_imag)(X(_t) _a) {return _a.imag;};      \
-X(_t) X(_add)(X(_t) _a, X(_t) _b);
+#define LIQUIDFPM_DEFINE_COMPLEX_API(X,Q)                           \
+typedef struct {Q(_t) real; Q(_t) imag;} X(_t);                     \
+                                                                    \
+/* accessor functions */                                            \
+inline Q(_t) X(_real)(X(_t) _a) {return _a.real;};                  \
+inline Q(_t) X(_imag)(X(_t) _a) {return _a.imag;};                  \
+X(_t) X(_conj)(X(_t) _a);                                           \
+                                                                    \
+/* arithmetic */                                                    \
+X(_t) X(_add)(X(_t) _a, X(_t) _b);                                  \
+X(_t) X(_sub)(X(_t) _a, X(_t) _b);                                  \
+X(_t) X(_mul)(X(_t) _a, X(_t) _b);                                  \
+X(_t) X(_div)(X(_t) _a, X(_t) _b);                                  \
+                                                                    \
+/* trig */                                                          \
+X(_t) X(_cexp)(X(_t) _x);                                           \
+Q(_t) X(_carg)(X(_t) _x);/* { return Q(_atan2)(_x.imag, _x.real); }; */   \
+Q(_t) X(_abs) (X(_t) _x);
 
 LIQUIDFPM_DEFINE_COMPLEX_API(LIQUIDFPM_MANGLE_CQ32, LIQUIDFPM_MANGLE_Q32)
 
