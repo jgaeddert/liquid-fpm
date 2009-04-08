@@ -26,9 +26,31 @@ extern "C" {
  * INTBITS  :   number of integer bits
  * FRACBITS :   number of fractional bits
  */
-#define LIQUIDFPM_DEFINE_API(X,T,INTBITS,FRACBITS)                \
-typedef T X(_t);      \
-X(_t) X(_add)(X(_t) _a, X(_t) _b);
+#define LIQUIDFPM_DEFINE_API(X,T,INTBITS,FRACBITS)                  \
+typedef T X(_t);                                                    \
+                                                                    \
+/* conversion */                                                    \
+inline float X(_fixed_to_float)(X(_t) _x)                           \
+    { return (float) (_x) / (float)(1 << FRACBITS); };              \
+inline X(_t) X(_float_to_fixed)(float _x)                           \
+    { return (X(_t)) (_x * (float)(1 << FRACBITS) + 0.5f); };       \
+                                                                    \
+/* arithmetic */                                                    \
+inline X(_t) X(_add)(X(_t) _a, X(_t) _b) {return _a + _b;};         \
+inline X(_t) X(_sub)(X(_t) _a, X(_t) _b) {return _a - _b;};         \
+inline X(_t) X(_mul)(X(_t) _a, X(_t) _b) {return (_a * _b) >> FRACBITS;};                           \
+X(_t) X(_div)(X(_t) _a, X(_t) _b);                                  \
+                                                                    \
+/* trig */                                                          \
+X(_t) X(_sin)(X(_t) _theta);                                        \
+X(_t) X(_cos)(X(_t) _theta);                                        \
+void  X(_sincos)(X(_t) _theta, X(_t) * _sin, X(_t) * _cos);         \
+X(_t) X(_tan)(X(_t) _theta);                                        \
+X(_t) X(_atan2)(X(_t) _x, X(_t) _y);                                \
+                                                                    \
+/* log */                                                           \
+X(_t) X(_log2)(X(_t) _x);
+
 
 LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)
 
