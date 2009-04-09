@@ -2,12 +2,29 @@
 # Makefile for liquid fixed-point math libraries
 #
 
-srcdir = @srcdir@
-prefix = @prefix@
-exec_prefix = @exec_prefix@
-VPATH = @srcdir@
+# paths
+srcdir = 	@srcdir@
+prefix = 	@prefix@
+exec_prefix = 	@exec_prefix@
+VPATH = 	@srcdir@
+include_dirs	:= . include
+vpath %.h $(include_dirs)
 
-CC = @CC@
+# programs
+CC 	= @CC@
+MV	:= mv -f
+RM	:= rm -f
+SED	:= sed
+AR	:= ar
+RANLIB	:= ranlib
+
+# flags
+INCLUDE_CFLAGS	= $(addprefix -I ,$(include_dirs))
+CONFIG_CFLAGS	= @ARCH_OPTION@
+CFLAGS		+= $(INCLUDE_CFLAGS) -g -O2 -Wall -I. @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_OPTION@
+LDFLAGS		+= @LIBS@
+ARFLAGS		= r
+
 LIBS = clz.o msb_index.o trig.o libmad_fixed.o \
 	sin_table_q32_256.o \
 	log2_fraction_table_32.o \
@@ -23,10 +40,8 @@ AUTOTESTS =
 
 BENCHMARKS = 
 
-CFLAGS = -g -O2 -Wall -I. @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_OPTION@
 BENCH_FLAGS = -g -Wall -pthread @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_OPTION@
 AUTOTEST_FLAGS = $(CFLAGS)
-LDFLAGS = -lm
 
 SHARED_LIB = @SH_LIB@
 

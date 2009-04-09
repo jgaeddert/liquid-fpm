@@ -13,7 +13,7 @@
 //  0x80000000  :   32
 //
 
-#include "fpm_internal.h"
+#include "liquidfpm.internal.h"
 
 unsigned int msb_index(unsigned int _x)
 {
