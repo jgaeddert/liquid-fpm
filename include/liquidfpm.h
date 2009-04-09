@@ -52,7 +52,10 @@ X(_t) X(_atan2)(X(_t) _x, X(_t) _y);                                \
 X(_t) X(_log2)(X(_t) _x);                                           \
 X(_t) X(_exp) (X(_t) _x);                                           \
 X(_t) X(_sqrt)(X(_t) _x);                                           \
-X(_t) X(_pow) (X(_t) _x);
+X(_t) X(_pow) (X(_t) _x);                                           \
+                                                                    \
+/* vector operations */                                             \
+X(_t) X(_dotprod)(X(_t) * _x, X(_t) * _v, unsigned int _n);
 
 
 LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)
