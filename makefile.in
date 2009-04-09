@@ -39,7 +39,7 @@ install:
 	@REBIND@
 	mkdir -p @includedir@
 	mkdir -p @includedir@/liquid
-	install -m 644 -p include/liquid.h @includedir@/liquid
+	install -m 644 -p include/liquidfpm.h @includedir@/liquid
 	install -m 644 -p $(INCLUDE_HEADERS) @includedir@/liquid
 	
 libliquidfpm.a: $(LIBS)
