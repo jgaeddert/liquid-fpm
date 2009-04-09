@@ -92,3 +92,7 @@ Documentation organization
     Module2
         ...
 
+
+Help:
+http://x86asm.net/articles/working-with-big-numbers-using-x86-instructions/
+

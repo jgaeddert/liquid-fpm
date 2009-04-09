@@ -98,8 +98,23 @@ $(GENTABS) : % : src/%.c
 $(LIBS) : %.o : src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-clean: check-clean bench-clean
-	rm -f *.o $(SHARED_LIB) *.a
+#
+# Tests
+#
+tests: fpmtest.x86
+
+q32_mul.x86.o: q32_mul.x86.s
+
+fpmtest.o: fpmtest.c include/liquidfpm.h
+
+fpmtest.x86: fpmtest.o q32_mul.x86.o
+	$(CC) $^ -o $@
+
+#
+# clean
+#
+clean:
+	rm -f *.o $(SHARED_LIB) *.a fpmtest.x86
 
 distclean: clean
 	rm -f config.log config.cache config.status config.h makefile
