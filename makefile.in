@@ -25,6 +25,32 @@ CFLAGS		+= $(INCLUDE_CFLAGS) -g -O2 -Wall -I. @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_
 LDFLAGS		+= @LIBS@
 ARFLAGS		= r
 
+# Target collection
+#
+# Information about targets is collected in these variables
+programs		:=
+sources			:=
+libraries		:=
+extra_clean		:=
+
+objects		= $(patsubst %.c,%.o,$(sources))
+dependencies	= $(patsubst %.c,%.d,$(sources))
+
+# Dependencies
+# Use compiler's -M flags (and equivalent) to parse source files
+# and create a list of dependencies.  Each list is stored in a
+# .d file and included, below.
+#
+%.d: %.c 
+	$(CC) $(CFLAGS) -MM -MG $< | $(SED) 's,\($(notdir $*)\.o\) *:,$(dir $@)\1 $@: ,' > $@
+include $(dependencies)
+
+sources  +=			\
+	clz.c			\
+	msb_index.c		\
+	tric.c
+
+
 LIBS = clz.o msb_index.o trig.o libmad_fixed.o \
 	sin_table_q32_256.o \
 	log2_fraction_table_32.o \
@@ -32,16 +58,6 @@ LIBS = clz.o msb_index.o trig.o libmad_fixed.o \
 	atan_table_q32_32_8.o
 
 GENTABS = gentab_sincos gentab_atan2
-
-INCLUDE_HEADERS = \
-	src/fpm.h
-
-AUTOTESTS = 
-
-BENCHMARKS = 
-
-BENCH_FLAGS = -g -Wall -pthread @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_OPTION@
-AUTOTEST_FLAGS = $(CFLAGS)
 
 SHARED_LIB = @SH_LIB@
 
@@ -52,21 +68,21 @@ install:
 	mkdir -p @libdir@
 	install -m 644 -p $(SHARED_LIB) libliquidfpm.a @libdir@
 	@REBIND@
-	mkdir -p @includedir@
-	mkdir -p @includedir@/liquid
-	install -m 644 -p include/liquidfpm.h @includedir@/liquid
-	install -m 644 -p $(INCLUDE_HEADERS) @includedir@/liquid
+	mkdir -p $(prefix)/include
+	mkdir -p $(prefix)/include/liquid
+	install -m 644 -p include/liquidfpm.h $(prefix)/include/liquid
 	
-libliquidfpm.a: $(LIBS)
-	ar r $@ $^
-	ranlib libliquidfpm.a
+# Library definition
+libliquidfpm.a: $(objects)
+	$(AR) $(ARFLAGS) $@ $^
+	$(RANLIB) $@
 
 # darwin
-libliquidfpm.dylib: $(LIBS)
+libliquidfpm.dylib: $(objects)
 	$(CC) -dynamiclib -install_name $@ -o $@ $^
 
 # linux, et al
-libliquidfpm.so: $(LIBS)
+libliquidfpm.so: $(libraries)
 	$(CC) -shared -Xlinker -soname=$@ -o $@ -Wl,-whole-archive $^ -Wl,-no-whole-archive @CLIB@
 
 # 
@@ -81,41 +97,6 @@ $(GENTABS) : % : src/%.c
 # library objects
 $(LIBS) : %.o : src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
-
-#
-# Autotests
-#
-autotest_include.h: $(AUTOTESTS)
-	python autotest/autotest_gen.py $(AUTOTESTS)
-
-xautotest: autotest_include.h autotest/autotest.c $(LIBS)
-	$(CC) $(AUTOTEST_FLAGS) $(LIBS) $(LDFLAGS) autotest/autotest.c -o xautotest
-
-check: xautotest
-	./xautotest -v
-
-check-clean:
-	rm -f autotest_include.h xautotest
-
-# 
-# Benchmarks
-#
-benchmark_include.h: $(BENCHMARKS) bench/benchmarkgen.py
-	python bench/benchmarkgen.py $(BENCHMARKS)
-
-# ignore optimization flags
-benchmark: benchmark_include.h bench/bench.c $(LIBS)
-	$(CC) $(BENCH_FLAGS) $(LIBS) $(LDFLAGS) bench/bench.c -o benchmark
-
-bench: benchmark
-	./benchmark
-
-bench-clean:
-	rm -f benchmark_include.h benchmark
-
-#
-# Examples
-#
 
 clean: check-clean bench-clean
 	rm -f *.o $(SHARED_LIB) *.a
