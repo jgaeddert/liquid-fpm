@@ -25,7 +25,7 @@ CONFIG_CFLAGS	= @ARCH_OPTION@
 CFLAGS		+= $(INCLUDE_CFLAGS) -g -O2 -Wall -I. @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_OPTION@
 LDFLAGS		+= @LIBS@
 ARFLAGS		= r
-ASFLAGS		+= -arch ppc7400
+#ASFLAGS		+= -arch ppc7400
 
 # Target collection
 #
