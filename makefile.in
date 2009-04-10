@@ -103,6 +103,8 @@ $(LIBS) : %.o : src/%.c
 #
 tests: fpmtest.x86
 
+q32_mul.port.o: q32_mul.port.c
+
 q32_mul.x86.o: q32_mul.x86.s
 
 q32_mul.intelmac.o: q32_mul.intelmac.s
@@ -113,6 +115,9 @@ fpmtest.x86: fpmtest.o q32_mul.x86.o
 	$(CC) $^ -o $@
 
 fpmtest.intelmac: fpmtest.o q32_mul.intelmac.o
+	$(CC) $^ -o $@
+
+fpmtest.port: fpmtest.o q32_mul.port.o
 	$(CC) $^ -o $@
 
 #
