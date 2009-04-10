@@ -23,6 +23,7 @@ AS	:= as
 INCLUDE_CFLAGS	= $(addprefix -I ,$(include_dirs))
 CONFIG_CFLAGS	= @ARCH_OPTION@
 CFLAGS		+= $(INCLUDE_CFLAGS) -g -O2 -Wall -I. @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_OPTION@
+CFLAGS		+= -std=c99
 LDFLAGS		+= @LIBS@
 ARFLAGS		= r
 #ASFLAGS		+= -arch ppc7400
@@ -47,7 +48,8 @@ dependencies	= $(patsubst %.c,%.d,$(sources))
 	$(CC) $(CFLAGS) -MM -MG $< | $(SED) 's,\($(notdir $*)\.o\) *:,$(dir $@)\1 $@: ,' > $@
 include $(dependencies)
 
-sources  +=
+sources  +=			\
+	q32_dotprod.port.o
 
 objects += @MLIBS@
 XLIBS = clz.o msb_index.o trig.o libmad_fixed.o \
