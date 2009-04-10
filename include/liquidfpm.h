@@ -28,6 +28,8 @@ extern "C" {
  */
 #define LIQUIDFPM_DEFINE_API(X,T,INTBITS,FRACBITS)                  \
 typedef T X(_t);                                                    \
+const static unsigned int X(_intbits) = INTBITS;                    \
+const static unsigned int X(_fracbits) = FRACBITS;                  \
                                                                     \
 /* conversion */                                                    \
 inline float X(_fixed_to_float)(X(_t) _x)                           \
