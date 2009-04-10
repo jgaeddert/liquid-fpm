@@ -49,25 +49,32 @@ case $target_cpu in
 i386|i486|i586|i686)
     ARCH_OPTION="-march=$target_cpu"
     FPM_OPTION="-DFPM_INTEL"
+    MLIBS="q32_mul.x86.o"
     AC_DEFINE(FPM_INTEL, 1, [Intel]);;
 ppc|powerpc*)
     ARCH_OPTION="-fno-common -faltivec"
     FPM_OPTION="-DFPM_PPC"
+    MLIBS="q32_mul.ppc.o"
     AC_DEFINE(FPM_PPC, 1, [Power PC]);;
 arm)
     FPM_OPTION="-DFPM_ARM"
+    MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_ARM, 1, [ARM]);;
 mips)
     FPM_OPTION="-DFPM_MIPS"
+    MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_MIPS, 1, [MIPS]);;
 sparc)
     FPM_OPTION="-DFPM_SPARC"
+    MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_SPARC, 1, [SPARC]);;
 64bit)
     FPM_OPTION="-DFPM_64BIT"
+    MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_64BIT, 1, [64-bit]);;
 *)
     FPM_OPTION="-DFPM_DEFAULT"
+    MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_DEFAULT, 1, [Default]);;
 esac
 
@@ -84,6 +91,7 @@ esac
 AC_SUBST(SH_LIB)
 AC_SUBST(REBIND)
 AC_SUBST(ARCH_OPTION)
+AC_SUBST(MLIBS)
 
 AC_SUBST(DEBUG_OPTION)
 AC_SUBST(FPM_OPTION)
