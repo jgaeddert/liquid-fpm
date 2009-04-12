@@ -37,11 +37,11 @@ then
 fi
 
 dnl Check for necessary library functions
-#AC_CHECK_FUNCS(memset memcpy memmove)
+dnl AC_CHECK_FUNCS(memset memcpy memmove)
 
 dnl Check size of certain variables
 AC_CHECK_SIZEOF(int)
-#AC_CHECK_SIZEOF(unsigned int)
+dnl AC_CHECK_SIZEOF(unsigned int)
 
 dnl Check canonical system
 AC_CANONICAL_SYSTEM
@@ -50,32 +50,39 @@ i386|i486|i586|i686)
     ARCH_OPTION="-march=$target_cpu"
     FPM_OPTION="-DFPM_INTEL"
     MLIBS="q32_mul.x86.o"
-    AC_DEFINE(FPM_INTEL, 1, [Intel]);;
+    AC_DEFINE(FPM_INTEL, 1, [Intel])
+    ;;
 ppc|powerpc*)
     ARCH_OPTION="-fno-common -faltivec"
     FPM_OPTION="-DFPM_PPC"
     MLIBS="q32_mul.ppc.o"
-    AC_DEFINE(FPM_PPC, 1, [Power PC]);;
+    AC_DEFINE(FPM_PPC, 1, [Power PC])
+    ;;
 arm)
     FPM_OPTION="-DFPM_ARM"
     MLIBS="q32_mul.port.o"
-    AC_DEFINE(FPM_ARM, 1, [ARM]);;
+    AC_DEFINE(FPM_ARM, 1, [ARM])
+    ;;
 mips)
-    FPM_OPTION="-DFPM_MIPS"
+    fpm_optiON="-DFPM_MIPS"
     MLIBS="q32_mul.port.o"
-    AC_DEFINE(FPM_MIPS, 1, [MIPS]);;
+    AC_DEFINE(FPM_MIPS, 1, [MIPS])
+    ;;
 sparc)
     FPM_OPTION="-DFPM_SPARC"
     MLIBS="q32_mul.port.o"
-    AC_DEFINE(FPM_SPARC, 1, [SPARC]);;
+    AC_DEFINE(FPM_SPARC, 1, [SPARC])
+    ;;
 64bit)
     FPM_OPTION="-DFPM_64BIT"
     MLIBS="q32_mul.port.o"
-    AC_DEFINE(FPM_64BIT, 1, [64-bit]);;
+    AC_DEFINE(FPM_64BIT, 1, [64-bit])
+    ;;
 *)
     FPM_OPTION="-DFPM_DEFAULT"
     MLIBS="q32_mul.port.o"
-    AC_DEFINE(FPM_DEFAULT, 1, [Default]);;
+    AC_DEFINE(FPM_DEFAULT, 1, [Default])
+    ;;
 esac
 
 case $target_os in
@@ -91,6 +98,9 @@ esac
 AC_SUBST(SH_LIB)
 AC_SUBST(REBIND)
 AC_SUBST(ARCH_OPTION)
+
+dnl MLIBS defined the additional architecture-specific library objects to
+dnl build.
 AC_SUBST(MLIBS)
 
 AC_SUBST(DEBUG_OPTION)
