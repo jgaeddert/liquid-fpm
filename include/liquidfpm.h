@@ -41,7 +41,7 @@ static inline X(_t) X(_float_to_fixed)(float _x)                    \
 static inline X(_t) X(_abs)(X(_t) _x) {return (_x<0) ? -_x : _x;};  \
 static inline X(_t) X(_add)(X(_t) _a, X(_t) _b) {return _a + _b;};  \
 static inline X(_t) X(_sub)(X(_t) _a, X(_t) _b) {return _a - _b;};  \
-extern X(_t) X(_mul)(X(_t) _a, X(_t) _b);                           \
+X(_t) X(_mul)(X(_t) _a, X(_t) _b);                                  \
 X(_t) X(_div)(X(_t) _a, X(_t) _b);                                  \
                                                                     \
 /* trig */                                                          \

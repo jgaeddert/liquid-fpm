@@ -96,7 +96,7 @@ void fpmtest_q32_sub()
 void fpmtest_q32_mul()
 {
     printf("testing multiplication...\n");
-    float x = 0.25f;
+    float x = 1/3.0f;
     float y = 2.25f;
 
     q32_t a = q32_float_to_fixed(x);
