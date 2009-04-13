@@ -32,14 +32,14 @@ const static unsigned int X(_intbits) = INTBITS;                    \
 const static unsigned int X(_fracbits) = FRACBITS;                  \
                                                                     \
 /* conversion */                                                    \
-inline float X(_fixed_to_float)(X(_t) _x)                           \
+static inline float X(_fixed_to_float)(X(_t) _x)                    \
     { return (float) (_x) / (float)(1 << FRACBITS); };              \
-inline X(_t) X(_float_to_fixed)(float _x)                           \
+static inline X(_t) X(_float_to_fixed)(float _x)                    \
     { return (X(_t)) (_x * (float)(1 << FRACBITS) + 0.5f); };       \
                                                                     \
 /* arithmetic */                                                    \
-inline X(_t) X(_add)(X(_t) _a, X(_t) _b) {return _a + _b;};         \
-inline X(_t) X(_sub)(X(_t) _a, X(_t) _b) {return _a - _b;};         \
+static inline X(_t) X(_add)(X(_t) _a, X(_t) _b) {return _a + _b;};  \
+static inline X(_t) X(_sub)(X(_t) _a, X(_t) _b) {return _a - _b;};  \
 extern X(_t) X(_mul)(X(_t) _a, X(_t) _b);                           \
 X(_t) X(_div)(X(_t) _a, X(_t) _b);                                  \
                                                                     \
@@ -71,8 +71,8 @@ LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)
 typedef struct {Q(_t) real; Q(_t) imag;} X(_t);                     \
                                                                     \
 /* accessor functions */                                            \
-inline Q(_t) X(_real)(X(_t) _a) {return _a.real;};                  \
-inline Q(_t) X(_imag)(X(_t) _a) {return _a.imag;};                  \
+static inline Q(_t) X(_real)(X(_t) _a) {return _a.real;};           \
+static inline Q(_t) X(_imag)(X(_t) _a) {return _a.imag;};           \
 X(_t) X(_conj)(X(_t) _a);                                           \
                                                                     \
 /* arithmetic */                                                    \

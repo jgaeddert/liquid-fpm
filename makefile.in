@@ -23,7 +23,6 @@ AS	:= as
 INCLUDE_CFLAGS	= $(addprefix -I ,$(include_dirs))
 CONFIG_CFLAGS	= @ARCH_OPTION@
 CFLAGS		+= $(INCLUDE_CFLAGS) -g -O2 -Wall -I. @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_OPTION@
-CFLAGS		+= -std=c99
 LDFLAGS		+= @LIBS@
 ARFLAGS		= r
 ASFLAGS		+= -g
@@ -104,11 +103,12 @@ $(LIBS) : %.o : src/%.c
 # Tests
 #
 test: fpmtest
+	./fpmtest
 
 fpmtest.o: fpmtest.c include/liquidfpm.h
 
 fpmtest: fpmtest.o libliquidfpm.a
-	$(CC) $^ $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
 
 #q32_mul.port.o: q32_mul.port.c
 
