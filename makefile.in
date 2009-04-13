@@ -39,6 +39,13 @@ extra_clean		:=
 objects		= $(patsubst %.c,%.o,$(sources))
 dependencies	= $(patsubst %.c,%.d,$(sources))
 
+all:
+
+
+sources  +=			\
+	q32_dotprod.port.c	\
+	src/clz.c
+
 # Dependencies
 # Use compiler's -M flags (and equivalent) to parse source files
 # and create a list of dependencies.  Each list is stored in a
@@ -47,9 +54,6 @@ dependencies	= $(patsubst %.c,%.d,$(sources))
 %.d: %.c 
 	$(CC) $(CFLAGS) -MM -MG $< | $(SED) 's,\($(notdir $*)\.o\) *:,$(dir $@)\1 $@: ,' > $@
 include $(dependencies)
-
-sources  +=			\
-	q32_dotprod.port.o
 
 objects += @MLIBS@
 XLIBS = clz.o msb_index.o trig.o libmad_fixed.o \
@@ -124,6 +128,7 @@ fpmtest: fpmtest.o libliquidfpm.a
 #
 clean:
 	rm -f *.o $(SHARED_LIB) *.a fpmtest
+	$(RM) $(dependencies)
 
 distclean: clean
 	rm -f config.log config.cache config.status config.h makefile
