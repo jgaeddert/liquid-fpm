@@ -46,6 +46,15 @@ sources  +=			\
 	q32_dotprod.port.c	\
 	src/clz.c
 
+gentab_progs = gentab/gentab_math
+gentab_sources = gentab/gentab_test.c
+
+gentab_objects	= $(patsubst %.c,%.o,$(gentab_sources))
+objects		+= $(gentab_objects)
+
+gentab/gentab_test.c: $(gentab_progs)
+	./gentab/gentab_math > gentab/gentab_test.c
+
 # Dependencies
 # Use compiler's -M flags (and equivalent) to parse source files
 # and create a list of dependencies.  Each list is stored in a
@@ -61,8 +70,6 @@ XLIBS = clz.o msb_index.o trig.o libmad_fixed.o \
 	log2_fraction_table_32.o \
 	log2_fraction_table_256.o \
 	atan_table_q32_32_8.o
-
-GENTABS = gentab_sincos gentab_atan2
 
 SHARED_LIB = @SH_LIB@
 
@@ -95,9 +102,11 @@ libliquidfpm.so: $(libraries)
 #
 
 # generate tables
-$(GENTABS) : % : src/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
-	./$< > src/$<.lut.c
+#$(GENTABS) : % : src/%.c
+#	$(CC) $(CFLAGS) -c $< -o $@
+#	./$< > src/$<.lut.c
+
+$(gentab_progs) : % : %.c
 
 # library objects
 $(LIBS) : %.o : src/%.c
@@ -127,8 +136,14 @@ fpmtest: fpmtest.o libliquidfpm.a
 # clean
 #
 clean:
-	rm -f *.o $(SHARED_LIB) *.a fpmtest
+	$(RM) $(objects)
 	$(RM) $(dependencies)
+	$(RM) $(SHARED_LIB)
+	$(RM) libliquidfpm.a
+	$(RM) fpmtest
+	$(RM) $(gentab_objects)
+	$(RM) $(gentab_sources)
+	$(RM) $(gentab_progs)
 
 distclean: clean
 	rm -f config.log config.cache config.status config.h makefile

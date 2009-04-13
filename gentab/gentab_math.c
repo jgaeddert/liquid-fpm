@@ -67,13 +67,19 @@ int main(int argc, char * argv[]) {
 
     // generate the table
 
-    printf("generating table:\n");
-    printf("  fracbits  : %u\n", fracbits);
-    printf("  intbits   : %u\n", intbits);
-    printf("  res       : %u\n", res);
-    printf("  varname   : %s\n", varname);
-    printf("  type      : %s\n", typename);
-    printf("  filename  : %s\n", filename);
+    fprintf(fid,"//  fracbits  : %u\n", fracbits);
+    fprintf(fid,"//  intbits   : %u\n", intbits);
+    fprintf(fid,"//  res       : %u\n", res);
+    fprintf(fid,"//  varname   : %s\n", varname);
+    fprintf(fid,"//  type      : %s\n", typename);
+    fprintf(fid,"//  filename  : %s\n", filename);
+
+    fprintf(fid,"\n\n");
+    fprintf(fid,"const int gentab_var=5;\n");
+
+    fprintf(fid,"\n\n");
+
+    return 0;
 }
 
 void usage()
