@@ -5,9 +5,8 @@
 #ifndef __LIQUID_FPM_INTERNAL_H__
 #define __LIQUID_FPM_INTERNAL_H__
 
-#include "fpm.h"
-
-#define FRACBITS 28
+#include "liquidfpm.h"
+#include "config.h"
 
 //
 // Trigonometric helper functions, arrays, constants

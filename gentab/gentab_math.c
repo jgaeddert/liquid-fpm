@@ -67,6 +67,8 @@ int main(int argc, char * argv[]) {
 
     // generate the table
 
+    fprintf(fid,"// %s : auto-generated file (do not edit)\n\n", varname);
+
     fprintf(fid,"//  fracbits  : %u\n", fracbits);
     fprintf(fid,"//  intbits   : %u\n", intbits);
     fprintf(fid,"//  res       : %u\n", res);
@@ -74,7 +76,9 @@ int main(int argc, char * argv[]) {
     fprintf(fid,"//  type      : %s\n", typename);
     fprintf(fid,"//  filename  : %s\n", filename);
 
-    fprintf(fid,"\n\n");
+    fprintf(fid,"\n");
+    fprintf(fid,"#include \"liquidfpm.internal.h\"\n\n");
+
     fprintf(fid,"const int gentab_var=5;\n");
 
     fprintf(fid,"\n\n");
