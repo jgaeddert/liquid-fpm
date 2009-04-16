@@ -7,6 +7,8 @@
 
 #include "liquidfpm.internal.h"
 
+#define ACCURACY_LEVEL  0
+
 q32_t log2_q32( q32_t _x )
 {
     if (_x <= 0) {
@@ -23,16 +25,17 @@ q32_t log2_q32( q32_t _x )
     // apply 8-bit mask
     f &= 0x00ff;
 
-    //log2_base_frac_index(_x, &b, &f);
-
-    // x000,0100 0000 0000... : 1/4  > -2, b=26
-    // x000,1000 0000 0000... : 1/2  > -1, b=27
-    // x001,0000 0000 0000... : 1    >  0, b=28
-    // x010,0000 0000 0000... : 2    >  1, b=29
-    // x100,0000 0000 0000... : 4    >  3, b=30
-
+    // normalize by decimal position
     b -= q32_fracbits;
+
+#if ACCURACY_LEVEL == 0
+    q32_t frac = f << (q32_fracbits-8);
+#elif ACCURACY_LEVEL == 1
     q32_t frac = q32_log2_fraction_table[f];
+#else
+#   error "unknown/unsupported accuracy level"
+#endif
+
     printf("    log2(%f) = %d + %12.10f\n", q32_fixed_to_float(_x), b, q32_fixed_to_float(frac));
 
     if (b >= 0 ) {
