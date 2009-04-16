@@ -15,6 +15,8 @@ void fpmtest_q32_mul();
 void fpmtest_q32_div();
 void fpmtest_q32_log2();
 
+void fpmtest_q32_dotprod();
+
 int main() {
     fpmtest_q32_conversion();
     fpmtest_q32_abs();
@@ -23,6 +25,8 @@ int main() {
     fpmtest_q32_mul();
     fpmtest_q32_div();
     fpmtest_q32_log2();
+
+    fpmtest_q32_dotprod();
 
     printf("testing complex...\n");
     cq32_t y = {3,5};
@@ -137,7 +141,7 @@ void fpmtest_q32_dotprod()
     // compute fixed-point dot product
     q32_t dp = q32_dotprod(x,v,10);
 
-    printf("dp : 0x%.8x (%8.5f, expected %8.5f)\n",
+    printf("    dotprod : 0x%.8x (%8.5f, expected %8.5f)\n",
         dp,
         q32_fixed_to_float(dp),
         dpf);
