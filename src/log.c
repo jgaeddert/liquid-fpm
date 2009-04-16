@@ -7,7 +7,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define ACCURACY_LEVEL  0
+#define ACCURACY_LEVEL  1
 
 q32_t log2_q32( q32_t _x )
 {
