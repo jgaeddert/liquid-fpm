@@ -20,10 +20,10 @@
 
 //#define fpm_angle_fixed_to_double(x) (mad_f_todouble(x) / mad_f_todouble(FPM_Q32_PI) * M_PI)
 
-extern const q32_t sin_table_q32_256[256];
+//extern const q32_t sin_table_q32_256[256];
 
 // fractional portion, \f$ f \f$ of log2, \f$ log2(x) = b + f/256 \f$
-extern const unsigned int log2_fraction_table_256[256];
+//extern const unsigned int log2_fraction_table_256[256];
 extern const unsigned int log2_fraction_table_32[32];
 
 //
@@ -45,5 +45,20 @@ unsigned int clz(unsigned int _x);
 
 // index of most significant bit
 unsigned int msb_index(unsigned int _x);
+
+/* Internal API definition macro
+ *
+ * X        :   name-mangling macro
+ * T        :   primitive data type
+ * INTBITS  :   number of integer bits
+ * FRACBITS :   number of fractional bits
+ */
+#define LIQUIDFPM_DEFINE_INTERNAL_API(X,T,INTBITS,FRACBITS)         \
+                                                                    \
+/* auto-generated look-up tables */                                 \
+extern const X(_t) X(_sin_table)[256];                              \
+extern const X(_t) X(_log2_fraction_table)[256];
+
+LIQUIDFPM_DEFINE_INTERNAL_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)
 
 #endif // __LIQUID_FPM_INTERNAL_H__
