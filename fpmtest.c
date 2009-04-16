@@ -22,10 +22,12 @@ int main() {
     fpmtest_q32_mul();
     fpmtest_q32_div();
 
-    return 0;
     printf("testing complex...\n");
     cq32_t y = {3,5};
     printf("y = %d + j %d\n", y.real, y.imag);
+
+    printf("testing log2...\n");
+    log2_q32( q32_float_to_fixed(0.1f) );
 
     printf("done.\n");
     return 0;

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "fpm_internal.h"
+#include "liquidfpm.internal.h"
 
 q32_t log2_q32( q32_t _x )
 {
@@ -14,10 +14,13 @@ q32_t log2_q32( q32_t _x )
         return 0;
     }
     
-    int b; // base index
-    int f; // 8-bit fraction
+    // base index
+    int b = msb_index(_x) - 1;
 
-    log2_base_frac_index(_x, &b, &f);
+    // compute 8-bit fractional portion
+    q32_t f = (b < 8) ? (_x<<(8-b)) : (_x>>(b-8));
+
+    //log2_base_frac_index(_x, &b, &f);
 
     // x000,0100 0000 0000... : 1/4  > -2, b=26
     // x000,1000 0000 0000... : 1/2  > -1, b=27
@@ -25,7 +28,7 @@ q32_t log2_q32( q32_t _x )
     // x010,0000 0000 0000... : 2    >  1, b=29
     // x100,0000 0000 0000... : 4    >  3, b=30
 
-    b -= FRACBITS;
+    b -= q32_fracbits;
     if (b >= 0 ) {
         // resulting log will be positive
         //return (b << MAD_F_FRACBITS) + log2_fraction_table_q32_256[f];
@@ -33,6 +36,10 @@ q32_t log2_q32( q32_t _x )
         // resulting log will be negative
         //return -(abs(b) << MAD_F_FRACBITS) - log2_fraction_table_q32_256[f];
     }
+
+    q32_t frac = q32_log2_fraction_table[f & 0xff];
+    printf("log2(%f) = %d + %12.10f\n", q32_fixed_to_float(_x), b, q32_fixed_to_float(frac));
+
     return 0;
 }
 
