@@ -44,16 +44,23 @@ all:
 
 sources  +=			\
 	q32_dotprod.port.c	\
-	src/clz.c
+	src/clz.c		\
+	gentab/q32_tables.c
 
-gentab_progs = gentab/gentab_math
-gentab_sources = gentab/gentab_test.c
+extra_clean		+=	\
+	gentab/gentab_q32	\
+	gentab/q32_tables.c
 
-gentab_objects	= $(patsubst %.c,%.o,$(gentab_sources))
-objects		+= $(gentab_objects)
+#objects		+= gentab/q32_tables.o
 
-gentab/gentab_test.c: $(gentab_progs)
-	./gentab/gentab_math > gentab/gentab_test.c
+#
+# Auto-generated tables
+#
+gentab/gentab_q32: gentab/gentab_q32.c
+	$(CC) $(CFLAGS) -lm $< -o $@
+
+gentab/q32_tables.c: gentab/gentab_q32
+	./gentab/gentab_q32 > gentab/q32_tables.c
 
 # Dependencies
 # Use compiler's -M flags (and equivalent) to parse source files
@@ -106,8 +113,6 @@ libliquidfpm.so: $(libraries)
 #	$(CC) $(CFLAGS) -c $< -o $@
 #	./$< > src/$<.lut.c
 
-$(gentab_progs) : % : %.c
-
 # library objects
 $(LIBS) : %.o : src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -141,9 +146,7 @@ clean:
 	$(RM) $(SHARED_LIB)
 	$(RM) libliquidfpm.a
 	$(RM) fpmtest
-	$(RM) $(gentab_objects)
-	$(RM) $(gentab_sources)
-	$(RM) $(gentab_progs)
+	$(RM) $(extra_clean)
 
 distclean: clean
 	rm -f config.log config.cache config.status config.h makefile

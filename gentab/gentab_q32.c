@@ -13,9 +13,10 @@
 int main(int argc, char * argv[]) {
 
     // initialize variables, set defaults
-    unsigned int fracbits=28;
-    unsigned int intbits=4;
-    unsigned int tabsize=256;
+    //unsigned int fracbits=28;
+    //unsigned int intbits=4;
+    unsigned int sine_tabsize=256;
+    unsigned int log2_tabsize = 256;
 
     unsigned int i;
     unsigned int n=8;
@@ -28,13 +29,14 @@ int main(int argc, char * argv[]) {
     printf("#include \"liquidfpm.internal.h\"\n\n");
 
     // generate sine table
-    printf("const q32_t sin_table_q32[%u] = {\n    ", tabsize);
-    for (i=0; i<tabsize; i++) {
-        float sine = sin( (M_PI/2.0) * ((double)i) / (double)(tabsize-1));
+    printf("// sine table\n");
+    printf("const q32_t sin_table_q32[%u] = {\n    ", sine_tabsize);
+    for (i=0; i<sine_tabsize; i++) {
+        float sine = sin( (M_PI/2.0) * ((double)i) / (double)(sine_tabsize-1));
         //printf("%4u: %12.8f\n",i,sine);
 
         printf("0x%.8x", q32_float_to_fixed(sine));
-        if ( i == (tabsize-1) )
+        if ( i == (sine_tabsize-1) )
             printf("\n};\n");
         else if ( ((i+1)%n) == 0 )
             printf(",\n    ");
@@ -42,13 +44,15 @@ int main(int argc, char * argv[]) {
             printf(", ");
     }
 
-    unsigned int log2_tabsize = 256;
-    printf("const unsigned int log2_fraction_table[%d] = {\n    ", log2_tabsize);
+    printf("\n");
+    printf("// log2 fraction table\n");
+
+    printf("const q32_t q32_log2_fraction_table[%d] = {\n    ", log2_tabsize);
     for (i=0; i<log2_tabsize; i++) {
         double log2val = log2( 1.0 + ((double)i)/((double)log2_tabsize) );
-        unsigned int frac_val = (unsigned int) (log2_tabsize*log2val);
+        q32_t frac_val = q32_float_to_fixed(log2val);
 
-        printf("%3u", frac_val);
+        printf("0x%.8x", frac_val);
         if ( i == (log2_tabsize-1) )
             printf("\n};\n");
         else if ( ((i+1)%n) == 0 )
