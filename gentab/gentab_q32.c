@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <getopt.h>
-#include <string.h>
 
 #include "../include/liquidfpm.h"
 
@@ -30,7 +28,7 @@ int main(int argc, char * argv[]) {
 
     // generate sine table
     printf("// sine table\n");
-    printf("const q32_t sin_table_q32[%u] = {\n    ", sine_tabsize);
+    printf("const q32_t q32_sin_table[%u] = {\n    ", sine_tabsize);
     for (i=0; i<sine_tabsize; i++) {
         float sine = sin( (M_PI/2.0) * ((double)i) / (double)(sine_tabsize-1));
         //printf("%4u: %12.8f\n",i,sine);
@@ -44,9 +42,9 @@ int main(int argc, char * argv[]) {
             printf(", ");
     }
 
+    // generate log2 fraction table
     printf("\n");
     printf("// log2 fraction table\n");
-
     printf("const q32_t q32_log2_fraction_table[%d] = {\n    ", log2_tabsize);
     for (i=0; i<log2_tabsize; i++) {
         double log2val = log2( 1.0 + ((double)i)/((double)log2_tabsize) );
