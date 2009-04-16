@@ -13,6 +13,7 @@ void fpmtest_q32_add();
 void fpmtest_q32_sub();
 void fpmtest_q32_mul();
 void fpmtest_q32_div();
+void fpmtest_q32_log2();
 
 int main() {
     fpmtest_q32_conversion();
@@ -21,13 +22,11 @@ int main() {
     fpmtest_q32_sub();
     fpmtest_q32_mul();
     fpmtest_q32_div();
+    fpmtest_q32_log2();
 
     printf("testing complex...\n");
     cq32_t y = {3,5};
     printf("y = %d + j %d\n", y.real, y.imag);
-
-    printf("testing log2...\n");
-    log2_q32( q32_float_to_fixed(0.1f) );
 
     printf("done.\n");
     return 0;
@@ -144,3 +143,13 @@ void fpmtest_q32_dotprod()
         dpf);
 }
 
+void fpmtest_q32_log2()
+{
+    printf("testing log2...\n");
+    float x = 0.00849112f;
+    q32_t log2_test = log2_q32( q32_float_to_fixed(x) );
+    printf("    log2: 0x%.8x (%8.5f, expected %8.5f)\n",
+        log2_test,
+        q32_fixed_to_float(log2_test),
+        log2f(x));
+}

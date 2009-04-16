@@ -128,7 +128,7 @@ test: fpmtest
 fpmtest.o: fpmtest.c include/liquidfpm.h
 
 fpmtest: fpmtest.o libliquidfpm.a
-	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) -lm $^ $(LDFLAGS) -o $@
 
 #q32_mul.port.o: q32_mul.port.c
 
