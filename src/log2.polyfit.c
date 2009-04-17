@@ -19,7 +19,7 @@
 //
 // use second-order polynomial fit
 //
-q32_t log2_q32( q32_t _x )
+q32_t q32_log2( q32_t _x )
 {
     if (_x <= 0) {
         perror("error: log2_q32(), x must be > 0");

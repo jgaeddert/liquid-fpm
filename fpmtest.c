@@ -16,6 +16,7 @@ void fpmtest_q32_sub();
 void fpmtest_q32_mul();
 void fpmtest_q32_div();
 void fpmtest_q32_log2();
+void fpmtest_q32_exp2();
 
 void fpmtest_q32_dotprod();
 
@@ -29,6 +30,7 @@ int main() {
     fpmtest_q32_mul();
     fpmtest_q32_div();
     fpmtest_q32_log2();
+    fpmtest_q32_exp2();
 
     fpmtest_q32_dotprod();
 
@@ -173,9 +175,20 @@ void fpmtest_q32_log2()
 {
     printf("testing log2...\n");
     float x = 0.25f + 0.0001f;
-    q32_t log2_test = log2_q32( q32_float_to_fixed(x) );
+    q32_t log2_test = q32_log2( q32_float_to_fixed(x) );
     printf("    log2: 0x%.8x (%8.5f, expected %8.5f)\n",
         log2_test,
         q32_fixed_to_float(log2_test),
         log2f(x));
+}
+
+void fpmtest_q32_exp2()
+{
+    printf("testing exp2...\n");
+    float x = -0.75f;
+    q32_t exp2_test = q32_exp2( q32_float_to_fixed(x) );
+    printf("    exp2: 0x%.8x (%8.5f, expected %8.5f)\n",
+        exp2_test,
+        q32_fixed_to_float(exp2_test),
+        powf(2.0f,x));
 }

@@ -57,6 +57,10 @@ unsigned int msb_index(unsigned int _x);
                                                                     \
 /* auto-generated look-up tables */                                 \
 extern const X(_t) X(_sin_table)[256];                              \
+                                                                    \
+/* log */                                                           \
+X(_t) X(_log2_convert_forward) (X(_log2_t) _logtype);               \
+X(_log2_t) X(_log2_convert_reverse) (X(_t) _x);                     \
 extern const X(_t) X(_log2_fraction_table)[256];
 
 LIQUIDFPM_DEFINE_INTERNAL_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)

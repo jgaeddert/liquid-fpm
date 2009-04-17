@@ -46,6 +46,7 @@ sources  +=			\
 	q32_dotprod.port.c	\
 	src/clz.c		\
 	src/log2.polyfit.c		\
+	src/exp2.polyfit.c		\
 	src/msb_index.c		\
 	gentab/q32_tables.c
 
