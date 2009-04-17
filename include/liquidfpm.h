@@ -30,6 +30,10 @@ extern "C" {
 typedef T X(_t);                                                    \
 const static unsigned int X(_intbits) = INTBITS;                    \
 const static unsigned int X(_fracbits) = FRACBITS;                  \
+static inline int X(_intpart) (X(_t) _x)                            \
+    { return (_x >> FRACBITS); } ;                                  \
+static inline int X(_fracpart) (X(_t) _x)                           \
+    { return _x & ((1<<FRACBITS)-1); };                             \
                                                                     \
 /* conversion */                                                    \
 static inline float X(_fixed_to_float)(X(_t) _x)                    \
@@ -52,7 +56,9 @@ X(_t) X(_tan)(X(_t) _theta);                                        \
 X(_t) X(_atan2)(X(_t) _x, X(_t) _y);                                \
                                                                     \
 /* log, etc. */                                                     \
+typedef struct {int base; X(_t) frac;} X(_log2_t);                  \
 X(_t) X(_log2)(X(_t) _x);                                           \
+X(_t) X(_exp2)(X(_t) _x);                                           \
 X(_t) X(_exp) (X(_t) _x);                                           \
 X(_t) X(_sqrt)(X(_t) _x);                                           \
 X(_t) X(_pow) (X(_t) _x);                                           \

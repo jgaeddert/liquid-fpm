@@ -8,6 +8,8 @@
 #include "include/liquidfpm.h"
 
 void fpmtest_q32_conversion();
+void fpmtest_q32_intpart();
+void fpmtest_q32_fracpart();
 void fpmtest_q32_abs();
 void fpmtest_q32_add();
 void fpmtest_q32_sub();
@@ -19,6 +21,8 @@ void fpmtest_q32_dotprod();
 
 int main() {
     fpmtest_q32_conversion();
+    fpmtest_q32_intpart();
+    fpmtest_q32_fracpart();
     fpmtest_q32_abs();
     fpmtest_q32_add();
     fpmtest_q32_sub();
@@ -44,6 +48,24 @@ void fpmtest_q32_conversion()
     q32_t q = q32_float_to_fixed(f);
     printf("    %10.7f > 0x%.8x > %10.7f\n",
         f, q, q32_fixed_to_float(q));
+}
+
+void fpmtest_q32_fracpart()
+{
+    printf("testing fracpart...\n");
+    float f = 0.9999f;
+    q32_t q = q32_float_to_fixed(f);
+    printf("    fracpart(%12.8f) = %d\n",
+        f, q32_fracpart(q));
+}
+
+void fpmtest_q32_intpart()
+{
+    printf("testing intpart...\n");
+    float f = -1.399f;
+    q32_t q = q32_float_to_fixed(f);
+    printf("    intpart(%12.8f) = %d\n",
+        f, q32_intpart(q));
 }
 
 void fpmtest_q32_abs()
