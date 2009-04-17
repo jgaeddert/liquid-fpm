@@ -17,6 +17,7 @@ void fpmtest_q32_mul();
 void fpmtest_q32_div();
 void fpmtest_q32_log2();
 void fpmtest_q32_exp2();
+void fpmtest_q32_sqrt();
 
 void fpmtest_q32_dotprod();
 
@@ -31,6 +32,7 @@ int main() {
     fpmtest_q32_div();
     fpmtest_q32_log2();
     fpmtest_q32_exp2();
+    fpmtest_q32_sqrt();
 
     fpmtest_q32_dotprod();
 
@@ -191,4 +193,15 @@ void fpmtest_q32_exp2()
         exp2_test,
         q32_fixed_to_float(exp2_test),
         powf(2.0f,x));
+}
+
+void fpmtest_q32_sqrt()
+{
+    printf("testing sqrt...\n");
+    float x = 0.75f;
+    q32_t sqrt_test = q32_sqrt( q32_float_to_fixed(x) );
+    printf("    sqrt: 0x%.8x (%8.5f, expected %8.5f)\n",
+        sqrt_test,
+        q32_fixed_to_float(sqrt_test),
+        sqrt(x));
 }

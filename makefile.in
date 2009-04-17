@@ -47,6 +47,7 @@ sources  +=			\
 	src/clz.c		\
 	src/log2.polyfit.c		\
 	src/exp2.polyfit.c		\
+	src/sqrt.log2.c		\
 	src/msb_index.c		\
 	gentab/q32_tables.c
 
