@@ -18,6 +18,7 @@ BUILD:
 
 CONFIGURE OPTIONS:
     - fpm precision, data size (e.g. 16-bit, etc.)
+    - accuracy/speed/memory tradeoff
     - target platform (e.g. ARM)
 
 INSTALL:

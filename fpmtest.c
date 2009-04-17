@@ -150,7 +150,7 @@ void fpmtest_q32_dotprod()
 void fpmtest_q32_log2()
 {
     printf("testing log2...\n");
-    float x = 0.00849112f;
+    float x = 0.25f + 0.0001f;
     q32_t log2_test = log2_q32( q32_float_to_fixed(x) );
     printf("    log2: 0x%.8x (%8.5f, expected %8.5f)\n",
         log2_test,
