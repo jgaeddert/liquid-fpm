@@ -145,6 +145,19 @@ void fpmtest_q32_mul()
 void fpmtest_q32_div()
 {
     printf("testing div...\n");
+    float x = 1/3.0f;
+    float y = 2.25f;
+
+    q32_t a = q32_float_to_fixed(x);
+    q32_t b = q32_float_to_fixed(y);
+    q32_t r = q32_div(a,b);
+    printf("    0x%.8x / 0x%.8x = 0x%.8x\n", a, b, r);
+    printf("    %10.7f / %10.7f = %10.7f\n",
+        q32_fixed_to_float(a),
+        q32_fixed_to_float(b),
+        q32_fixed_to_float(r));
+    printf("    computed %10.7f (expected %10.7f)\n",
+        q32_fixed_to_float(r), x/y);
 
 }
 void fpmtest_q32_dotprod()

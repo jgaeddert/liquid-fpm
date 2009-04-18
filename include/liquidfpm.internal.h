@@ -6,10 +6,12 @@
 #define __LIQUID_FPM_INTERNAL_H__
 
 #include "liquidfpm.h"
+#include "liquidfpm.h"
 #include "config.h"
 
 //
 // Trigonometric helper functions, arrays, constants
+// TODO: auto-compute these values
 //
 #define FPM_Q32_2_PI       0x7FFFFFFF  ///< \f$2\pi\f$
 #define FPM_Q32_PI         0x3FFFFFFF  ///< \f$\pi\f$

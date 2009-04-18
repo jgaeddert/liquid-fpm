@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "fpm_internal.h"
+#include "liquidfpm.internal.h"
 
 void angle_quadrant_index_q32(q32_t _theta, unsigned int *_quadrant, unsigned int *_index)
 {
@@ -116,7 +116,7 @@ q32_t atan2_q32( q32_t _y, q32_t _x )
     // negate calculated angle if _y < 0
     int negate = (_y < 0);
 
-    // subtract calculate angle from pi if _x < 0
+    // subtract calculated angle from pi if _x < 0
     int sub_from_pi = (_x < 0);
 
     // subtract calculated angle from pi/2 if abs(y/x) < 1, or invert
