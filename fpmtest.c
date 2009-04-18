@@ -213,7 +213,7 @@ void fpmtest_q32_sqrt()
     printf("testing sqrt...\n");
     float x = 0.75f;
     q32_t sqrt_test = q32_sqrt( q32_float_to_fixed(x) );
-    printf("    sqrt: 0x%.8x (%8.5f, expected %8.5f)\n",
+    printf("    sqrt: 0x%.8x (%12.10f, expected %12.10f)\n",
         sqrt_test,
         q32_fixed_to_float(sqrt_test),
         sqrt(x));
