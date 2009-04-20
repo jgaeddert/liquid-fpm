@@ -51,6 +51,7 @@ sources  +=			\
 	src/log.port.c		\
 	src/exp.port.c		\
 	src/sqrt.newton.c		\
+	src/sincos.pwpolyfit.c		\
 	src/msb_index.c		\
 	gentab/q32_tables.c
 
@@ -159,7 +160,7 @@ clean:
 	$(RM) $(dependencies)
 	$(RM) $(SHARED_LIB)
 	$(RM) libliquidfpm.a
-	$(RM) fpmtest
+	$(RM) fpmtest fpmtest.o
 	$(RM) $(extra_clean)
 
 distclean: clean

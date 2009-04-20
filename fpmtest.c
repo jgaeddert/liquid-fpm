@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "include/liquidfpm.h"
+#include "include/liquidfpm.internal.h"
 
 void fpmtest_q32_conversion();
 void fpmtest_q32_intpart();
@@ -18,10 +18,13 @@ void fpmtest_q32_div();
 void fpmtest_q32_log2();
 void fpmtest_q32_exp2();
 void fpmtest_q32_sqrt();
+void fpmtest_angle();
+void fpmtest_sin();
 
 void fpmtest_q32_dotprod();
 
 int main() {
+    /*
     fpmtest_q32_conversion();
     fpmtest_q32_intpart();
     fpmtest_q32_fracpart();
@@ -33,6 +36,10 @@ int main() {
     fpmtest_q32_log2();
     fpmtest_q32_exp2();
     fpmtest_q32_sqrt();
+    */
+    fpmtest_angle();
+    fpmtest_sin();
+    return 0;
 
     fpmtest_q32_dotprod();
 
@@ -227,4 +234,46 @@ void fpmtest_q32_sqrt()
         sqrt_test,
         q32_fixed_to_float(sqrt_test),
         sqrt(x));
+}
+
+void fpmtest_angle()
+{
+    printf("testing sin...\n");
+    unsigned int i, n=32;
+    float theta0;
+    q32_t theta1;
+    float theta2;
+    for (i=0; i<n+1; i++) {
+        theta0 = 4.0f * (float)(i) / ((float)(n)) * M_PI - 2*M_PI;
+        theta1 = q32_angle_float_to_fixed(theta0);
+        theta2 = q32_angle_fixed_to_float(theta1);
+        printf("%4u : %12.8f > 0x%.8x > %12.8f\n", i, theta0, theta1, theta2);
+    }
+}
+
+void fpmtest_sin()
+{
+    printf("testing sin...\n");
+    unsigned int i, n=45;
+    float thetaf;
+    q32_t theta;
+    q32_t s;
+#if 1
+    for (i=0; i<n+1; i++) {
+        thetaf = 4.0f * (float)(i) / ((float)(n)) * M_PI - 2*M_PI;
+        theta  = q32_angle_float_to_fixed(thetaf);
+
+        s = q32_sin(theta);
+
+        printf("%4u : sin(%12.8f) = %12.8f (%12.8f) error: %12.8f\n",
+                i, thetaf, sinf(thetaf), q32_fixed_to_float(s),
+                sinf(thetaf)-q32_fixed_to_float(s));
+    }
+#else
+    thetaf = 2*M_PI;
+    theta  = q32_angle_float_to_fixed(thetaf);
+    s = q32_sin(theta);
+    printf("sin(%12.8f) = %12.8f (%12.8f)\n",
+            thetaf, sinf(thetaf), q32_fixed_to_float(s));
+#endif
 }

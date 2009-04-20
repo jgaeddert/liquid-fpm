@@ -9,6 +9,8 @@
 #include "liquidfpm.h"
 #include "config.h"
 
+#include <math.h>
+
 //
 // Trigonometric helper functions, arrays, constants
 // TODO: auto-compute these values
@@ -20,7 +22,9 @@
 
 #define FPM_Q32_1_BY_SQRT_2 0x0B504F33 ///< \f$ 1/sqrt(2) \f$
 
-//#define fpm_angle_fixed_to_double(x) (mad_f_todouble(x) / mad_f_todouble(FPM_Q32_PI) * M_PI)
+#define q32_angle_scalar (M_PI/4.0f)
+#define q32_angle_fixed_to_float(x) (q32_fixed_to_float(x) * q32_angle_scalar)
+#define q32_angle_float_to_fixed(x) (q32_float_to_fixed(x /  q32_angle_scalar)-1)
 
 //extern const q32_t sin_table_q32_256[256];
 
