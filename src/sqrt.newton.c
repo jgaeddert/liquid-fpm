@@ -27,6 +27,10 @@ q32_t q32_sqrt( q32_t _x )
         printf("%4u : %18.14f\n", i, q32_fixed_to_float(x0));
 #endif
         x1 = (x0 + q32_div(_x,x0)) / 2;
+
+        if (abs(x1-x0) < 1)
+            break;
+
         x0 = x1;
     }
 
