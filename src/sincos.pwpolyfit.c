@@ -109,33 +109,54 @@ q32_t q32_sin( q32_t _theta )
     return retval;
 }
 
-#if 0
 q32_t q32_cos( q32_t _theta )
 {
     unsigned int quadrant;
     unsigned int index;
+    q32_t x;
 
     // Extract 2-bit quadrant and 8-bit phase index
     // Q1 | Q0
     // ---+---
     // Q2 | Q3
-    angle_quadrant_index_q32(_theta, &quadrant, &index);
+    q32_angle_quadrant_index(_theta, &quadrant, &index, &x);
 
-    // cosine is sine leading pi/2 (one quadrant)
-    quadrant++;
+#if DEBUG
+    printf("    theta : %12.8f (0x%.8x > %12.8f)\n", q32_angle_fixed_to_float(_theta), _theta, q32_fixed_to_float(_theta));
+    printf("    quadrant : %u\n", quadrant);
+    printf("    index    : %u\n", index);
+    printf("    x        : %f\n", q32_fixed_to_float(x));
+#endif
 
-    // cosine: for quadrants Q1 & Q3 phase is inverted
-    if (quadrant & 0x01)
-        index = 255 - index;
+    // cosine: for quadrants Q0 & Q2 phase is inverted
+    if ( quadrant==0 || quadrant==2 ) {
+        x = (1<<q32_fracbits) - x;
+        index = 15 - index;
+#if DEBUG
+        printf("    x        : %f (phase inversion)\n", q32_fixed_to_float(x));
+        printf("    index    : %u (phase inversion)\n", index);
+#endif
+    }
 
-    // cosine: for quadrants Q2 & Q3 value is negated
-    if (quadrant & 0x02)
-        return -sin_table_q32_256[index];
-    else
-        return sin_table_q32_256[index];
+    q32_t c2 = q32_sine_table_pwpolyfit[index][0];
+    q32_t c1 = q32_sine_table_pwpolyfit[index][1];
+    q32_t c0 = q32_sine_table_pwpolyfit[index][2];
+#if DEBUG
+    printf("    c0 : %12.8f\n", q32_fixed_to_float(c0));
+    printf("    c1 : %12.8f\n", q32_fixed_to_float(c1));
+    printf("    c2 : %12.8f\n", q32_fixed_to_float(c2));
+#endif
+
+    // cosine: for quadrants Q1 & Q2 value is negated
+    q32_t retval = q32_polyval_p2(x,c0,c1,c2);
+    if ( quadrant==1 || quadrant==2 )
+        retval = -retval;
+
+    return retval;
 
 }
 
+#if 0
 void q32_sincos( q32_t _theta, q32_t *_sin, q32_t *_cos )
 {
     unsigned int quadrant;
