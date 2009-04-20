@@ -39,6 +39,7 @@ double calculate_execution_time(struct rusage _start, struct rusage _finish);
 // 
 #include "bench/log2_benchmark.h"
 #include "bench/sqrt_benchmark.h"
+#include "bench/sin_benchmark.h"
 
 int main() {
     //
@@ -69,6 +70,18 @@ int main() {
 
     // print results
     printf("    %-20s : %12.6f s : %12.6f\n", "q32_sqrt", extime, rmse);
+
+
+   
+    // run benchmarks
+    precision_sin(resolution,&rmse);
+    benchmark_sin(&t0,&t1,&num_trials);
+
+    // compile results
+    extime = calculate_execution_time(t0,t1);
+
+    // print results
+    printf("    %-20s : %12.6f s : %12.6f\n", "q32_sin", extime, rmse);
 
     printf("done.\n");
 
