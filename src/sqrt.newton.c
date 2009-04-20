@@ -9,7 +9,7 @@
 
 #define DEBUG 0
 
-#define LIQUIDFPM_SQRT_NEWTON_NUM_ITERATIONS    10
+#define LIQUIDFPM_SQRT_NEWTON_NUM_ITERATIONS    3
 
 q32_t q32_sqrt( q32_t _x )
 {
@@ -18,7 +18,13 @@ q32_t q32_sqrt( q32_t _x )
         return 0;
     }
 
-    q32_t x0 = _x;
+    // initial guess: x0 = _x
+    //q32_t x0 = _x;
+
+    // initial guess: set x0 to 2^floor(msb_index/2)
+    // NOTE: we need to compensate for the decimal position of q32
+    q32_t x0 = 1 << (((msb_index(_x)-q32_fracbits)/2)+q32_fracbits);
+
     q32_t x1;
 
     unsigned int i;
@@ -28,6 +34,7 @@ q32_t q32_sqrt( q32_t _x )
 #endif
         x1 = (x0 + q32_div(_x,x0)) / 2;
 
+        // break if change in this iteration is negligible
         if (abs(x1-x0) < 1)
             break;
 
