@@ -48,6 +48,8 @@ sources  +=			\
 	src/clz.c		\
 	src/log2.polyfit.c		\
 	src/exp2.polyfit.c		\
+	src/log.port.c		\
+	src/exp.port.c		\
 	src/sqrt.newton.c		\
 	src/msb_index.c		\
 	gentab/q32_tables.c

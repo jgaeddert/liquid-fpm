@@ -59,10 +59,8 @@ X(_t) X(_atan2)(X(_t) _x, X(_t) _y);                                \
 typedef struct {int base; X(_t) frac;} X(_log2_t);                  \
 X(_t) X(_log2)(X(_t) _x);                                           \
 X(_t) X(_exp2)(X(_t) _x);                                           \
-static inline X(_t) X(_log) (X(_t) _x)                              \
-    { return X(_mul)( X(_log2)(_x),0x0b17217f); };                  \
-static inline X(_t) X(_exp) (X(_t) _x)                              \
-    { return X(_exp2)( X(_mul)(_x,0x17154765)); };                  \
+X(_t) X(_log) (X(_t) _x);                                           \
+X(_t) X(_exp) (X(_t) _x);                                           \
 X(_t) X(_sqrt)(X(_t) _x);                                           \
 X(_t) X(_pow) (X(_t) _x);                                           \
                                                                     \
