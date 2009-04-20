@@ -141,6 +141,13 @@ fpmtest: fpmtest.o libliquidfpm.a
 
 #q32_mul.intelmac.o: q32_mul.intelmac.s
 
+# Benchmark
+benchmark: bench/bench.c libliquidfpm.a
+	$(CC) $(CFLAGS) -lm $^ $(LDFLAGS) -o $@
+
+bench: benchmark
+	./benchmark
+
 
 #
 # clean
