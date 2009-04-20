@@ -4,8 +4,8 @@
 #
 
 .text
-.globl _q32_mul
-_q32_mul:
+.globl q32_mul
+q32_mul:
     pushl   %ebp            # create the stack frame
     movl    %esp, %ebp
 
