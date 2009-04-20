@@ -156,31 +156,9 @@ q32_t q32_cos( q32_t _theta )
 
 }
 
-#if 0
 void q32_sincos( q32_t _theta, q32_t *_sin, q32_t *_cos )
 {
-    unsigned int quadrant;
-    unsigned int index;
-
-    // Extract 2-bit quadrant and 8-bit phase index
-    // Q1 | Q0
-    // ---+---
-    // Q2 | Q3
-    angle_quadrant_index_q32(_theta, &quadrant, &index);
-
-    if (quadrant == 0) {
-        *_sin =  sin_table_q32_256[index];
-        *_cos =  sin_table_q32_256[255-index];
-    } else if (quadrant == 1) {
-        *_sin =  sin_table_q32_256[255-index];
-        *_cos = -sin_table_q32_256[index];
-    } else if (quadrant == 2) {
-        *_sin = -sin_table_q32_256[index];
-        *_cos = -sin_table_q32_256[255-index];
-    } else {
-        *_sin = -sin_table_q32_256[255-index];
-        *_cos =  sin_table_q32_256[index];
-    }
-
+    // TODO: implement more efficient method
+    *_sin = q32_sin(_theta);
+    *_cos = q32_cos(_theta);
 }
-#endif
