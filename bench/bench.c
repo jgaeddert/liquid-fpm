@@ -11,6 +11,7 @@
 
 // define precision function pointer
 typedef void(*precision_function_t) (
+    unsigned int _res,
     float * _rmse);
 
 // define benchmark function pointer
@@ -43,10 +44,11 @@ int main() {
     struct rusage t0;
     struct rusage t1;
     unsigned long int num_trials = 100000;
+    unsigned int resolution = 256;
     float rmse;
     
     // run benchmarks
-    precision_log2(&rmse);
+    precision_log2(resolution,&rmse);
     benchmark_log2(&t0,&t1,&num_trials);
 
     // compile results

@@ -12,15 +12,18 @@
 
 #define DEBUG 1
 
-void precision_log2(float * _rmse)
+void precision_log2(unsigned int _res, float * _rmse)
 {
     float e, mse=0.0f;
-    float dyf=0.1f, yf=-7.0f;
+    float yf_min = -7.9f;
+    float yf_max = 2.9f;
+    float dyf = (yf_max-yf_min)/(_res-1);
+    float yf = yf_min;
     float xf;
-    unsigned int n=0;
+    unsigned int i;
 
     q32_t x, y;
-    while (yf < 3.0f) {
+    for (i=0; i<_res; i++) {
         xf = powf(2.0f, yf);
 
         x = q32_float_to_fixed(xf);
@@ -30,14 +33,14 @@ void precision_log2(float * _rmse)
         mse += e*e;
 
 #if DEBUG
-        printf(" log2(%12.8f) = %12.8f (%12.8f, e=%12.8f)\n",
-                xf, yf, q32_fixed_to_float(y), e);
+        printf("%4u : log2(%12.8f) = %12.8f (%12.8f, e=%12.8f)\n",
+                i, xf, yf, q32_fixed_to_float(y), e);
+//        printf("e(%4u) = %12.4e;\n", i+1, e);
 #endif
 
-        n++;
         yf += dyf;
     }
-    *_rmse = sqrtf(mse/n);
+    *_rmse = sqrtf(mse/_res);
 }
 
 void benchmark_log2(struct rusage *_start,
