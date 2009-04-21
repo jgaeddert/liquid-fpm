@@ -21,6 +21,7 @@ void fpmtest_q32_sqrt();
 void fpmtest_angle();
 void fpmtest_sin();
 void fpmtest_cos();
+void fpmtest_atan2();
 
 void fpmtest_q32_dotprod();
 
@@ -37,10 +38,11 @@ int main() {
     fpmtest_q32_log2();
     fpmtest_q32_exp2();
     fpmtest_q32_sqrt();
-    */
     fpmtest_angle();
     fpmtest_sin();
     fpmtest_cos();
+    */
+    fpmtest_atan2();
     return 0;
 
     fpmtest_q32_dotprod();
@@ -305,4 +307,21 @@ void fpmtest_cos()
     printf("cos(%12.8f) = %12.8f (%12.8f)\n",
             thetaf, cosf(thetaf), q32_fixed_to_float(s));
 #endif
+}
+
+void fpmtest_atan2()
+{
+    printf("testing atan2...\n");
+    float thetaf = 0.234;
+    float xf = cosf(thetaf);
+    float yf = sinf(thetaf);
+
+    q32_t theta;
+    q32_t x = q32_float_to_fixed(xf);
+    q32_t y = q32_float_to_fixed(yf);
+    
+    theta  = q32_atan2(y,x);
+
+    printf("atan2(%12.8f,%12.8f) = %12.8f (%12.8f)\n",
+            yf,xf,thetaf, q32_angle_fixed_to_float(theta));
 }
