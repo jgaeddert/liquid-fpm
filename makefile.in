@@ -52,6 +52,7 @@ sources  +=			\
 	src/exp.port.c		\
 	src/sqrt.newton.c		\
 	src/sincos.pwpolyfit.c		\
+	src/complex_arithmetic.c	\
 	src/msb_index.c		\
 	gentab/q32_tables.c
 
