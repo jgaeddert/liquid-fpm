@@ -22,12 +22,18 @@ typedef void(*benchmark_function_t) (
 
 // define basic structure for storing results
 typedef struct {
-    // precision
+    unsigned int id;
+
+    // APIs
     precision_function_t precision_api;
+    benchmark_function_t benchmark_api;
+
+    const char * name;
+
+    // precision
     float rmse;
 
     // speed
-    benchmark_function_t benchmark_api;
     unsigned long int num_trials;
     float extime;
     float rate;
@@ -37,10 +43,14 @@ typedef struct {
 double calculate_execution_time(struct rusage _start, struct rusage _finish);
 
 // 
+/*
 #include "bench/log2_benchmark.h"
 #include "bench/sqrt_benchmark.h"
 #include "bench/sin_benchmark.h"
 #include "bench/atan2_benchmark.h"
+*/
+
+#include "bench/benchmark_include.h"
 
 int main() {
     //
@@ -50,16 +60,20 @@ int main() {
     double extime;
     unsigned int resolution = 256;
     float rmse;
-     
+    
+    unsigned int i;
+
     // run benchmarks
-    precision_atan2(resolution,&rmse);
-    benchmark_atan2(&t0,&t1,&num_trials);
+    for (i=0; i<NUM_BENCHMARKS; i++) {
+        benchmarks[i].precision_api(resolution,&rmse);
+        benchmarks[i].benchmark_api(&t0,&t1,&num_trials);
 
-    // compile results
-    extime = calculate_execution_time(t0,t1);
+        // compile results
+        extime = calculate_execution_time(t0,t1);
 
-    // print results
-    printf("    %-20s : %12.6f s : %12.8f\n", "q32_atan2", extime, rmse);
+        // print results
+        printf("    %-20s : %12.6f s : %12.8f\n", benchmarks[i].name, extime, rmse);
+    }
 
     printf("done.\n");
 
