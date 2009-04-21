@@ -7,7 +7,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 // polynomial coefficients
 q32_t q32_atan_table_pwpolyfit[16][3] = {
@@ -58,18 +58,6 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
     _y = abs(_y);
     _x = abs(_x);
 
-#if 0
-    // handle zero cases here
-    if (_y == 0) {
-        // atan( 0 ) = pi when (x<)
-        // atan( 0 ) = 0  when (x>0)
-        return (sub_from_pi) ? FPM_Q32_PI : 0;
-    } else if (_x == 0) {
-        // atan( +/- inf) = +/- pi/2
-        return (negate) ? -FPM_Q32_PI_BY_2 : FPM_Q32_PI_BY_2;
-    }
-#endif
-
     // compare x, y; place larger value in y, smaller in x, thus ratio
     // r = y/x is always greater than or equal to 1; keeps log2(y/x)
     // positive
@@ -90,16 +78,19 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
     // Extract location of MSB for _y and _x; keep values in register as
     // operations on them will be computed very quickly
 
-#if 1
     // scale values by max msb_index
     unsigned int msb_index_x = msb_index(_x);
     unsigned int msb_index_y = msb_index(_y);
 
+#if DEBUG
     printf("msb_index_x: %u\n", msb_index_x);
     printf("msb_index_y: %u\n", msb_index_y);
+#endif
     if (abs(msb_index_x - msb_index_y) > 7) {
         // use high ratio approximation
+#if DEBUG
         printf("high ratio approximation\n");
+#endif
 
         // four conditions exist
         if (invert) {
@@ -111,18 +102,21 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
     unsigned int shift = 31 - ( (msb_index_x > msb_index_y) ? msb_index_x : msb_index_y );
     _x <<= shift;
     _y <<= shift;
-#endif
         
     float yf = q32_fixed_to_float(_y);
     float xf = q32_fixed_to_float(_x);
+#if DEBUG
     printf("  y > %12.8f, log2(y) : %12.8f\n", yf, log2(yf));
     printf("  x > %12.8f, log2(x) : %12.8f\n", xf, log2(xf));
     printf("  true log2diff : %12.8f\n", log2(yf) - log2(xf));
+#endif
     q32_t log2diff = q32_log2(_y) - q32_log2(_x);
 
     unsigned int index = (log2diff >> 27) & 0x000f;
+#if DEBUG
     printf("  log2diff : %f > %d (index=%u)\n", q32_fixed_to_float(log2diff), q32_intpart(log2diff), index);
     printf("  log2diff : 0x%.8x\n", log2diff);
+#endif
 
     // if negative, overflow (use high ratio approximation)
     if (log2diff < 0) { return 0; };
@@ -138,10 +132,13 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
 
     q32_t phi = q32_atan_polyval_p2(log2diff,c0,c1,c2);
 
+#if DEBUG
     printf("  polyval   : %f\n", q32_fixed_to_float(phi));
+#endif
     phi <<= 2;
-    printf("  retval    : %f\n", q32_fixed_to_float(phi));
+#if DEBUG
     printf("  angle     : %f\n", q32_angle_fixed_to_float(phi));
+#endif
 
     // invert if necessary
     if (invert) phi = FPM_Q32_PI_BY_2 - phi;
@@ -151,7 +148,6 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
 
     // negate if necessary
     if (negate) phi = -phi;
-
 
     return phi;
 }
