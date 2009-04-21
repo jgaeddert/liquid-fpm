@@ -40,6 +40,7 @@ double calculate_execution_time(struct rusage _start, struct rusage _finish);
 #include "bench/log2_benchmark.h"
 #include "bench/sqrt_benchmark.h"
 #include "bench/sin_benchmark.h"
+#include "bench/atan2_benchmark.h"
 
 int main() {
     //
@@ -51,37 +52,14 @@ int main() {
     float rmse;
      
     // run benchmarks
-    precision_log2(resolution,&rmse);
-    benchmark_log2(&t0,&t1,&num_trials);
+    precision_atan2(resolution,&rmse);
+    benchmark_atan2(&t0,&t1,&num_trials);
 
     // compile results
     extime = calculate_execution_time(t0,t1);
 
     // print results
-    printf("    %-20s : %12.6f s : %12.6f\n", "q32_log2", extime, rmse);
-
-   
-    // run benchmarks
-    precision_sqrt(resolution,&rmse);
-    benchmark_sqrt(&t0,&t1,&num_trials);
-
-    // compile results
-    extime = calculate_execution_time(t0,t1);
-
-    // print results
-    printf("    %-20s : %12.6f s : %12.6f\n", "q32_sqrt", extime, rmse);
-
-
-   
-    // run benchmarks
-    precision_sin(resolution,&rmse);
-    benchmark_sin(&t0,&t1,&num_trials);
-
-    // compile results
-    extime = calculate_execution_time(t0,t1);
-
-    // print results
-    printf("    %-20s : %12.6f s : %12.8f\n", "q32_sin", extime, rmse);
+    printf("    %-20s : %12.6f s : %12.8f\n", "q32_atan2", extime, rmse);
 
     printf("done.\n");
 
