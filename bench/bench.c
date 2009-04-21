@@ -81,7 +81,7 @@ int main() {
     extime = calculate_execution_time(t0,t1);
 
     // print results
-    printf("    %-20s : %12.6f s : %12.6f\n", "q32_sin", extime, rmse);
+    printf("    %-20s : %12.6f s : %12.8f\n", "q32_sin", extime, rmse);
 
     printf("done.\n");
 
