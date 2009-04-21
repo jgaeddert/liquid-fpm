@@ -91,8 +91,11 @@ X(_t) X(_div)(X(_t) _a, X(_t) _b);                                  \
                                                                     \
 /* trig */                                                          \
 X(_t) X(_cexp)(X(_t) _x);                                           \
+X(_t) X(_clog)(X(_t) _x);                                           \
 Q(_t) X(_carg)(X(_t) _x);/* { return Q(_atan2)(_x.imag, _x.real); }; */   \
-Q(_t) X(_abs) (X(_t) _x);
+Q(_t) X(_abs2) (X(_t) _x);                                          \
+static inline Q(_t) X(_abs) (X(_t) _x)                              \
+    {return Q(_sqrt)(X(_abs2)(_x));};
 
 LIQUIDFPM_DEFINE_COMPLEX_API(LIQUIDFPM_MANGLE_CQ32, LIQUIDFPM_MANGLE_Q32)
 
