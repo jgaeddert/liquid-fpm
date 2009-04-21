@@ -49,7 +49,16 @@ case $target_cpu in
 i386|i486|i586|i686)
     ARCH_OPTION="-march=$target_cpu"
     FPM_OPTION="-DFPM_INTEL"
-    MLIBS="q32_mul.x86.o"
+
+    case $target_os in
+    darwin*)
+        MLIBS="q32_mul.intelmac.o"
+        ;;
+    *)
+        MLIBS="q32_mul.x86.o"
+        ;;
+    esac
+
     AC_DEFINE(FPM_INTEL, 1, [Intel])
     ;;
 ppc|powerpc*)
