@@ -34,7 +34,7 @@ CQ(_t) CQ(_cexp)(CQ(_t) _x)
 CQ(_t) CQ(_clog)(CQ(_t) _x)
 {
     // log(x) = log(|x|) + j*arg(x)
-    CQ(_t) clog = {Q(_log)(CQ(_abs)(_x)), CQ(_arg)(_x)};
+    CQ(_t) clog = {Q(_log)(CQ(_abs)(_x)), CQ(_carg)(_x)};
     return clog;
 }
 
