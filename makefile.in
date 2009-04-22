@@ -165,11 +165,11 @@ $(benchmarkgen_prog): bench/benchmarkgen.c
 $(benchmark_include): $(benchmarkgen_prog)
 	./$(benchmarkgen_prog) $(benchmark_headers) > $@
 
-benchmark: bench/bench.c $(benchmark_include) libliquidfpm.a
+$(benchmark_prog): bench/bench.c $(benchmark_include) libliquidfpm.a
 	$(CC) $(CFLAGS) -lm $< $(LDFLAGS) libliquidfpm.a -o $@
 
-bench: benchmark
-	./benchmark
+bench: $(benchmark_prog)
+	./$(benchmark_prog)
 
 clean-bench:
 	$(RM) $(benchmarkgen_prog) $(benchmark_prog) $(benchmark_include)
