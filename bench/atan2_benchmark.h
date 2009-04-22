@@ -12,15 +12,22 @@
 
 #define DEBUG 1
 
-void precision_atan2(unsigned int _res, float * _rmse)
+void precision_atan2(unsigned int _res, float * _rmse, float * _abse, FILE * _precision_fid)
 {
-    float e, mse=0.0f;
+    float e, rms_error=0.0f, max_error=0.0f;
     float theta_min = 0;
     float theta_max = 2*M_PI;
     float dthetaf = (theta_max-theta_min)/(_res-1);
     float thetaf = theta_min;
+    float theta_hat;
     float xf, yf;
     unsigned int i;
+
+    fprintf(_precision_fid,"\n\n%% atan2\n");
+    fprintf(_precision_fid,"clear all;\n");
+    fprintf(_precision_fid,"x = zeros(1,%u);\n", _res);
+    fprintf(_precision_fid,"y = zeros(1,%u);\n", _res);
+    fprintf(_precision_fid,"y_hat = zeros(1,%u);\n", _res);
 
     q32_t theta, x, y;
     for (i=0; i<_res; i++) {
@@ -32,23 +39,39 @@ void precision_atan2(unsigned int _res, float * _rmse)
 
         theta = q32_atan2(y,x);
 
-        e = fabsf( thetaf - q32_angle_fixed_to_float(theta) );
-        if (e > M_PI)
-            e -= 2*M_PI;
-        else if (e < -M_PI)
-            e += 2*M_PI;
+        theta_hat = q32_angle_fixed_to_float(theta);
 
-        mse += e*e;
+        e = thetaf - theta_hat;
+        if (e > M_PI) {
+            theta_hat += 2*M_PI;
+        } else if (e < -M_PI) {
+            theta_hat -= 2*M_PI;
+        }
+        e = thetaf - theta_hat;
+
+        rms_error += e*e;
+
+        if (fabsf(e) > max_error || i == 0)
+            max_error = fabsf(e);
 
 #if DEBUG
         printf("%4u : atan2(%12.8f,%12.8f) = %12.8f (%12.8f, e=%12.8f)\n",
-                i, yf, xf, thetaf, q32_angle_fixed_to_float(theta), e);
+                i, yf, xf, thetaf, theta_hat, e);
 //        printf("e(%4u) = %12.4e;\n", i+1, e);
 #endif
+        fprintf(_precision_fid, "x(%4u) = %12.4e; ", i+1, yf/xf);
+        fprintf(_precision_fid, "y(%4u) = %12.4e; ", i+1, thetaf);
+        fprintf(_precision_fid, "y_hat(%4u) = %12.4e; ", i+1, theta_hat);
+        fprintf(_precision_fid, "\n");
 
         thetaf += dthetaf;
     }
-    *_rmse = sqrtf(mse/_res);
+    *_rmse = sqrtf(rms_error/_res);
+    *_abse = max_error;
+
+    fprintf(_precision_fid, "figure; plot(x,y-y_hat);\n");
+    fprintf(_precision_fid, "xlabel('y/x');\n");
+    fprintf(_precision_fid, "ylabel('atan2(y,x)');\n");
 }
 
 void benchmark_atan2(struct rusage *_start,

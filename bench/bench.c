@@ -12,7 +12,9 @@
 // define precision function pointer
 typedef void(*precision_function_t) (
     unsigned int _res,
-    float * _rmse);
+    float * _rmse,
+    float * _abse,
+    FILE * _precision_file);
 
 // define benchmark function pointer
 typedef void(*benchmark_function_t) (
@@ -31,7 +33,13 @@ typedef struct {
     const char * name;
 
     // precision
-    float rmse;
+    float rms_error;
+    float abs_error;
+#if 0
+    float * input_val;      // input value
+    float * output_true;    // true (correct) output
+    float * output_actual;  // actual output
+#endif
 
     // speed
     unsigned long int num_trials;
@@ -56,12 +64,18 @@ int main() {
     double extime;
     unsigned int resolution = 256;
     float rmse;
+    float abse;
     
     unsigned int i;
 
+    FILE * fid = fopen("precision.m", "w");
+
     // run benchmarks
     for (i=0; i<NUM_BENCHMARKS; i++) {
-        benchmarks[i].precision_api(resolution,&rmse);
+        // run precision test
+        benchmarks[i].precision_api(resolution,&rmse,&abse,fid);
+
+        // run speed test
         benchmarks[i].benchmark_api(&t0,&t1,&num_trials);
 
         // compile results
@@ -70,6 +84,8 @@ int main() {
         // print results
         printf("    %-20s : %12.6f s : %12.8f\n", benchmarks[i].name, extime, rmse);
     }
+
+    fclose(fid);
 
     printf("done.\n");
 
