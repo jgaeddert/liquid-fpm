@@ -74,51 +74,51 @@ bool parse_filename(char * _filename, char * _basename)
     const char tag[] = "_benchmark.h";
 
     // try to strip out path: find rightmost occurrence of pathsep
-    printf("%s\n", _filename);
+    //printf("%s\n", _filename);
     subptr = strrchr(_filename, pathsep);   // obtain index of last pathsep
     if (subptr == NULL) {
-        printf("path delimiter not found\n");
+        //printf("path delimiter not found\n");
         i0 = 0;
     } else {
         i0 = subptr - _filename + 1;
     }
-    printf("  i0 : %d\n", i0);
+    //printf("  i0 : %d\n", i0);
 
     // try to strip out tag: "_benchmark.h"
     subptr = strrchr( _filename, tag[0] );
     if (subptr == NULL) {
-        printf("  tag not found\n");
+        //printf("  tag not found\n");
         return false;
     } else {
         i1 = subptr - _filename;
-        printf("  i1 : %d\n", i1);
+        //printf("  i1 : %d\n", i1);
     }
 
     // ensure the last occurrence of tag is not in the path name
     if (i0 >= i1) {
-        printf("invalid path name\n");
+        //printf("invalid path name\n");
         return false;
     }
     
     // ensure tag is valid
-    strncpy(substr,&_filename[i1],256);
-    printf("  comparing %s with %s\n", tag, substr);
+    //strncpy(substr,&_filename[i1],256);
+    //printf("  comparing %s with %s\n", tag, substr);
     if (strncmp(tag,&_filename[i1],strlen(tag)) != 0 ) {
-        printf("  invalid tag (comparison failed)\n");
+        //printf("  invalid tag (comparison failed)\n");
         return false;
     } else {
-        printf("  comparison passed!\n");
+        //printf("  comparison passed!\n");
     }
 
     // copy base name
     strncpy( substr, _filename+i0, i1-i0 );
     // add null character to end
     substr[i1-i0] = '\0';
-    printf("base: \"%s\"\n", substr);
+    //printf("base: \"%s\"\n", substr);
 
     strncpy(_basename, substr, 256);
 
-    printf("\n\n");
+    //printf("\n\n");
     return true;
 }
 

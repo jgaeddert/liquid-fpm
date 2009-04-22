@@ -50,7 +50,7 @@ double calculate_execution_time(struct rusage _start, struct rusage _finish);
 #include "bench/atan2_benchmark.h"
 */
 
-#include "bench/benchmark_include.h"
+#include "../benchmark_include.h"
 
 int main() {
     //

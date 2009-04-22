@@ -149,12 +149,30 @@ fpmtest: fpmtest.o libliquidfpm.a
 
 # Benchmark
 .PHONY: bench
+benchmark_headers = 			\
+	bench/atan2_benchmark.h		\
+	bench/log2_benchmark.h		\
+	bench/sin_benchmark.h		\
+	bench/sqrt_benchmark.h
+
+benchmarkgen_prog	= benchmarkgen
+benchmark_prog		= benchmark
+benchmark_include	= benchmark_include.h
+
+$(benchmarkgen_prog): bench/benchmarkgen.c
+	$(CC) -Wall -o $@ $<
+
+$(benchmark_include): $(benchmarkgen_prog)
+	./$(benchmarkgen_prog) $(benchmark_headers) > $@
+
 benchmark: bench/bench.c libliquidfpm.a
 	$(CC) $(CFLAGS) -lm $^ $(LDFLAGS) -o $@
 
 bench: benchmark
 	./benchmark
 
+clean-bench:
+	$(RM) $(benchmarkgen_prog) $(benchmark_prog) $(benchmark_include)
 
 #
 # clean
