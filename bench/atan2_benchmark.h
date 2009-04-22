@@ -59,9 +59,10 @@ void precision_atan2(unsigned int _res, float * _rmse, float * _abse, FILE * _pr
                 i, yf, xf, thetaf, theta_hat, e);
 //        printf("e(%4u) = %12.4e;\n", i+1, e);
 #endif
-        fprintf(_precision_fid, "x(%4u) = %12.4e; ", i+1, yf/xf);
-        fprintf(_precision_fid, "y(%4u) = %12.4e; ", i+1, thetaf);
-        fprintf(_precision_fid, "y_hat(%4u) = %12.4e; ", i+1, theta_hat);
+        fprintf(_precision_fid, "x(%4u) = %12.4e; ", i+1, xf);
+        fprintf(_precision_fid, "y(%4u) = %12.4e; ", i+1, yf);
+        fprintf(_precision_fid, "theta(%4u) = %12.4e; ", i+1, thetaf);
+        fprintf(_precision_fid, "theta_hat(%4u) = %12.4e; ", i+1, theta_hat);
         fprintf(_precision_fid, "\n");
 
         thetaf += dthetaf;
@@ -69,7 +70,7 @@ void precision_atan2(unsigned int _res, float * _rmse, float * _abse, FILE * _pr
     *_rmse = sqrtf(rms_error/_res);
     *_abse = max_error;
 
-    fprintf(_precision_fid, "figure; plot(x,y-y_hat);\n");
+    fprintf(_precision_fid, "figure; plot(x,y,'x');\n");
     fprintf(_precision_fid, "xlabel('y/x');\n");
     fprintf(_precision_fid, "ylabel('atan2(y,x)');\n");
 }
