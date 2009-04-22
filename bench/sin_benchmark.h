@@ -10,6 +10,9 @@
 
 #include "liquidfpm.internal.h"
 
+#ifdef DEBUG
+#   undef DEBUG
+#endif
 #define DEBUG 0
 
 void precision_sin(unsigned int _res, float * _rmse, float * _abse, FILE * _precision_fid)

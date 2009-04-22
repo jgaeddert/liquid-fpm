@@ -161,6 +161,8 @@ benchmarkgen_prog	= benchmarkgen
 benchmark_prog		= benchmark
 benchmark_include	= benchmark_include.h
 
+BENCH_CFLAGS		= $(INCLUDE_CFLAGS)
+
 $(benchmarkgen_prog): bench/benchmarkgen.c
 	$(CC) -Wall -o $@ $<
 
@@ -168,7 +170,7 @@ $(benchmark_include): $(benchmarkgen_prog) $(benchmark_headers)
 	./$(benchmarkgen_prog) $(benchmark_headers) > $@
 
 $(benchmark_prog): bench/bench.c $(benchmark_include) libliquidfpm.a
-	$(CC) $(CFLAGS) -lm $< $(LDFLAGS) libliquidfpm.a -o $@
+	$(CC) $(BENCH_CFLAGS) -lm $< $(LDFLAGS) libliquidfpm.a -o $@
 
 bench: $(benchmark_prog)
 	./$(benchmark_prog)
