@@ -54,7 +54,7 @@ int main(int argc, char*argv[]) {
             benchmarks[i].basename,
             benchmarks[i].basename,
             benchmarks[i].basename);
-        if (i<n)
+        if (i<n-1)
             printf(",");
         printf("\n");
     }

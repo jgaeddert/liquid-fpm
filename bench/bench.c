@@ -40,17 +40,13 @@ typedef struct {
     float cycles_per_trial;
 } bench_t;
 
-double calculate_execution_time(struct rusage _start, struct rusage _finish);
-
-// 
-/*
-#include "bench/log2_benchmark.h"
-#include "bench/sqrt_benchmark.h"
-#include "bench/sin_benchmark.h"
-#include "bench/atan2_benchmark.h"
-*/
-
+// include auto-generated benchmark header
+//
+// defines the following symbols...
+//
 #include "../benchmark_include.h"
+
+double calculate_execution_time(struct rusage _start, struct rusage _finish);
 
 int main() {
     //
