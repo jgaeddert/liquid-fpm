@@ -2,8 +2,8 @@
 //
 //
 
-#ifndef __LIQUIDFPM_ATAN_BENCHMARK_H__
-#define __LIQUIDFPM_ATAN_BENCHMARK_H__
+#ifndef __LIQUIDFPM_ATAN2_BENCHMARK_H__
+#define __LIQUIDFPM_ATAN2_BENCHMARK_H__
 
 #include <sys/resource.h>
 #include <math.h>
@@ -82,4 +82,4 @@ void benchmark_atan2(struct rusage *_start,
     *_num_trials *= 4;
 }
 
-#endif // __LIQUIDFPM_ATAN_BENCHMARK_H__
+#endif // __LIQUIDFPM_ATAN2_BENCHMARK_H__
