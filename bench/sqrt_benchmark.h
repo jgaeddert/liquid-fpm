@@ -10,11 +10,14 @@
 
 #include "liquidfpm.h"
 
-#define DEBUG 1
+#ifdef DEBUG
+#   undef DEBUG
+#endif
+#define DEBUG 0
 
-void precision_sqrt(unsigned int _res, float * _rmse)
+void precision_sqrt(unsigned int _res, float * _rmse, float *_maxe)
 {
-    float e, mse=0.0f;
+    float e, rms_error=0.0f, max_error=0.0f;
     float xf_min = 0.01f;
     float xf_max = 7.5f;
     float dxf = (xf_max-xf_min)/(_res-1);
@@ -29,8 +32,11 @@ void precision_sqrt(unsigned int _res, float * _rmse)
         x = q32_float_to_fixed(xf);
         y = q32_sqrt(x);
 
-        e = yf - q32_fixed_to_float(y);
-        mse += e*e;
+        e = fabsf(yf - q32_fixed_to_float(y));
+        rms_error += e*e;
+
+        if (e > max_error || i == 0)
+            max_error = e;
 
 #if DEBUG
         printf("%4u : sqrt(%12.8f) = %12.8f (%12.8f, e=%12.8f)\n",
@@ -40,7 +46,8 @@ void precision_sqrt(unsigned int _res, float * _rmse)
 
         xf += dxf;
     }
-    *_rmse = sqrtf(mse/_res);
+    *_rmse = sqrtf(rms_error/_res);
+    *_maxe = max_error;
 }
 
 void benchmark_sqrt(struct rusage *_start,

@@ -151,9 +151,7 @@ fpmtest: fpmtest.o libliquidfpm.a
 .PHONY: bench
 benchmark_headers = 				\
 	bench/atan2_benchmark.h			\
-	bench/sin_benchmark.h
-
-#	bench/sin_benchmark.h			\
+	bench/sin_benchmark.h			\
 	bench/sqrt_benchmark.h			\
 	bench/log2_benchmark.h
 

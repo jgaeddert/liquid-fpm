@@ -13,9 +13,9 @@
 #ifdef DEBUG
 #   undef DEBUG
 #endif
-#define DEBUG 1
+#define DEBUG 0
 
-void precision_atan2(unsigned int _res, float * _rmse, float * _abse, FILE * _precision_fid)
+void precision_atan2(unsigned int _res, float * _rmse, float * _abse)
 {
     float e, rms_error=0.0f, max_error=0.0f;
     float theta_min = 0;
@@ -25,12 +25,6 @@ void precision_atan2(unsigned int _res, float * _rmse, float * _abse, FILE * _pr
     float theta_hat;
     float xf, yf;
     unsigned int i;
-
-    fprintf(_precision_fid,"\n\n%% atan2\n");
-    fprintf(_precision_fid,"clear all;\n");
-    fprintf(_precision_fid,"x = zeros(1,%u);\n", _res);
-    fprintf(_precision_fid,"y = zeros(1,%u);\n", _res);
-    fprintf(_precision_fid,"y_hat = zeros(1,%u);\n", _res);
 
     q32_t theta, x, y;
     for (i=0; i<_res; i++) {
@@ -62,20 +56,10 @@ void precision_atan2(unsigned int _res, float * _rmse, float * _abse, FILE * _pr
                 i, yf, xf, thetaf, theta_hat, e);
 //        printf("e(%4u) = %12.4e;\n", i+1, e);
 #endif
-        fprintf(_precision_fid, "x(%4u) = %12.4e; ", i+1, xf);
-        fprintf(_precision_fid, "y(%4u) = %12.4e; ", i+1, yf);
-        fprintf(_precision_fid, "theta(%4u) = %12.4e; ", i+1, thetaf);
-        fprintf(_precision_fid, "theta_hat(%4u) = %12.4e; ", i+1, theta_hat);
-        fprintf(_precision_fid, "\n");
-
         thetaf += dthetaf;
     }
     *_rmse = sqrtf(rms_error/_res);
     *_abse = max_error;
-
-    fprintf(_precision_fid, "figure; plot(x,y,'x');\n");
-    fprintf(_precision_fid, "xlabel('y/x');\n");
-    fprintf(_precision_fid, "ylabel('atan2(y,x)');\n");
 }
 
 void benchmark_atan2(struct rusage *_start,

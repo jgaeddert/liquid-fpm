@@ -13,8 +13,7 @@
 typedef void(*precision_function_t) (
     unsigned int _res,
     float * _rmse,
-    float * _abse,
-    FILE * _precision_file);
+    float * _abse);
 
 // define benchmark function pointer
 typedef void(*benchmark_function_t) (
@@ -61,31 +60,37 @@ int main() {
     struct rusage t0;
     struct rusage t1;
     unsigned long int num_trials = 100000;
+    unsigned long int n;
     double extime;
+    double cycles_per_trial;
+    double cpu_clock = 867e6;
     unsigned int resolution = 256;
     float rmse;
-    float abse;
+    float maxe;
     
     unsigned int i;
-
-    FILE * fid = fopen("precision.m", "w");
 
     // run benchmarks
     for (i=0; i<NUM_BENCHMARKS; i++) {
         // run precision test
-        benchmarks[i].precision_api(resolution,&rmse,&abse,fid);
+        benchmarks[i].precision_api(resolution,&rmse,&maxe);
 
         // run speed test
-        benchmarks[i].benchmark_api(&t0,&t1,&num_trials);
+        n = num_trials;
+        benchmarks[i].benchmark_api(&t0,&t1,&n);
 
         // compile results
         extime = calculate_execution_time(t0,t1);
+        cycles_per_trial = extime * cpu_clock / (n);
 
         // print results
-        printf("    %-20s : %12.6f s : %12.8f\n", benchmarks[i].name, extime, rmse);
+        printf("    %-16s : %10.6f s (%7.2f cycles/tr) : %10.8f rms, %10.8f max\n",
+            benchmarks[i].name,
+            extime,
+            cycles_per_trial,
+            rmse,
+            maxe);
     }
-
-    fclose(fid);
 
     printf("done.\n");
 

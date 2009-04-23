@@ -15,9 +15,9 @@
 #endif
 #define DEBUG 0
 
-void precision_sin(unsigned int _res, float * _rmse, float * _abse, FILE * _precision_fid)
+void precision_sin(unsigned int _res, float * _rmse, float * _abse)
 {
-    float e, mse=0.0f;
+    float e, rms_error=0.0f, max_error=0.0f;
     float theta_min = -2*M_PI;
     float theta_max =  2*M_PI;
     float dthetaf = (theta_max-theta_min)/(_res-1);
@@ -25,12 +25,6 @@ void precision_sin(unsigned int _res, float * _rmse, float * _abse, FILE * _prec
     float sin_hat;
     float sf;
     unsigned int i;
-
-    fprintf(_precision_fid,"\n\n%% sin\n");
-    fprintf(_precision_fid,"clear all;\n");
-    fprintf(_precision_fid,"x = zeros(1,%u);\n", _res);
-    fprintf(_precision_fid,"y = zeros(1,%u);\n", _res);
-    fprintf(_precision_fid,"y_hat = zeros(1,%u);\n", _res);
 
     q32_t theta, s;
     for (i=0; i<_res; i++) {
@@ -40,27 +34,21 @@ void precision_sin(unsigned int _res, float * _rmse, float * _abse, FILE * _prec
         sin_hat = q32_fixed_to_float(s);
         sf = sinf(thetaf);
 
-        e = sf - sin_hat;
-        mse += e*e;
+        e = fabsf(sf - sin_hat);
+        rms_error += e*e;
+
+        if (e > max_error || i == 0)
+            max_error = e;
 
 #if DEBUG
         printf("%4u : sin(%12.8f) = %12.8f (%12.8f, e=%12.8f)\n",
                 i, thetaf, sf, q32_fixed_to_float(s), e);
 //        printf("e(%4u) = %12.4e;\n", i+1, e);
 #endif
-        fprintf(_precision_fid, "x(%4u) = %12.4e; ", i+1, thetaf);
-        fprintf(_precision_fid, "y(%4u) = %12.4e; ", i+1, sinf(thetaf));
-        fprintf(_precision_fid, "y_hat(%4u) = %12.4e; ", i+1, sin_hat);
-        fprintf(_precision_fid, "\n");
-
         thetaf += dthetaf;
     }
-    *_rmse = sqrtf(mse/_res);
-    *_abse = 0.0f;
-
-    fprintf(_precision_fid, "figure; plot(x,y-y_hat);\n");
-    fprintf(_precision_fid, "xlabel('x');\n");
-    fprintf(_precision_fid, "ylabel('sin(x)');\n");
+    *_rmse = sqrtf(rms_error/_res);
+    *_abse = max_error;
 }
 
 void benchmark_sin(struct rusage *_start,
