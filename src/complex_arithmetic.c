@@ -31,9 +31,19 @@ CQ(_t) CQ(_sub)(CQ(_t) _a, CQ(_t) _b)
 // multiply 2 complex numbers
 CQ(_t) CQ(_mul)(CQ(_t) _a, CQ(_t) _b)
 {
+#if 0
     CQ(_t) prod = { Q(_mul)(_a.real,_b.real) - Q(_mul)(_a.imag,_b.imag),
                     Q(_mul)(_a.real,_b.imag) + Q(_mul)(_a.imag,_b.real) };
     return prod;
+#else
+    // faster method? only requires three multiplications
+    Q(_t) k1 = Q(_mul)(_a.real, _b.real + _b.imag);
+    Q(_t) k2 = Q(_mul)(_b.imag, _a.real + _a.imag);
+    Q(_t) k3 = Q(_mul)(_b.real, _a.imag - _a.real);
+
+    CQ(_t) prod = {k1-k2,k1+k3};
+    return prod;
+#endif
 }
 
 // divide 2 complex numbers
