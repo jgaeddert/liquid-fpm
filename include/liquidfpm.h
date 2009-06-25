@@ -11,6 +11,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include <inttypes.h>
+#include <complex.h>
 
 /* concatenation function */
 #define LIQUIDFPM_CONCAT(prefix, name) prefix ## name
@@ -34,6 +35,11 @@ static inline int X(_intpart) (X(_t) _x)                            \
     { return (_x >> FRACBITS); } ;                                  \
 static inline int X(_fracpart) (X(_t) _x)                           \
     { return _x & ((1<<FRACBITS)-1); };                             \
+                                                                    \
+/* constants */                                                     \
+const static X(_t) X(_min) = (1);                                   \
+const static X(_t) X(_max) = (1<<(FRACBITS));                       \
+const static X(_t) X(_pi) = (1<<(INTBITS+FRACBITS-1))-1;            \
                                                                     \
 /* conversion */                                                    \
 static inline float X(_fixed_to_float)(X(_t) _x)                    \
@@ -82,6 +88,10 @@ typedef struct {Q(_t) real; Q(_t) imag;} X(_t);                     \
 static inline Q(_t) X(_real)(X(_t) _a) {return _a.real;};           \
 static inline Q(_t) X(_imag)(X(_t) _a) {return _a.imag;};           \
 X(_t) X(_conj)(X(_t) _a);                                           \
+                                                                    \
+/* conversion */                                                    \
+float complex X(_fixed_to_float)(X(_t) _x);                         \
+X(_t) X(_float_to_fixed)(float complex _x);                         \
                                                                     \
 /* arithmetic */                                                    \
 X(_t) X(_add)(X(_t) _a, X(_t) _b);                                  \
