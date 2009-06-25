@@ -103,9 +103,9 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
     _x <<= shift;
     _y <<= shift;
         
+#if DEBUG_ATAN_PWPOLY
     float yf = q32_fixed_to_float(_y);
     float xf = q32_fixed_to_float(_x);
-#if DEBUG_ATAN_PWPOLY
     printf("  y > %12.8f, log2(y) : %12.8f\n", yf, log2(yf));
     printf("  x > %12.8f, log2(x) : %12.8f\n", xf, log2(xf));
     printf("  true log2diff : %12.8f\n", log2(yf) - log2(xf));

@@ -6,7 +6,6 @@
 #define __LIQUID_FPM_INTERNAL_H__
 
 #include "liquidfpm.h"
-#include "liquidfpm.h"
 #include "config.h"
 
 #include <math.h>
