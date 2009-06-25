@@ -53,9 +53,7 @@ sources  +=			\
 	src/sqrt.newton.c		\
 	src/sincos.pwpolyfit.c		\
 	src/atan.pwpolyfit.c		\
-	src/complex_arithmetic.c	\
-	src/complex_conversion.c	\
-	src/complex_trig.c	\
+	src/cq32.c	\
 	src/msb_index.c		\
 	gentab/q32_tables.c
 
