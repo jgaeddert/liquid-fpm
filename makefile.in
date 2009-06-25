@@ -187,6 +187,6 @@ clean: clean-bench
 	$(RM) $(extra_clean)
 
 distclean: clean
-	rm -f config.log config.cache config.status config.h makefile
-	rm -rf autom4te.cache
+	$(RM) config.log config.cache config.status config.h makefile
+	$(RM) autom4te.cache
 

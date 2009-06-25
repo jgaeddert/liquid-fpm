@@ -7,7 +7,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG 0
+#define DEBUG_ATAN_PWPOLY 0
 
 // polynomial coefficients
 q32_t q32_atan_table_pwpolyfit[16][3] = {
@@ -82,13 +82,13 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
     unsigned int msb_index_x = msb_index(_x);
     unsigned int msb_index_y = msb_index(_y);
 
-#if DEBUG
+#if DEBUG_ATAN_PWPOLY
     printf("msb_index_x: %u\n", msb_index_x);
     printf("msb_index_y: %u\n", msb_index_y);
 #endif
     if (abs(msb_index_x - msb_index_y) > 7) {
         // use high ratio approximation
-#if DEBUG
+#if DEBUG_ATAN_PWPOLY
         printf("high ratio approximation\n");
 #endif
 
@@ -105,7 +105,7 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
         
     float yf = q32_fixed_to_float(_y);
     float xf = q32_fixed_to_float(_x);
-#if DEBUG
+#if DEBUG_ATAN_PWPOLY
     printf("  y > %12.8f, log2(y) : %12.8f\n", yf, log2(yf));
     printf("  x > %12.8f, log2(x) : %12.8f\n", xf, log2(xf));
     printf("  true log2diff : %12.8f\n", log2(yf) - log2(xf));
@@ -113,7 +113,7 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
     q32_t log2diff = q32_log2(_y) - q32_log2(_x);
 
     unsigned int index = (log2diff >> 27) & 0x000f;
-#if DEBUG
+#if DEBUG_ATAN_PWPOLY
     printf("  log2diff : %f > %d (index=%u)\n", q32_fixed_to_float(log2diff), q32_intpart(log2diff), index);
     printf("  log2diff : 0x%.8x\n", log2diff);
 #endif
@@ -124,7 +124,7 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
     q32_t c0 = q32_atan_table_pwpolyfit[index][2];
     q32_t c1 = q32_atan_table_pwpolyfit[index][1];
     q32_t c2 = q32_atan_table_pwpolyfit[index][0];
-#if DEBUG
+#if DEBUG_ATAN_PWPOLY
     printf("    c0 : %12.8f\n", q32_fixed_to_float(c0));
     printf("    c1 : %12.8f\n", q32_fixed_to_float(c1));
     printf("    c2 : %12.8f\n", q32_fixed_to_float(c2));
@@ -132,11 +132,11 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
 
     q32_t phi = q32_atan_polyval_p2(log2diff,c0,c1,c2);
 
-#if DEBUG
+#if DEBUG_ATAN_PWPOLY
     printf("  polyval   : %f\n", q32_fixed_to_float(phi));
 #endif
     phi <<= 2;
-#if DEBUG
+#if DEBUG_ATAN_PWPOLY
     printf("  angle     : %f\n", q32_angle_fixed_to_float(phi));
 #endif
 

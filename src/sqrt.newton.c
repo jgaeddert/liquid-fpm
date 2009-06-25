@@ -7,7 +7,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG 0
+#define DEBUG_SQRT_NEWTON 0
 
 #define LIQUIDFPM_SQRT_NEWTON_NUM_ITERATIONS    3
 
@@ -29,7 +29,7 @@ q32_t q32_sqrt( q32_t _x )
 
     unsigned int i;
     for (i=0; i<LIQUIDFPM_SQRT_NEWTON_NUM_ITERATIONS; i++) {
-#if DEBUG
+#if DEBUG_SQRT_NEWTON
         printf("%4u : %18.14f\n", i, q32_fixed_to_float(x0));
 #endif
         x1 = (x0 + q32_div(_x,x0)) / 2;
