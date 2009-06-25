@@ -22,91 +22,91 @@ extern "C" {
 
 /* API definition macro
  *
- * X        :   name-mangling macro
+ * Q        :   name-mangling macro
  * T        :   primitive data type
  * INTBITS  :   number of integer bits
  * FRACBITS :   number of fractional bits
  */
-#define LIQUIDFPM_DEFINE_API(X,T,INTBITS,FRACBITS)                  \
-typedef T X(_t);                                                    \
-const static unsigned int X(_intbits) = INTBITS;                    \
-const static unsigned int X(_fracbits) = FRACBITS;                  \
-static inline int X(_intpart) (X(_t) _x)                            \
+#define LIQUIDFPM_DEFINE_API(Q,T,INTBITS,FRACBITS)                  \
+typedef T Q(_t);                                                    \
+const static unsigned int Q(_intbits) = INTBITS;                    \
+const static unsigned int Q(_fracbits) = FRACBITS;                  \
+static inline int Q(_intpart) (Q(_t) _x)                            \
     { return (_x >> FRACBITS); } ;                                  \
-static inline int X(_fracpart) (X(_t) _x)                           \
+static inline int Q(_fracpart) (Q(_t) _x)                           \
     { return _x & ((1<<FRACBITS)-1); };                             \
                                                                     \
 /* constants */                                                     \
-const static X(_t) X(_min) = (1);                                   \
-const static X(_t) X(_max) = (1<<(FRACBITS));                       \
-const static X(_t) X(_pi) = (1<<(INTBITS+FRACBITS-1))-1;            \
+const static Q(_t) Q(_min) = (1);                                   \
+const static Q(_t) Q(_max) = (1<<(FRACBITS));                       \
+const static Q(_t) Q(_pi) = (1<<(INTBITS+FRACBITS-1))-1;            \
                                                                     \
 /* conversion */                                                    \
-static inline float X(_fixed_to_float)(X(_t) _x)                    \
+static inline float Q(_fixed_to_float)(Q(_t) _x)                    \
     { return (float) (_x) / (float)(1 << FRACBITS); };              \
-static inline X(_t) X(_float_to_fixed)(float _x)                    \
-    { return (X(_t)) (_x * (float)(1 << FRACBITS) + 0.5f); };       \
+static inline Q(_t) Q(_float_to_fixed)(float _x)                    \
+    { return (Q(_t)) (_x * (float)(1 << FRACBITS) + 0.5f); };       \
                                                                     \
 /* arithmetic */                                                    \
-static inline X(_t) X(_abs)(X(_t) _x) {return (_x<0) ? -_x : _x;};  \
-static inline X(_t) X(_add)(X(_t) _a, X(_t) _b) {return _a + _b;};  \
-static inline X(_t) X(_sub)(X(_t) _a, X(_t) _b) {return _a - _b;};  \
-X(_t) X(_mul)(X(_t) _a, X(_t) _b);                                  \
-X(_t) X(_div)(X(_t) _a, X(_t) _b);                                  \
+static inline Q(_t) Q(_abs)(Q(_t) _x) {return (_x<0) ? -_x : _x;};  \
+static inline Q(_t) Q(_add)(Q(_t) _a, Q(_t) _b) {return _a + _b;};  \
+static inline Q(_t) Q(_sub)(Q(_t) _a, Q(_t) _b) {return _a - _b;};  \
+Q(_t) Q(_mul)(Q(_t) _a, Q(_t) _b);                                  \
+Q(_t) Q(_div)(Q(_t) _a, Q(_t) _b);                                  \
                                                                     \
 /* trig */                                                          \
-X(_t) X(_sin)(X(_t) _theta);                                        \
-X(_t) X(_cos)(X(_t) _theta);                                        \
-void  X(_sincos)(X(_t) _theta, X(_t) * _sin, X(_t) * _cos);         \
-X(_t) X(_tan)(X(_t) _theta);                                        \
-X(_t) X(_atan2)(X(_t) _x, X(_t) _y);                                \
+Q(_t) Q(_sin)(Q(_t) _theta);                                        \
+Q(_t) Q(_cos)(Q(_t) _theta);                                        \
+void  Q(_sincos)(Q(_t) _theta, Q(_t) * _sin, Q(_t) * _cos);         \
+Q(_t) Q(_tan)(Q(_t) _theta);                                        \
+Q(_t) Q(_atan2)(Q(_t) _x, Q(_t) _y);                                \
                                                                     \
 /* log, etc. */                                                     \
-typedef struct {int base; X(_t) frac;} X(_log2_t);                  \
-X(_t) X(_log2)(X(_t) _x);                                           \
-X(_t) X(_exp2)(X(_t) _x);                                           \
-X(_t) X(_log) (X(_t) _x);                                           \
-X(_t) X(_exp) (X(_t) _x);                                           \
-X(_t) X(_sqrt)(X(_t) _x);                                           \
-X(_t) X(_pow) (X(_t) _x);                                           \
+typedef struct {int base; Q(_t) frac;} Q(_log2_t);                  \
+Q(_t) Q(_log2)(Q(_t) _x);                                           \
+Q(_t) Q(_exp2)(Q(_t) _x);                                           \
+Q(_t) Q(_log) (Q(_t) _x);                                           \
+Q(_t) Q(_exp) (Q(_t) _x);                                           \
+Q(_t) Q(_sqrt)(Q(_t) _x);                                           \
+Q(_t) Q(_pow) (Q(_t) _x);                                           \
                                                                     \
 /* vector operations */                                             \
-X(_t) X(_dotprod)(X(_t) * _x, X(_t) * _v, unsigned int _n);
+Q(_t) Q(_dotprod)(Q(_t) * _x, Q(_t) * _v, unsigned int _n);
 
 
 LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)
 
 /* API definition macro (complex types)
  *
- * X        :   name-mangling macro (complex)
+ * CQ       :   name-mangling macro (complex)
  * Q        :   name-mangling macro (real)
  */
-#define LIQUIDFPM_DEFINE_COMPLEX_API(X,Q)                           \
-typedef struct {Q(_t) real; Q(_t) imag;} X(_t);                     \
+#define LIQUIDFPM_DEFINE_COMPLEX_API(CQ,Q)                          \
+typedef struct {Q(_t) real; Q(_t) imag;} CQ(_t);                    \
                                                                     \
 /* accessor functions */                                            \
-static inline Q(_t) X(_real)(X(_t) _a) {return _a.real;};           \
-static inline Q(_t) X(_imag)(X(_t) _a) {return _a.imag;};           \
-X(_t) X(_conj)(X(_t) _a);                                           \
+static inline Q(_t) CQ(_real)(CQ(_t) _a) {return _a.real;};         \
+static inline Q(_t) CQ(_imag)(CQ(_t) _a) {return _a.imag;};         \
+CQ(_t) CQ(_conj)(CQ(_t) _a);                                        \
                                                                     \
 /* conversion */                                                    \
-float complex X(_fixed_to_float)(X(_t) _x);                         \
-X(_t) X(_float_to_fixed)(float complex _x);                         \
+float complex CQ(_fixed_to_float)(CQ(_t) _x);                       \
+CQ(_t) CQ(_float_to_fixed)(float complex _x);                       \
                                                                     \
 /* arithmetic */                                                    \
-X(_t) X(_add)(X(_t) _a, X(_t) _b);                                  \
-X(_t) X(_sub)(X(_t) _a, X(_t) _b);                                  \
-X(_t) X(_mul)(X(_t) _a, X(_t) _b);                                  \
-X(_t) X(_div)(X(_t) _a, X(_t) _b);                                  \
+CQ(_t) CQ(_add)(CQ(_t) _a, CQ(_t) _b);                              \
+CQ(_t) CQ(_sub)(CQ(_t) _a, CQ(_t) _b);                              \
+CQ(_t) CQ(_mul)(CQ(_t) _a, CQ(_t) _b);                              \
+CQ(_t) CQ(_div)(CQ(_t) _a, CQ(_t) _b);                              \
                                                                     \
 /* trig */                                                          \
-X(_t) X(_cexp)(X(_t) _x);                                           \
-X(_t) X(_clog)(X(_t) _x);                                           \
-static inline Q(_t) X(_carg)(X(_t) _x)                              \
+CQ(_t) CQ(_cexp)(CQ(_t) _x);                                        \
+CQ(_t) CQ(_clog)(CQ(_t) _x);                                        \
+static inline Q(_t) CQ(_carg)(CQ(_t) _x)                            \
     { return Q(_atan2)(_x.imag, _x.real); };                        \
-Q(_t) X(_abs2) (X(_t) _x);                                          \
-static inline Q(_t) X(_abs) (X(_t) _x)                              \
-    {return Q(_sqrt)(X(_abs2)(_x));};
+Q(_t) CQ(_abs2) (CQ(_t) _x);                                        \
+static inline Q(_t) CQ(_abs) (CQ(_t) _x)                            \
+    {return Q(_sqrt)(CQ(_abs2)(_x));};
 
 LIQUIDFPM_DEFINE_COMPLEX_API(LIQUIDFPM_MANGLE_CQ32, LIQUIDFPM_MANGLE_Q32)
 
