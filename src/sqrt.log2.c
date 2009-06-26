@@ -7,7 +7,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG
+#define DEBUG_SQRT_LOG2 0
 
 //
 // use log2 and exp2 functions to approximate sqare root
@@ -28,7 +28,7 @@ q32_t q32_sqrt( q32_t _x )
     // compute exponential
     q32_t qsqrt = q32_exp2(log2x_by_2);
 
-#ifdef DEBUG
+#if DEBUG_SQRT_LOG2
     printf("    x           = %12.10f\n", q32_fixed_to_float(_x));
     printf("    log2(x)     = %12.10f\n", q32_fixed_to_float(log2x));
     printf("    log2(x)/2   = %12.10f\n", q32_fixed_to_float(log2x_by_2));
