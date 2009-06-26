@@ -10,7 +10,7 @@
 #define DEBUG_SQRT_LOG2 0
 
 //
-// use log2 and exp2 functions to approximate sqare root
+// use log2 and exp2 functions to approximate square root
 //
 q32_t q32_sqrt( q32_t _x )
 {
@@ -22,8 +22,8 @@ q32_t q32_sqrt( q32_t _x )
     // compute logarithm
     q32_t log2x = q32_log2(_x);
 
-    // divide by 2 (multiply by 1/2)
-    q32_t log2x_by_2 = q32_mul(log2x,(1<<(q32_fracbits-1)));
+    // divide by 2 (logical bit shift)
+    q32_t log2x_by_2 = log2x >> 1;
 
     // compute exponential
     q32_t qsqrt = q32_exp2(log2x_by_2);
