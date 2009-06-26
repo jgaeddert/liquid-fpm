@@ -12,7 +12,7 @@
 
 #define DEBUG_ATAN2_BENCH 0
 
-void precision_atan2(unsigned int _res, float * _rmse, float * _abse)
+void precision_q32_atan2(unsigned int _res, float * _rmse, float * _abse)
 {
     float e, rms_error=0.0f, max_error=0.0f;
     float theta_min = 0;
@@ -59,7 +59,7 @@ void precision_atan2(unsigned int _res, float * _rmse, float * _abse)
     *_abse = max_error;
 }
 
-void benchmark_atan2(struct rusage *_start,
+void benchmark_q32_atan2(struct rusage *_start,
                     struct rusage *_finish,
                     unsigned long int *_num_trials)
 {
