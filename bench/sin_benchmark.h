@@ -10,10 +10,7 @@
 
 #include "liquidfpm.internal.h"
 
-#ifdef DEBUG
-#   undef DEBUG
-#endif
-#define DEBUG 0
+#define DEBUG_SIN_BENCH 0
 
 void precision_sin(unsigned int _res, float * _rmse, float * _abse)
 {
@@ -40,7 +37,7 @@ void precision_sin(unsigned int _res, float * _rmse, float * _abse)
         if (e > max_error || i == 0)
             max_error = e;
 
-#if DEBUG
+#if DEBUG_SIN_BENCH
         printf("%4u : sin(%12.8f) = %12.8f (%12.8f, e=%12.8f)\n",
                 i, thetaf, sf, q32_fixed_to_float(s), e);
 //        printf("e(%4u) = %12.4e;\n", i+1, e);

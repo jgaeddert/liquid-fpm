@@ -10,10 +10,7 @@
 
 #include "liquidfpm.h"
 
-#ifdef DEBUG
-#   undef DEBUG
-#endif
-#define DEBUG 0
+#define DEBUG_LOG2_BENCH 0
 
 void precision_log2(unsigned int _res, float * _rmse, float *_maxe)
 {
@@ -38,7 +35,7 @@ void precision_log2(unsigned int _res, float * _rmse, float *_maxe)
         if (e > max_error || i == 0)
             max_error = e;
 
-#if DEBUG
+#if DEBUG_LOG2_BENCH
         printf("%4u : log2(%12.8f) = %12.8f (%12.8f, e=%12.8f)\n",
                 i, xf, yf, q32_fixed_to_float(y), e);
 //        printf("e(%4u) = %12.4e;\n", i+1, e);

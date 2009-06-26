@@ -10,10 +10,7 @@
 
 #include "liquidfpm.internal.h"
 
-#ifdef DEBUG
-#   undef DEBUG
-#endif
-#define DEBUG 0
+#define DEBUG_ATAN2_BENCH 0
 
 void precision_atan2(unsigned int _res, float * _rmse, float * _abse)
 {
@@ -51,7 +48,7 @@ void precision_atan2(unsigned int _res, float * _rmse, float * _abse)
         if (fabsf(e) > max_error || i == 0)
             max_error = fabsf(e);
 
-#if DEBUG
+#if DEBUG_ATAN2_BENCH
         printf("%4u : atan2(%12.8f,%12.8f) = %12.8f (%12.8f, e=%12.8f)\n",
                 i, yf, xf, thetaf, theta_hat, e);
 //        printf("e(%4u) = %12.4e;\n", i+1, e);

@@ -26,7 +26,6 @@ void fpmtest_atan2();
 void fpmtest_q32_dotprod();
 
 int main() {
-    /*
     fpmtest_q32_conversion();
     fpmtest_q32_intpart();
     fpmtest_q32_fracpart();
@@ -41,9 +40,7 @@ int main() {
     fpmtest_angle();
     fpmtest_sin();
     fpmtest_cos();
-    */
     fpmtest_atan2();
-    return 0;
 
     fpmtest_q32_dotprod();
 
