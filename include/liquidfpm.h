@@ -8,13 +8,33 @@
 
 #ifdef __cplusplus
 extern "C" {
+#   define LIQUIDFPM_USE_COMPLEX_H 0
+#else
+#   define LIQUIDFPM_USE_COMPLEX_H 1
 #endif /* __cplusplus */
 
 #include <inttypes.h>
-#include <complex.h>
 
 /* concatenation function */
 #define LIQUIDFPM_CONCAT(prefix, name) prefix ## name
+
+/* 
+ * Default: use the C99 complex data type, otherwise
+ * define complex type compatible with the C++ complex standard,
+ * otherwise resort to defining binary compatible array.
+ */
+#if LIQUIDFPM_USE_COMPLEX_H==1
+#   include <complex.h>
+#   define LIQUIDFPM_DEFINE_COMPLEX(R,C) typedef R _Complex C
+#elif defined _GLIBCXX_COMPLEX
+#   define LIQUIDFPM_DEFINE_COMPLEX(R,C) typedef std::complex<R> C
+#else
+#   define LIQUIDFPM_DEFINE_COMPLEX(R,C) typedef R C[2]
+#endif
+//#   define LIQUIDFPM_DEFINE_COMPLEX(R,C) typedef C struct {R real; R imag;};
+
+LIQUIDFPM_DEFINE_COMPLEX(float, liquidfpm_float_complex);
+
 
 /* name-mangling macros */
 #define LIQUIDFPM_MANGLE_Q32(name)  LIQUIDFPM_CONCAT(q32, name)
@@ -90,8 +110,8 @@ static inline Q(_t) CQ(_imag)(CQ(_t) _a) {return _a.imag;};         \
 CQ(_t) CQ(_conj)(CQ(_t) _a);                                        \
                                                                     \
 /* conversion */                                                    \
-float complex CQ(_fixed_to_float)(CQ(_t) _x);                       \
-CQ(_t) CQ(_float_to_fixed)(float complex _x);                       \
+liquidfpm_float_complex CQ(_fixed_to_float)(CQ(_t) _x);             \
+CQ(_t) CQ(_float_to_fixed)(liquidfpm_float_complex _x);             \
                                                                     \
 /* arithmetic */                                                    \
 CQ(_t) CQ(_add)(CQ(_t) _a, CQ(_t) _b);                              \
