@@ -8,9 +8,6 @@
 #include "liquidfpm.h"
 #include "config.h"
 
-#include <math.h>
-#include <complex.h>
-
 //
 // Trigonometric helper functions, arrays, constants
 // TODO: auto-compute these values
