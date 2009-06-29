@@ -7,7 +7,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG 0
+#define DEBUG_SINCOS_PWPOLY 0
 
 // polynomial coefficients
 q32_t q32_sine_table_pwpolyfit[16][3] = {
@@ -75,7 +75,7 @@ q32_t q32_sin( q32_t _theta )
     // Q2 | Q3
     q32_angle_quadrant_index(_theta, &quadrant, &index, &x);
 
-#if DEBUG
+#if DEBUG_SINCOS_PWPOLY
     printf("    theta : %12.8f (0x%.8x > %12.8f)\n", q32_angle_fixed_to_float(_theta), _theta, q32_fixed_to_float(_theta));
     printf("    quadrant : %u\n", quadrant);
     printf("    index    : %u\n", index);
@@ -86,7 +86,7 @@ q32_t q32_sin( q32_t _theta )
     if (quadrant & 0x01) {
         x = (1<<q32_fracbits) - x;
         index = 15 - index;
-#if DEBUG
+#if DEBUG_SINCOS_PWPOLY
         printf("    x        : %f (phase inversion)\n", q32_fixed_to_float(x));
         printf("    index    : %u (phase inversion)\n", index);
 #endif
@@ -95,7 +95,7 @@ q32_t q32_sin( q32_t _theta )
     q32_t c2 = q32_sine_table_pwpolyfit[index][0];
     q32_t c1 = q32_sine_table_pwpolyfit[index][1];
     q32_t c0 = q32_sine_table_pwpolyfit[index][2];
-#if DEBUG
+#if DEBUG_SINCOS_PWPOLY
     printf("    c0 : %12.8f\n", q32_fixed_to_float(c0));
     printf("    c1 : %12.8f\n", q32_fixed_to_float(c1));
     printf("    c2 : %12.8f\n", q32_fixed_to_float(c2));
@@ -121,7 +121,7 @@ q32_t q32_cos( q32_t _theta )
     // Q2 | Q3
     q32_angle_quadrant_index(_theta, &quadrant, &index, &x);
 
-#if DEBUG
+#if DEBUG_SINCOS_PWPOLY
     printf("    theta : %12.8f (0x%.8x > %12.8f)\n", q32_angle_fixed_to_float(_theta), _theta, q32_fixed_to_float(_theta));
     printf("    quadrant : %u\n", quadrant);
     printf("    index    : %u\n", index);
@@ -132,7 +132,7 @@ q32_t q32_cos( q32_t _theta )
     if ( quadrant==0 || quadrant==2 ) {
         x = (1<<q32_fracbits) - x;
         index = 15 - index;
-#if DEBUG
+#if DEBUG_SINCOS_PWPOLY
         printf("    x        : %f (phase inversion)\n", q32_fixed_to_float(x));
         printf("    index    : %u (phase inversion)\n", index);
 #endif
@@ -141,7 +141,7 @@ q32_t q32_cos( q32_t _theta )
     q32_t c2 = q32_sine_table_pwpolyfit[index][0];
     q32_t c1 = q32_sine_table_pwpolyfit[index][1];
     q32_t c0 = q32_sine_table_pwpolyfit[index][2];
-#if DEBUG
+#if DEBUG_SINCOS_PWPOLY
     printf("    c0 : %12.8f\n", q32_fixed_to_float(c0));
     printf("    c1 : %12.8f\n", q32_fixed_to_float(c1));
     printf("    c2 : %12.8f\n", q32_fixed_to_float(c2));
