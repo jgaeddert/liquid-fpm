@@ -1,7 +1,7 @@
 
 
 CC	= gcc
-CFLAGS	= -I.. -I../include ../libliquidfpm.a
+CFLAGS	= -I.. -I../include ../libliquidfpm.a -lm -lc
 
 src	=			\
 	log.shiftadd.test.c	\

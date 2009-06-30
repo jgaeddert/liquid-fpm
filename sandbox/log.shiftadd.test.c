@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 int main() {
-    unsigned int n = 30;
+    unsigned int n = 12;
     double b = 2.0;
     double x = sqrt(2.0);
 
