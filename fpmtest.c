@@ -58,6 +58,9 @@ int main() {
     x = q32_exp( q32_float_to_fixed(t) );
     printf("exp(%f) = %f (%f)\n", t, expf(t), q32_fixed_to_float(x));
 
+    printf("testing one...\n");
+    printf("%12.8f (expected 1.0)\n", q32_fixed_to_float(q32_one));
+
     printf("done.\n");
     return 0;
 };

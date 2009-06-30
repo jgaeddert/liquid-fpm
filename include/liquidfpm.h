@@ -59,6 +59,7 @@ static inline int Q(_fracpart) (Q(_t) _x)                           \
 /* constants */                                                     \
 const static Q(_t) Q(_min) = (1);                                   \
 const static Q(_t) Q(_max) = (1<<(FRACBITS));                       \
+const static Q(_t) Q(_one) = (1<<(FRACBITS))-1;                     \
 const static Q(_t) Q(_pi) = (1<<(INTBITS+FRACBITS-2))-1;            \
                                                                     \
 /* conversion */                                                    \
