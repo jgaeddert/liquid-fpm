@@ -21,6 +21,7 @@ void fpmtest_q32_sqrt();
 void fpmtest_angle();
 void fpmtest_sin();
 void fpmtest_cos();
+void fpmtest_sincos_cordic();
 void fpmtest_atan2();
 
 void fpmtest_q32_dotprod();
@@ -63,6 +64,8 @@ int main() {
 
     printf("testing max...\n");
     printf("%12.8f : 0x%08x (expected 8.0)\n", q32_fixed_to_float(q32_max), q32_max);
+
+    fpmtest_sincos_cordic();
 
     printf("done.\n");
     return 0;
@@ -311,6 +314,38 @@ void fpmtest_cos()
             thetaf, cosf(thetaf), q32_fixed_to_float(s));
 #endif
 }
+
+void fpmtest_sincos_cordic()
+{
+    printf("testing sin|cos [cordic]...\n");
+    unsigned int i, n=20;
+    float thetaf;
+    q32_t theta;
+    q32_t s,c;
+#if 1
+    for (i=0; i<n+1; i++) {
+        thetaf = 4.0f * (float)(i) / ((float)(n)) * M_PI - 2*M_PI;
+        theta  = q32_angle_float_to_fixed(thetaf);
+
+        q32_sincos_cordic(theta,&s,&c);
+
+        printf("%4u : theta : %12.8f, sin:%12.8f(%12.8f), cos:%12.8f(%12.8f)\n",
+                i,
+                thetaf,
+                q32_fixed_to_float(s),
+                sinf(thetaf),
+                q32_fixed_to_float(c),
+                cosf(thetaf));
+    }
+#else
+    thetaf = 2*M_PI;
+    theta  = q32_angle_float_to_fixed(thetaf);
+    s = q32_sin(theta);
+    printf("sin(%12.8f) = %12.8f (%12.8f)\n",
+            thetaf, sinf(thetaf), q32_fixed_to_float(s));
+#endif
+}
+
 
 void fpmtest_atan2()
 {

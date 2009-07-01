@@ -52,6 +52,7 @@ sources  +=			\
 	src/exp.port.c		\
 	src/sqrt.newton.c		\
 	src/sincos.pwpolyfit.c		\
+	src/sincos.cordic.c		\
 	src/atan.pwpolyfit.c		\
 	src/cq32.c	\
 	src/msb_index.c		\
