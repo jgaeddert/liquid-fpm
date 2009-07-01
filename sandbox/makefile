@@ -1,11 +1,12 @@
 
 
 CC	= gcc
-CFLAGS	= -I.. -I../include ../libliquidfpm.a -lm -lc
+CFLAGS	= -Wall -I.. -I../include ../libliquidfpm.a -lm -lc
 
 src	=			\
 	log.shiftadd.test.c	\
-	q32_log.shiftadd.test.c
+	q32_log.shiftadd.test.c	\
+	sincos.cordic.test.c
 
 obj	= $(patsubst %.c,%.o,$(src))
 bin	= $(patsubst %.c,%,  $(src))
