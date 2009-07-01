@@ -26,7 +26,6 @@ int main() {
     q32_t x = k_inv;
     q32_t y = 0;
     q32_t z = theta;
-    q32_t v = q32_one;
     q32_t d,tx,ty,tz;
     printf("   n           x            y            z         -d*An\n");
     printf("init %12.8f %12.8f %12.8f %12.8f\n",
@@ -35,24 +34,15 @@ int main() {
             q32_fixed_to_float(z),
             0.0);
     for (i=0; i<n; i++) {
-        d = ( z>=0 ) ? 1 : -1;
+        d = ( z>=0 ) ? 0 : -1;
+        // d = z >> 31;
 
-        tx = x;
-        ty = y;
-        tz = z;
-        if (z>0) {
-            tx -= y>>i;
-            ty += x>>i;
-            tz -= sintab[i];
-        } else {
-            tx += y>>i;
-            ty -= x>>i;
-            tz += sintab[i];
-        }
+        tx = x - ((y>>i)^d)-d;
+        ty = y + ((x>>i)^d)-d;
+        tz = z - ((sintab[i]^d)-d);
         x = tx;
         y = ty;
         z = tz;
-        v >>= 1;
         printf("%4u %12.8f %12.8f %12.8f %12.8f\n",
             i,
             q32_fixed_to_float(x),
