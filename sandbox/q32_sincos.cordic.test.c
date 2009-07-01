@@ -35,7 +35,7 @@ int main() {
             q32_fixed_to_float(z),
             0.0);
     for (i=0; i<n; i++) {
-        d = ( z>=0.0 ) ? 1 : -1;
+        d = ( z>=0 ) ? 1 : -1;
 
         tx = x;
         ty = y;
@@ -58,7 +58,7 @@ int main() {
             q32_fixed_to_float(x),
             q32_fixed_to_float(y),
             q32_fixed_to_float(z),
-            q32_fixed_to_float(q32_mul(d,sintab[i])));
+            q32_fixed_to_float(sintab[i])*(z>=0?1.0:-1.0));
     }
 
     return 0;
