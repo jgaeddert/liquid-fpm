@@ -49,6 +49,7 @@ LIQUIDFPM_DEFINE_COMPLEX(float, liquidfpm_float_complex);
  */
 #define LIQUIDFPM_DEFINE_API(Q,T,INTBITS,FRACBITS)                  \
 typedef T Q(_t);                                                    \
+const static unsigned int Q(_bits) = INTBITS + FRACBITS;            \
 const static unsigned int Q(_intbits) = INTBITS;                    \
 const static unsigned int Q(_fracbits) = FRACBITS;                  \
 static inline int Q(_intpart) (Q(_t) _x)                            \
@@ -58,9 +59,9 @@ static inline int Q(_fracpart) (Q(_t) _x)                           \
                                                                     \
 /* constants */                                                     \
 const static Q(_t) Q(_min) = (1);                                   \
-const static Q(_t) Q(_max) = (1<<(FRACBITS));                       \
+const static Q(_t) Q(_max) = (((1<<(FRACBITS+INTBITS-2))-1)<<1)+1;  \
 const static Q(_t) Q(_one) = (1<<(FRACBITS))-1;                     \
-const static Q(_t) Q(_pi) = (1<<(INTBITS+FRACBITS-2))-1;            \
+const static Q(_t) Q(_pi)  = (1<<(FRACBITS+INTBITS-2))-1;           \
                                                                     \
 /* conversion */                                                    \
 static inline float Q(_fixed_to_float)(Q(_t) _x)                    \

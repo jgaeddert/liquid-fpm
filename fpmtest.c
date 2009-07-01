@@ -61,6 +61,9 @@ int main() {
     printf("testing one...\n");
     printf("%12.8f (expected 1.0)\n", q32_fixed_to_float(q32_one));
 
+    printf("testing max...\n");
+    printf("%12.8f : 0x%08x (expected 8.0)\n", q32_fixed_to_float(q32_max), q32_max);
+
     printf("done.\n");
     return 0;
 };
