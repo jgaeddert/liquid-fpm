@@ -73,6 +73,10 @@ gentab/gentab_q32: gentab/gentab_q32.c
 gentab/q32_tables.c: gentab/gentab_q32
 	./gentab/gentab_q32 > gentab/q32_tables.c
 
+# PPC mul source code generator
+qtype_mul.ppc.gen : qtype_mul.ppc.s.c
+	$(CC) $(CFLAGS) $< -o $@
+
 # Dependencies
 # Use compiler's -M flags (and equivalent) to parse source files
 # and create a list of dependencies.  Each list is stored in a
@@ -123,6 +127,10 @@ libliquidfpm.so: $(libraries)
 #$(GENTABS) : % : src/%.c
 #	$(CC) $(CFLAGS) -c $< -o $@
 #	./$< > src/$<.lut.c
+
+# generate other sources
+q32_mul.ppc.s : qtype_mul.ppc.gen
+	./$< -nq32 -i4 -f28 -o $@
 
 # library objects
 $(LIBS) : %.o : src/%.c

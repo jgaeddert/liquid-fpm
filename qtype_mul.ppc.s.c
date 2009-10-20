@@ -3,6 +3,7 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
 
@@ -20,6 +21,7 @@ void qtype_mul_ppc(FILE * _fid,
                    unsigned int _intbits,
                    unsigned int _fracbits)
 {
+    fprintf(_fid,"; auto-generated file\n");
     fprintf(_fid,";    .section __TEXT,__text,regular,pure_instructions\n");
     fprintf(_fid,";    .section __TEXT,__picsymbolstub1,symbol_stubs,pure_instructions,32\n");
     fprintf(_fid,";    .machine ppc7400\n");
@@ -49,19 +51,19 @@ int main(int argc, char *argv[])
 {
     // data type name
     char typename[64];
-    int  typename_set = 0;
+    int  typename_set=0;
 
     // number of integer bits
-    unsigned int intbits;
-    int intbits_set = 0;
+    unsigned int intbits=0;
+    int intbits_set=0;
 
     // number of fractional bits
-    unsigned int fracbits;
-    int fracbits_set = 0;
+    unsigned int fracbits=0;
+    int fracbits_set=0;
 
     // output file
     FILE * fid = stdout;
-    int outputfile_set = 0;
+    int outputfile_set=0;
 
     int dopt;
     while ((dopt = getopt(argc,argv,"un:i:f:o:")) != EOF) {
