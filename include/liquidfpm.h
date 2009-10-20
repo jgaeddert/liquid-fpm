@@ -63,6 +63,8 @@ const static Q(_t) Q(_max) = (((1<<(FRACBITS+INTBITS-2))-1)<<1)+1;  \
 const static Q(_t) Q(_one) = (1<<(FRACBITS))-1;                     \
 const static Q(_t) Q(_pi)  = (1<<(FRACBITS+INTBITS-2))-1;           \
 const static Q(_t) Q(_2pi) = (((1<<(FRACBITS+INTBITS-2))-1)<<1)+1;  \
+const static Q(_t) Q(_pi_by_2)  =                                   \
+    (((1<<(FRACBITS+INTBITS-2))-1)>>1);                             \
 const static float Q(_angle_scalar) =                               \
     (3.14159/(float)(1<<(INTBITS-2)));                              \
                                                                     \

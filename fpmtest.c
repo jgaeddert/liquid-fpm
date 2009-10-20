@@ -325,11 +325,12 @@ void fpmtest_sincos_cordic()
 #if 1
     for (i=0; i<n+1; i++) {
         thetaf = 4.0f * (float)(i) / ((float)(n)) * M_PI - 2*M_PI;
+        thetaf = (float)(i) / ((float)(n)) * M_PI * 0.5f;
         theta  = q32_angle_float_to_fixed(thetaf);
 
-        q32_sincos_cordic(theta,&s,&c);
+        q32_sincos_cordic(theta,&s,&c,n);
 
-        printf("%4u : theta : %12.8f, sin:%12.8f(%12.8f), cos:%12.8f(%12.8f)\n",
+        printf("*** %4u : theta : %12.8f, sin:%12.8f(%12.8f), cos:%12.8f(%12.8f)\n",
                 i,
                 thetaf,
                 q32_fixed_to_float(s),
