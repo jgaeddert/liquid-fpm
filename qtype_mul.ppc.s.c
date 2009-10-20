@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     int fracbits_set=0;
 
     // output file
-    FILE * fid = stdout;
+    char outputfile[64];
     int outputfile_set=0;
 
     int dopt;
@@ -88,11 +88,11 @@ int main(int argc, char *argv[])
             fracbits_set = 1;
             break;
         case 'o':
-            fid = fopen(optarg,"w");
-            if (fid == NULL) {
-                printf("error: could not open %s for writing\n",optarg);
+            if (strlen(optarg) > 64) {
+                printf("error: output filename too long\n");
                 return -1;
             }
+            strcpy(outputfile,optarg); 
             outputfile_set = 1;
             break;
         default:
@@ -111,6 +111,18 @@ int main(int argc, char *argv[])
     } else if ( (intbits + fracbits) != 32 ) {
         printf("error: intbits (%u) + fracbits (%u) must equal 32\n",intbits,fracbits);
         return -1;
+    }
+
+    // open output file
+    FILE * fid;
+    if (outputfile_set) {
+        fid = fopen(outputfile,"w");
+        if (fid == NULL) {
+            printf("error: could not open %s for writing\n",outputfile);
+            return -1;
+        }
+    } else {
+        fid = stdout;
     }
 
     // run the assembly source code generator
