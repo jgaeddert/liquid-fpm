@@ -10,8 +10,8 @@
 bool parse_filename(char * _filename, char * _basename);
 
 typedef struct {
-    char filename[256];
-    char basename[256];
+    char filename[256];     // e.g. "/path/to/mybench_benchmark.h"
+    char basename[256];     //   >> "mybench"
 } benchmark_t;
 
 int main(int argc, char*argv[]) {
