@@ -369,18 +369,24 @@ void fpmtest_sincos_cordic()
 void fpmtest_log2_shiftadd()
 {
     printf("testing log2 [shift|add]...\n");
-    unsigned int i=0, n=20;
+    unsigned int i=0;
+    unsigned int n=21;  // number of tests
+    unsigned int k=32;  // number of internal iterations (precision)
     float xf, log2xf;
     q32_t x,  log2x;
     float error;
     float rmse=0.0f;
 
-    xf = sqrt(2.0f);
-    //for (i=0; i<n+1; i++) {
-        //xf *= 0.95f;
+    // determine valid range of inputs
+    float x0 = powf(2.0f,-(1<<(q32_intbits-1)));// minimum input
+    float x1 = q32_fixed_to_float(q32_max);     // maximum input
+    float sigma = powf(x0/x1,1.0f/(float)n);    // multiplier
+    
+    xf = x1;
+    for (i=0; i<n+1; i++) {
         x  = q32_float_to_fixed(xf);
 
-        log2x  = q32_log2_shiftadd(x,18);
+        log2x  = q32_log2_shiftadd(x,k);
         log2xf = log2f(xf);
 
         error = log2xf - q32_fixed_to_float(log2x);
@@ -392,7 +398,9 @@ void fpmtest_log2_shiftadd()
                 q32_fixed_to_float(log2x),
                 log2xf,
                 error);
-    //}
+
+        xf *= sigma;
+    }
     rmse = sqrt(rmse / (float)n);
     printf("rmse : %e\n", rmse);
 }
