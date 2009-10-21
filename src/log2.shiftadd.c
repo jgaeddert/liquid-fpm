@@ -11,6 +11,7 @@
 
 #define DEBUG_LOG2_SHIFTADD     1
 
+// Ak = log2( 1 + 2^-k )
 const q32_t q32_log2_shiftadd_Ak_tab[32] = {
     0x10000000,    0x095c01a0,    0x05269e10,    0x02b80348,
     0x01663f70,    0x00b5d69c,    0x005b9e5a,    0x002dfca2,
@@ -21,10 +22,47 @@ const q32_t q32_log2_shiftadd_Ak_tab[32] = {
     0x00000017,    0x0000000c,    0x00000006,    0x00000003,
     0x00000001,    0x00000001,    0x00000000,    0x00000000};
 
+// Maximum number of iterations, given the shiftadd_Ak_table
+// above.  The shift|add algorithm will hit an infinite loop
+// condition for values in the table equal to zero, hence this
+// limitation.
 const q32_t q32_log2_shiftadd_nmax = 29;
 
+// Computes y = log2(x) by pre-shifting the input _x such
+// that _x is in [1,2), and then performing the iterative
+// shift|add operation on the result.
 q32_t q32_log2_shiftadd(q32_t _x,
                         unsigned int _n)
+{
+    // base index
+    int b = msb_index(_x) - 1;
+
+    // compute shift amount
+    int s = (int)q32_fracbits - b;
+
+    // pre-shift input (left : s>0, right : s<0)
+    q32_t x_hat = s>0 ? _x<<s : _x>>(-s);
+
+#if DEBUG_LOG2_SHIFTADD
+    printf("x : %12.8f >> %12.8f\n", q32_fixed_to_float(_x), 
+                                     q32_fixed_to_float(x_hat));
+    printf("s : %12.8f\n", q32_fixed_to_float(-s<<q32_fracbits));
+#endif
+
+    q32_t y = q32_log2_shiftadd_base(x_hat,_n);
+
+    y += -s<<(q32_fracbits);
+
+    return y;
+}
+
+// computes y=log2(x) where x >= 1
+//
+// For values of x < 1, it is necessary to pre-shift x by its
+// most-significant bit.  The algorithm will NOT converge for
+// x < 1, nor will it validate that the input is in this range.
+q32_t q32_log2_shiftadd_base(q32_t _x,
+                             unsigned int _n)
 {
     q32_t tn = 0;
     q32_t en = q32_one;
