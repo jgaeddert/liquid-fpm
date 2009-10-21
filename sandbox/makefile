@@ -7,6 +7,8 @@ CFLAGS	= -Wall -I.. -I../include
 LDFLAGS	= -lm -lc ../libliquidfpm.a
 
 src	=				\
+	exp.shiftadd.test.c		\
+	q32_exp.shiftadd.test.c		\
 	log.shiftadd.test.c		\
 	q32_log.shiftadd.test.c		\
 	sincos.cordic.test.c		\
