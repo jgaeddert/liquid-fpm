@@ -11,7 +11,7 @@
 
 #define DEBUG_LOG2_SHIFTADD     1
 
-// Ak = log2( 1 + 2^-k )
+// Pre-computed look-up table: A[k] = log2( 1 + 2^-k )
 const q32_t q32_log2_shiftadd_Ak_tab[32] = {
     0x10000000,    0x095c01a0,    0x05269e10,    0x02b80348,
     0x01663f70,    0x00b5d69c,    0x005b9e5a,    0x002dfca2,
@@ -49,11 +49,16 @@ q32_t q32_log2_shiftadd(q32_t _x,
     printf("s : %12.8f\n", q32_fixed_to_float(-s<<q32_fracbits));
 #endif
 
-    q32_t y = q32_log2_shiftadd_base(x_hat,_n);
+    // compute the fractional portion using the iterative
+    // shift|add algorithm.
+    q32_t yfrac = q32_log2_shiftadd_base(x_hat,_n);
 
-    y += -s<<(q32_fracbits);
+    // compute the integer portion: simply the integer
+    // representation of the base index of the original
+    // input value _x
+    q32_t yint = (-s) << (q32_fracbits);
 
-    return y;
+    return yint + yfrac;
 }
 
 // computes y=log2(x) where x >= 1
