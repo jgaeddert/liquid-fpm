@@ -11,16 +11,23 @@
 int main() {
     unsigned int n = 32;
     float thetaf = M_PI / 2.0;
-    q32_t theta = q32_float_to_fixed(thetaf);
+    q32_t theta = q32_angle_float_to_fixed(thetaf);
 
     int print_table=0;
 
     // generate table
     q32_t sintab[n];
     double inv_2_n   = 1.0;
+    double Ak;
     unsigned int i;
     for (i=0; i<n; i++) {
-        sintab[i] = q32_float_to_fixed(atanf(inv_2_n));
+        // precompute Ak, normalizing by angular scaling factor. This
+        // is necessary by the nature of how angles are stored in
+        // fixed-point decimal:
+        //    2*pi  :   0x7fffffff (the largest positive number)
+        //   -2*pi  :   0xffffffff (the largest negative number)
+        Ak = atanf(inv_2_n) / q32_angle_scalar;
+        sintab[i] = q32_float_to_fixed(Ak);
         inv_2_n *= 0.5;
     }
 
@@ -38,7 +45,7 @@ int main() {
     q32_t z = theta;
     q32_t d,tx,ty,tz;
     printf("   n           x            y            z         -d*An\n");
-    printf("init %12.8f %12.8f %12.8f %12.8f\n",
+    printf("init: %12.8f %12.8f %12.8f %12.8f\n",
             q32_fixed_to_float(x),
             q32_fixed_to_float(y),
             q32_fixed_to_float(z),
