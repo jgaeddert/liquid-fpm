@@ -11,7 +11,8 @@
 int main() {
     unsigned int n = 20;
     double b = 2.0;
-    q32_t x = q32_float_to_fixed(sqrt(2.0));
+    float xf = sqrt(2.0f);
+    q32_t x = q32_float_to_fixed(xf);
 
     int print_table=1;
 
@@ -71,6 +72,7 @@ int main() {
             en = un;
         }
     }
+    printf("true:%12.8f %12.8f\n", xf, log2f(xf));
 
     return 0;
 }

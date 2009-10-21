@@ -39,6 +39,7 @@ int main() {
             en = un;
         }
     }
+    printf("true:%12.8f %12.8f\n", x, log2f(x));
 
     return 0;
 }
