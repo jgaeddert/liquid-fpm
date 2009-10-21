@@ -7,17 +7,17 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG_SINCOS_CORDIC 1
+#define DEBUG_SINCOS_CORDIC 0
 
 // cordic coefficients
-const q32_t q32_sine_cordic_tab[32] = {
-    0x0c90fdb0,    0x076b19c0,    0x03eb6ec0,    0x01fd5baa,
-    0x00ffaade,    0x007ff557,    0x003ffeab,    0x001fffd5,
-    0x000ffffb,    0x0007ffff,    0x00040000,    0x00020000,
-    0x00010000,    0x00008000,    0x00004000,    0x00002000,
-    0x00001000,    0x00000800,    0x00000400,    0x00000200,
-    0x00000100,    0x00000080,    0x00000040,    0x00000020,
-    0x00000010,    0x00000008,    0x00000004,    0x00000002,
+const q32_t q32_cordic_Ak_tab[32] = {
+    0x10000000,    0x09720290,    0x04fd9c28,    0x028888e8,
+    0x014586a0,    0x00a2ebf0,    0x00517b0f,    0x0028be2b,
+    0x00145f2a,    0x000a2f97,    0x000517cc,    0x00028be6,
+    0x000145f3,    0x0000a2fa,    0x0000517d,    0x000028be,
+    0x0000145f,    0x00000a30,    0x00000518,    0x0000028c,
+    0x00000146,    0x000000a3,    0x00000051,    0x00000029,
+    0x00000014,    0x0000000a,    0x00000005,    0x00000003,
     0x00000001,    0x00000001,    0x00000000,    0x00000000};
 
 const q32_t q32_cordic_k_inv = 0x09b74ee0;
@@ -46,25 +46,36 @@ void q32_sincos_cordic(q32_t _theta,
                        q32_t * _cos,
                        unsigned int _n)
 {
+    // constrain input angle to be in [-pi, pi]
+    // TODO : determine more efficient way of doing this
     if (_theta >= q32_pi)
-        _theta -= q32_pi;
+        _theta -= q32_2pi;
     else if (_theta <= -q32_pi)
-        _theta += q32_pi;
+        _theta += q32_2pi;
 
-    unsigned int q = q32_quadrant_cordic(_theta);
-#if DEBUG_SINCOS_CORDIC
-    printf("  quadrant : %u\n", q);
-#endif
-    // -pi <= _theta <= pi
-    if (q==0) {
-    } else if (q==1) {
-        _theta -= q32_pi_by_2;
-    } else if (q==2) {
-        _theta += q32_pi_by_2;
+    // invert phase: constrain to [-pi/2,pi/2]
+    // This is necessary because the cordic will only converge
+    // if -r < _theta < r, where
+    //      r = sum(k=0, infty) ( arctan(2^-k) )
+    //      r ~ 1.743286620472340
+    // Because r > pi/2 (1.57079632), constraining the phase
+    // to be in [-pi/2,pi/2] will ensure convergence.
+    int invert=0;
+    if (_theta > q32_pi_by_2) {
+        _theta -= q32_pi;
+        invert = 1;
+    } else if( _theta < -q32_pi_by_2) {
+        _theta += q32_pi;
+        invert = 1;
     } else {
+        invert = 0;
     }
 
-    q32_t x = q32_cordic_k_inv;
+#if DEBUG_SINCOS_CORDIC
+    printf("  theta : %12.8f\n", q32_angle_fixed_to_float(_theta));
+#endif
+
+    q32_t x = q32_cordic_k_inv; // TODO : initialize with cordic_Kinv_tab[_n-1];
     q32_t y = 0;
     q32_t z = _theta;
     q32_t d,tx,ty,tz;
@@ -85,7 +96,7 @@ void q32_sincos_cordic(q32_t _theta,
 
         tx = x - ((y>>i)^d)-d;
         ty = y + ((x>>i)^d)-d;
-        tz = z - ((q32_sine_cordic_tab[i]^d)-d);
+        tz = z - ((q32_cordic_Ak_tab[i]^d)-d);
         x = tx;
         y = ty;
         z = tz;
@@ -95,23 +106,19 @@ void q32_sincos_cordic(q32_t _theta,
             q32_fixed_to_float(x),
             q32_fixed_to_float(y),
             q32_fixed_to_float(z),
-            q32_fixed_to_float(q32_sine_cordic_tab[i])*(z>=0?1.0:-1.0));
+            q32_fixed_to_float(q32_cordic_Ak_tab[i])*(z>=0?1.0:-1.0));
 #endif
     }
 
-    // set values according to quadrant
-    if (q==0 ) {
+    // negate values if phase has been inverted
+    if (!invert) {
+        // returning values without negation
         *_cos =  x;
         *_sin =  y;
-    } else if (q==1) {
-        *_cos = -y;
-        *_sin =  x;
-    } else if (q==2) {
+    } else {
+        // negating values due to phase inversion
         *_cos = -x;
         *_sin = -y;
-    } else {
-        *_cos =  x;
-        *_sin =  y;
     }
 }
 

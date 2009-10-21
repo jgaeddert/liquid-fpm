@@ -66,7 +66,7 @@ const static Q(_t) Q(_2pi) = (((1<<(FRACBITS+INTBITS-2))-1)<<1)+1;  \
 const static Q(_t) Q(_pi_by_2)  =                                   \
     (((1<<(FRACBITS+INTBITS-2))-1)>>1);                             \
 const static float Q(_angle_scalar) =                               \
-    (3.14159/(float)(1<<(INTBITS-2)));                              \
+    (3.14159265358979/(float)(1<<(INTBITS-2)));                     \
                                                                     \
 /* conversion */                                                    \
 static inline float Q(_fixed_to_float)(Q(_t) _x)                    \

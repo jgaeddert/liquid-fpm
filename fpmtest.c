@@ -64,7 +64,7 @@ int main() {
 
     printf("testing max...\n");
     printf("%12.8f : 0x%08x (expected 8.0)\n", q32_fixed_to_float(q32_max), q32_max);
-
+    
     fpmtest_sincos_cordic();
 
     printf("done.\n");
@@ -318,25 +318,35 @@ void fpmtest_cos()
 void fpmtest_sincos_cordic()
 {
     printf("testing sin|cos [cordic]...\n");
-    unsigned int i, n=20;
+    unsigned int i=0, n=20;
     float thetaf;
     q32_t theta;
     q32_t s,c;
+    float sf,cf;
+    float error;
+    float rmse=0.0f;
 #if 1
     for (i=0; i<n+1; i++) {
         thetaf = 4.0f * (float)(i) / ((float)(n)) * M_PI - 2*M_PI;
-        thetaf = (float)(i) / ((float)(n)) * M_PI * 0.5f;
+        //thetaf = (float)(i) / ((float)(n)) * M_PI * 0.5f;
+        //thetaf = 5.0f * M_PI / 4.0f;
         theta  = q32_angle_float_to_fixed(thetaf);
 
-        q32_sincos_cordic(theta,&s,&c,n);
+        q32_sincos_cordic(theta,&s,&c,18);
+        sf = sinf(thetaf);
+        cf = cosf(thetaf);
+        error = fabsf(cf - q32_fixed_to_float(c) +
+                      sf - q32_fixed_to_float(s) );
+        rmse += error*error;
 
-        printf("*** %4u : theta : %12.8f, sin:%12.8f(%12.8f), cos:%12.8f(%12.8f)\n",
+        printf("%4u : theta=%12.8f, cos:%12.8f(%12.8f), sin:%12.8f(%12.8f), e:%12.8f\n",
                 i,
                 thetaf,
+                q32_fixed_to_float(c),
+                cosf(thetaf),
                 q32_fixed_to_float(s),
                 sinf(thetaf),
-                q32_fixed_to_float(c),
-                cosf(thetaf));
+                error);
     }
 #else
     thetaf = 2*M_PI;
@@ -345,6 +355,8 @@ void fpmtest_sincos_cordic()
     printf("sin(%12.8f) = %12.8f (%12.8f)\n",
             thetaf, sinf(thetaf), q32_fixed_to_float(s));
 #endif
+    rmse = sqrt(rmse / (float)n);
+    printf("rmse : %e\n", rmse);
 }
 
 
