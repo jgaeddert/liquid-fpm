@@ -9,11 +9,13 @@
 #include "liquidfpm.h"
 
 int main() {
-    unsigned int n = 12;
+    unsigned int n = 20;
     double b = 2.0;
     q32_t x = q32_float_to_fixed(sqrt(2.0));
 
-    // generate table
+    int print_table=1;
+
+    // generate table: Ak = log_b( 1 + 2^-k )
     q32_t logtab[n];
     double inv_log_b = 1.0 / log(b);
     double inv_2_n   = 1.0;
@@ -23,6 +25,21 @@ int main() {
         tabval = log(1.0 + inv_2_n) * inv_log_b;
         logtab[i] = q32_float_to_fixed(tabval);
         inv_2_n *= 0.5;
+    }
+
+    // Find maximum number of iterations (look for first zero
+    // in the log table)
+    unsigned int nmax=0;
+    for (i=0; i<n; i++)
+        if (logtab[i] == 0) break;
+    nmax = i-1;
+
+    if (print_table) {
+        printf("const q32_t q32_log2_shiftadd_Ak_tab[%u] = {\n", n);
+        for (i=0; i<n; i++) {
+            printf("    0x%.8x%s",logtab[i], (i<n-1) ? ",\n" : "};\n\n");
+        }
+        printf("const q32_t q32_log2_shiftadd_nmax = %u;\n\n", nmax);
     }
 
     q32_t tn = 0;
@@ -35,6 +52,7 @@ int main() {
             q32_fixed_to_float(tn),
             q32_fixed_to_float(en),
             q32_fixed_to_float(logtab[0]));
+    if (n>nmax) n=nmax;
     for (i=1; i<n; i++) {
         vn >>= 1;
         while (1) {
@@ -42,7 +60,7 @@ int main() {
             un = en;
             un += en>>i;
             dn = (un <= x);
-            printf("%4u %12.8f %12.8f %12.8f %12.8f\n",
+            printf("%4u %12.8f %12.8f %12.8f %12.4e\n",
                     i,
                     q32_fixed_to_float(un),
                     q32_fixed_to_float(tn),

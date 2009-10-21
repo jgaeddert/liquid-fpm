@@ -22,11 +22,13 @@ void fpmtest_angle();
 void fpmtest_sin();
 void fpmtest_cos();
 void fpmtest_sincos_cordic();
+void fpmtest_log2_shiftadd();
 void fpmtest_atan2();
 
 void fpmtest_q32_dotprod();
 
 int main() {
+    /*
     fpmtest_q32_conversion();
     fpmtest_q32_intpart();
     fpmtest_q32_fracpart();
@@ -66,6 +68,10 @@ int main() {
     printf("%12.8f : 0x%08x (expected 8.0)\n", q32_fixed_to_float(q32_max), q32_max);
     
     fpmtest_sincos_cordic();
+
+    */
+    // test log2 shift|add
+    fpmtest_log2_shiftadd();
 
     printf("done.\n");
     return 0;
@@ -355,6 +361,38 @@ void fpmtest_sincos_cordic()
     printf("sin(%12.8f) = %12.8f (%12.8f)\n",
             thetaf, sinf(thetaf), q32_fixed_to_float(s));
 #endif
+    rmse = sqrt(rmse / (float)n);
+    printf("rmse : %e\n", rmse);
+}
+
+
+void fpmtest_log2_shiftadd()
+{
+    printf("testing log2 [shift|add]...\n");
+    unsigned int i=0, n=20;
+    float xf, log2xf;
+    q32_t x,  log2x;
+    float error;
+    float rmse=0.0f;
+
+    xf = sqrt(2.0f);
+    //for (i=0; i<n+1; i++) {
+        //xf *= 0.95f;
+        x  = q32_float_to_fixed(xf);
+
+        log2x  = q32_log2_shiftadd(x,18);
+        log2xf = log2f(xf);
+
+        error = log2xf - q32_fixed_to_float(log2x);
+        rmse += error*error;
+
+        printf("%4u : x:%12.8f, log2(x):%12.8f(%12.8f), e:%12.8f\n",
+                i,
+                xf,
+                q32_fixed_to_float(log2x),
+                log2xf,
+                error);
+    //}
     rmse = sqrt(rmse / (float)n);
     printf("rmse : %e\n", rmse);
 }
