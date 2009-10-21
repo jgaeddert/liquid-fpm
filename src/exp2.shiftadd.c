@@ -9,7 +9,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG_EXP2_SHIFTADD     1
+#define DEBUG_EXP2_SHIFTADD     0
 
 // Pre-computed look-up table: A[k] = log2( 1 + 2^-k )
 const q32_t q32_exp2_shiftadd_Ak_tab[32] = {

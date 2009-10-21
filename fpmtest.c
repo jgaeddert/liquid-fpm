@@ -414,7 +414,7 @@ void fpmtest_exp2_shiftadd()
 {
     printf("testing exp2 [shift|add]...\n");
     unsigned int i=0;
-    unsigned int n=21;  // number of tests
+    unsigned int n=30;  // number of tests
     unsigned int k=15;  // number of internal iterations (precision)
     float xf, exp2xf;
     q32_t x,  exp2x;
@@ -424,7 +424,7 @@ void fpmtest_exp2_shiftadd()
     // determine valid range of inputs
     float x0 = -3.0000f;    // minimum input
     float x1 =  2.9999f;    // maximium input
-    float dx = (x1-x0)/(float)n; 
+    float dx = (x1-x0)/(float)(n); 
 
     xf = x0;
     for (i=0; i<n+1; i++) {
