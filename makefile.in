@@ -49,6 +49,7 @@ sources  +=			\
 	src/log2.polyfit.c		\
 	src/log2.shiftadd.c		\
 	src/exp2.polyfit.c		\
+	src/exp2.shiftadd.c		\
 	src/log.port.c		\
 	src/exp.port.c		\
 	src/sqrt.newton.c		\

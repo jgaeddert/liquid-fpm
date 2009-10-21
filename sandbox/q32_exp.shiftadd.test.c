@@ -11,7 +11,7 @@
 int main() {
     unsigned int n = 20;
     double b = 2.0;
-    float xf = 0.5f;
+    float xf = -0.1f;
     q32_t x = q32_float_to_fixed(xf);
 
     int print_table=1;

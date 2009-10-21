@@ -23,6 +23,7 @@ void fpmtest_sin();
 void fpmtest_cos();
 void fpmtest_sincos_cordic();
 void fpmtest_log2_shiftadd();
+void fpmtest_exp2_shiftadd();
 void fpmtest_atan2();
 
 void fpmtest_q32_dotprod();
@@ -69,9 +70,12 @@ int main() {
     
     fpmtest_sincos_cordic();
 
-    */
     // test log2 shift|add
     fpmtest_log2_shiftadd();
+    */
+
+    // test exp2 shift|add
+    fpmtest_exp2_shiftadd();
 
     printf("done.\n");
     return 0;
@@ -400,6 +404,46 @@ void fpmtest_log2_shiftadd()
                 error);
 
         xf *= sigma;
+    }
+    rmse = sqrt(rmse / (float)n);
+    printf("rmse : %e\n", rmse);
+}
+
+
+void fpmtest_exp2_shiftadd()
+{
+    printf("testing exp2 [shift|add]...\n");
+    unsigned int i=0;
+    unsigned int n=21;  // number of tests
+    unsigned int k=15;  // number of internal iterations (precision)
+    float xf, exp2xf;
+    q32_t x,  exp2x;
+    float error;
+    float rmse=0.0f;
+
+    // determine valid range of inputs
+    float x0 = -3.0000f;    // minimum input
+    float x1 =  2.9999f;    // maximium input
+    float dx = (x1-x0)/(float)n; 
+
+    xf = x0;
+    for (i=0; i<n+1; i++) {
+        x  = q32_float_to_fixed(xf);
+
+        exp2x  = q32_exp2_shiftadd(x,k);
+        exp2xf = exp2f(xf);
+
+        error = exp2xf - q32_fixed_to_float(exp2x);
+        rmse += error*error;
+
+        printf("%4u : x:%12.8f, exp2(x):%12.8f(%12.8f), e:%12.8f\n",
+                i,
+                xf,
+                q32_fixed_to_float(exp2x),
+                exp2xf,
+                error);
+
+        xf += dx;
     }
     rmse = sqrt(rmse / (float)n);
     printf("rmse : %e\n", rmse);
