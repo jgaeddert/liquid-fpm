@@ -65,6 +65,6 @@ q32_t q32_log2_shiftadd(q32_t _x,
         }
     }
 
-
+    return tn;
 }
 
