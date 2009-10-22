@@ -15,10 +15,10 @@ void fpmtest_q32_add();
 void fpmtest_q32_sub();
 void fpmtest_q32_mul();
 void fpmtest_q32_div();
-void fpmtest_q32_inv();
 void fpmtest_q32_log2();
 void fpmtest_q32_exp2();
-void fpmtest_q32_sqrt();
+void fpmtest_q32_inv_newton();
+void fpmtest_q32_sqrt_newton();
 void fpmtest_angle();
 void fpmtest_sin();
 void fpmtest_cos();
@@ -41,7 +41,7 @@ int main() {
     fpmtest_q32_div();
     fpmtest_q32_log2();
     fpmtest_q32_exp2();
-    fpmtest_q32_sqrt();
+    fpmtest_q32_sqrt_newton();
     fpmtest_angle();
     fpmtest_sin();
     fpmtest_cos();
@@ -78,7 +78,7 @@ int main() {
     fpmtest_exp2_shiftadd();
     */
 
-    fpmtest_q32_inv();
+    fpmtest_q32_inv_newton();
 
     printf("done.\n");
     return 0;
@@ -248,11 +248,12 @@ void fpmtest_q32_exp2()
         powf(2.0f,x));
 }
 
-void fpmtest_q32_sqrt()
+void fpmtest_q32_sqrt_newton()
 {
     printf("testing sqrt...\n");
+    unsigned int n=16;
     float x = 0.75f;
-    q32_t sqrt_test = q32_sqrt( q32_float_to_fixed(x) );
+    q32_t sqrt_test = q32_sqrt_newton( q32_float_to_fixed(x), n );
     printf("    sqrt: 0x%.8x (%12.10f, expected %12.10f)\n",
         sqrt_test,
         q32_fixed_to_float(sqrt_test),
@@ -453,7 +454,7 @@ void fpmtest_exp2_shiftadd()
 }
 
 
-void fpmtest_q32_inv()
+void fpmtest_q32_inv_newton()
 {
     printf("testing inv() [Newton]...\n");
     float xf, invxf;
@@ -463,7 +464,7 @@ void fpmtest_q32_inv()
     xf = 3.1415926f;
     invxf = 1.0f / xf;
     x = q32_float_to_fixed(xf);
-    invx = q32_inv(x,n);
+    invx = q32_inv_newton(x,n);
 
     printf("inv(%12.8f) = %12.8f (%12.8f)\n", xf,
                                               q32_fixed_to_float(invx),

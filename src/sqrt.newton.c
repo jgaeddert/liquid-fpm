@@ -9,9 +9,7 @@
 
 #define DEBUG_SQRT_NEWTON 0
 
-#define LIQUIDFPM_SQRT_NEWTON_NUM_ITERATIONS    3
-
-q32_t q32_sqrt( q32_t _x )
+q32_t q32_sqrt_newton( q32_t _x, unsigned int _n)
 {
     if (_x < 0) {
         perror("error: q32_sqrt(), x must be > 0");
@@ -25,10 +23,10 @@ q32_t q32_sqrt( q32_t _x )
     // NOTE: we need to compensate for the decimal position of q32
     q32_t x0 = 1 << (((msb_index(_x)-q32_fracbits)/2)+q32_fracbits);
 
-    q32_t x1;
+    q32_t x1=0;
 
     unsigned int i;
-    for (i=0; i<LIQUIDFPM_SQRT_NEWTON_NUM_ITERATIONS; i++) {
+    for (i=0; i<_n; i++) {
 #if DEBUG_SQRT_NEWTON
         printf("%4u : %18.14f\n", i, q32_fixed_to_float(x0));
 #endif

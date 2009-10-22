@@ -51,20 +51,36 @@ unsigned int msb_index(unsigned int _x);
 
 /* Internal API definition macro
  *
- * X        :   name-mangling macro
+ * Q        :   name-mangling macro
  * T        :   primitive data type
  * INTBITS  :   number of integer bits
  * FRACBITS :   number of fractional bits
  */
-#define LIQUIDFPM_DEFINE_INTERNAL_API(X,T,INTBITS,FRACBITS)         \
+#define LIQUIDFPM_DEFINE_INTERNAL_API(Q,T,INTBITS,FRACBITS)         \
                                                                     \
 /* auto-generated look-up tables */                                 \
-extern const X(_t) X(_sin_table)[256];                              \
+extern const Q(_t) Q(_sin_table)[256];                              \
                                                                     \
-/* log */                                                           \
-X(_t) X(_log2_convert_forward) (X(_log2_t) _logtype);               \
-X(_log2_t) X(_log2_convert_reverse) (X(_t) _x);                     \
-extern const X(_t) X(_log2_fraction_table)[256];
+/* arithmetic */                                                    \
+Q(_t) Q(_inv_newton)(Q(_t), unsigned int _n);                       \
+Q(_t) Q(_sqrt_newton)(Q(_t), unsigned int _n);                      \
+                                                                    \
+/* log (old) */                                                     \
+Q(_t) Q(_log2_convert_forward) (Q(_log2_t) _logtype);               \
+Q(_log2_t) Q(_log2_convert_reverse) (Q(_t) _x);                     \
+extern const Q(_t) Q(_log2_fraction_table)[256];                    \
+                                                                    \
+/* log2 shift|add */                                                \
+extern const Q(_t) Q(_log2_shiftadd_Ak_tab)[32];                    \
+extern const Q(_t) Q(_log2_shiftadd_nmax);                          \
+Q(_t) Q(_log2_shiftadd)(Q(_t),unsigned int _n);                     \
+Q(_t) Q(_log2_shiftadd_base)(Q(_t),unsigned int _n);                \
+                                                                    \
+/* exp2 shift|add */                                                \
+extern const Q(_t) Q(_exp2_shiftadd_Ak_tab)[32];                    \
+extern const Q(_t) Q(_exp2_shiftadd_nmax);                          \
+Q(_t) Q(_exp2_shiftadd)(Q(_t),unsigned int _n);                     \
+Q(_t) Q(_exp2_shiftadd_base)(Q(_t),unsigned int _n);
 
 LIQUIDFPM_DEFINE_INTERNAL_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)
 

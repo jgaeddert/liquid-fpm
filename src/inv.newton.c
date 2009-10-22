@@ -11,7 +11,7 @@
 
 // computes x = inv(d) = 1/d using iterative Newtonian method:
 //   x[k+1] = x[k] + x[k]*(1 - d*x[k])
-q32_t q32_inv( q32_t _x, unsigned int _n )
+q32_t q32_inv_newton( q32_t _x, unsigned int _n )
 {
     // initial guess: x0 = 2^-floor(log2(_x))
     int b = msb_index(_x) - 1;      // base index
