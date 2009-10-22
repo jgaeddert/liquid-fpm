@@ -27,6 +27,7 @@ void fpmtest_sincos_cordic();
 void fpmtest_log2_shiftadd();
 void fpmtest_exp2_shiftadd();
 void fpmtest_atan2();
+void fpmtest_atan2_cordic();
 
 void fpmtest_q32_dotprod();
 
@@ -78,10 +79,12 @@ int main() {
 
     // test exp2 shift|add
     fpmtest_exp2_shiftadd();
-    */
 
     fpmtest_q32_inv_newton();
     fpmtest_q32_div_inv_newton();
+    */
+
+    fpmtest_atan2_cordic();
 
     printf("done.\n");
     return 0;
@@ -363,11 +366,10 @@ void fpmtest_sincos_cordic()
     float sf,cf;
     float error;
     float rmse=0.0f;
-#if 1
-    for (i=0; i<n+1; i++) {
-        thetaf = 4.0f * (float)(i) / ((float)(n)) * M_PI - 2*M_PI;
-        //thetaf = (float)(i) / ((float)(n)) * M_PI * 0.5f;
-        //thetaf = 5.0f * M_PI / 4.0f;
+
+    //for (i=0; i<n+1; i++) {
+        //thetaf = 4.0f * (float)(i) / ((float)(n)) * M_PI - 2*M_PI;
+        thetaf = 3.14159 / 4.0f;
         theta  = q32_angle_float_to_fixed(thetaf);
 
         q32_sincos_cordic(theta,&s,&c,18);
@@ -385,14 +387,8 @@ void fpmtest_sincos_cordic()
                 q32_fixed_to_float(s),
                 sinf(thetaf),
                 error);
-    }
-#else
-    thetaf = 2*M_PI;
-    theta  = q32_angle_float_to_fixed(thetaf);
-    s = q32_sin(theta);
-    printf("sin(%12.8f) = %12.8f (%12.8f)\n",
-            thetaf, sinf(thetaf), q32_fixed_to_float(s));
-#endif
+    //}
+    
     rmse = sqrt(rmse / (float)n);
     printf("rmse : %e\n", rmse);
 }
@@ -512,3 +508,26 @@ void fpmtest_atan2()
     printf("atan2(%12.8f,%12.8f) = %12.8f (%12.8f)\n",
             yf,xf,thetaf, q32_angle_fixed_to_float(theta));
 }
+void fpmtest_atan2_cordic()
+{
+    printf("testing atan2|cordic...\n");
+    float rf = 1.8f;
+    float thetaf = M_PI / 2.0f;
+    float xf = rf*cosf(thetaf);
+    float yf = rf*sinf(thetaf);
+    unsigned int n=16;
+
+    q32_t r;
+    q32_t theta;
+    q32_t x = q32_float_to_fixed(xf);
+    q32_t y = q32_float_to_fixed(yf);
+    
+    q32_atan2_cordic(y,x,&r,&theta,n);
+
+    printf("atan2(%12.8f,%12.8f) = %12.8f (%12.8f)\n",
+            yf,
+            xf,
+            thetaf,
+            q32_angle_fixed_to_float(theta));
+}
+

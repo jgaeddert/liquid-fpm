@@ -67,6 +67,17 @@ Q(_t) Q(_inv_logexp)(Q(_t), unsigned int _n);                       \
 Q(_t) Q(_sqrt_newton)(Q(_t), unsigned int _n);                      \
 Q(_t) Q(_sqrt_logexp)(Q(_t), unsigned int _n);                      \
                                                                     \
+/* trig */                                                          \
+void Q(_sincos_cordic)(Q(_t) _theta,                                \
+                       Q(_t) * _sin,                                \
+                       Q(_t) * _cos,                                \
+                       unsigned int _n);                            \
+void Q(_atan2_cordic)(Q(_t) _y,                                     \
+                      Q(_t) _x,                                     \
+                      Q(_t) * _r,                                   \
+                      Q(_t) * _theta,                               \
+                      unsigned int _n);                             \
+                                                                    \
 /* log (old) */                                                     \
 Q(_t) Q(_log2_convert_forward) (Q(_log2_t) _logtype);               \
 Q(_log2_t) Q(_log2_convert_reverse) (Q(_t) _x);                     \
