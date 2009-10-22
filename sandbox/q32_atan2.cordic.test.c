@@ -16,9 +16,6 @@ int main() {
     float xf = rf*cosf(thetaf);
     float yf = rf*sinf(thetaf);
 
-    q32_t x = q32_float_to_fixed(xf);
-    q32_t y = q32_float_to_fixed(yf);
-
     int print_table=0;
 
     // generate table
@@ -46,6 +43,8 @@ int main() {
         printf("const q32_t q32_cordic_k_inv = 0x%.8x;\n\n", k_inv);
     }
 
+    q32_t x = q32_float_to_fixed(xf);
+    q32_t y = q32_float_to_fixed(yf);
     q32_t z = 0;
     q32_t d,tx,ty,tz;
     printf("   n           x            y            z         -d*An\n");
