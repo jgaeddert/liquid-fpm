@@ -422,7 +422,7 @@ void fpmtest_exp2_shiftadd()
     float rmse=0.0f;
 
     // determine valid range of inputs
-    float x0 = -3.0000f;    // minimum input
+    float x0 = -8.0000f;    // minimum input
     float x1 =  2.9999f;    // maximium input
     float dx = (x1-x0)/(float)(n); 
 
