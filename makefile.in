@@ -59,6 +59,7 @@ sources  +=				\
 	src/sincos.cordic.c		\
 	src/atan.pwpolyfit.c		\
 	src/atan.cordic.c		\
+	src/cordic.tab.c		\
 	src/cq32.c			\
 	src/msb_index.c			\
 	gentab/q32_tables.c

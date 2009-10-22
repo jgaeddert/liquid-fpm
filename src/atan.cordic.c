@@ -9,19 +9,6 @@
 
 #define DEBUG_ATAN_CORDIC 1
 
-// cordic coefficients
-const q32_t q32_atan_cordic_Ak_tab[32] = {
-    0x10000000,    0x09720290,    0x04fd9c28,    0x028888e8,
-    0x014586a0,    0x00a2ebf0,    0x00517b0f,    0x0028be2b,
-    0x00145f2a,    0x000a2f97,    0x000517cc,    0x00028be6,
-    0x000145f3,    0x0000a2fa,    0x0000517d,    0x000028be,
-    0x0000145f,    0x00000a30,    0x00000518,    0x0000028c,
-    0x00000146,    0x000000a3,    0x00000051,    0x00000029,
-    0x00000014,    0x0000000a,    0x00000005,    0x00000003,
-    0x00000001,    0x00000001,    0x00000000,    0x00000000};
-
-const q32_t q32_atan_cordic_k_inv = 0x09b74ee0;
-
 void q32_atan2_cordic_base(q32_t _y,
                            q32_t _x,
                            q32_t * _r,
@@ -96,7 +83,7 @@ void q32_atan2_cordic_base(q32_t _y,
 
         tx = x - ((y>>i)^d)-d;
         ty = y + ((x>>i)^d)-d;
-        tz = z - ((q32_atan_cordic_Ak_tab[i]^d)-d);
+        tz = z - ((q32_cordic_Ak_tab[i]^d)-d);
         x = tx;
         y = ty;
         z = tz;
@@ -106,11 +93,11 @@ void q32_atan2_cordic_base(q32_t _y,
             q32_fixed_to_float(x),
             q32_fixed_to_float(y),
             q32_fixed_to_float(z),
-            q32_fixed_to_float(q32_atan_cordic_Ak_tab[i])*(y>=0?-1.0:1.0));
+            q32_fixed_to_float(q32_cordic_Ak_tab[i])*(y>=0?-1.0:1.0));
 #endif
     }
-    //q32_t x = q32_atan_cordic_k_inv; // TODO : initialize with cordic_Kinv_tab[_n-1];
-    *_r = q32_mul(x,q32_atan_cordic_k_inv);
+    //q32_t x = q32_cordic_k_inv; // TODO : initialize with cordic_Kinv_tab[_n-1];
+    *_r = q32_mul(x,q32_cordic_k_inv);
     *_theta = z;
 }
 

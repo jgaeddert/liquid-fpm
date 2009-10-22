@@ -68,15 +68,26 @@ Q(_t) Q(_sqrt_newton)(Q(_t), unsigned int _n);                      \
 Q(_t) Q(_sqrt_logexp)(Q(_t), unsigned int _n);                      \
                                                                     \
 /* trig */                                                          \
+extern const Q(_t) Q(_cordic_Ak_tab)[32];                           \
+extern const Q(_t) Q(_cordic_k_inv);                                \
 void Q(_sincos_cordic)(Q(_t) _theta,                                \
                        Q(_t) * _sin,                                \
                        Q(_t) * _cos,                                \
                        unsigned int _n);                            \
+void Q(_sincos_cordic_base)(Q(_t) _theta,                           \
+                            Q(_t) * _sin,                           \
+                            Q(_t) * _cos,                           \
+                            unsigned int _n);                       \
 void Q(_atan2_cordic)(Q(_t) _y,                                     \
                       Q(_t) _x,                                     \
                       Q(_t) * _r,                                   \
                       Q(_t) * _theta,                               \
                       unsigned int _n);                             \
+void Q(_atan2_cordic_base)(Q(_t) _y,                                \
+                           Q(_t) _x,                                \
+                           Q(_t) * _r,                              \
+                           Q(_t) * _theta,                          \
+                           unsigned int _n);                        \
                                                                     \
 /* log (old) */                                                     \
 Q(_t) Q(_log2_convert_forward) (Q(_log2_t) _logtype);               \
