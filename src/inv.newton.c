@@ -9,7 +9,8 @@
 
 #define DEBUG_INV_NEWTON 1
 
-// computes inv(x) = 1/x using iterative Newtonian method
+// computes x = inv(d) = 1/d using iterative Newtonian method:
+//   x[k+1] = x[k] + x[k]*(1 - d*x[k])
 q32_t q32_inv( q32_t _x, unsigned int _n )
 {
     // initial guess
