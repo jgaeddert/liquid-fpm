@@ -94,15 +94,15 @@ Q(_t) Q(_log2_convert_forward) (Q(_log2_t) _logtype);               \
 Q(_log2_t) Q(_log2_convert_reverse) (Q(_t) _x);                     \
 extern const Q(_t) Q(_log2_fraction_table)[256];                    \
                                                                     \
-/* log2 shift|add */                                                \
+/* */                                                               \
 extern const Q(_t) Q(_log2_shiftadd_Ak_tab)[32];                    \
-extern const Q(_t) Q(_log2_shiftadd_nmax);                          \
+extern const unsigned int Q(_log2_shiftadd_nmax);                   \
+                                                                    \
+/* log2 shift|add */                                                \
 Q(_t) Q(_log2_shiftadd)(Q(_t),unsigned int _n);                     \
 Q(_t) Q(_log2_shiftadd_base)(Q(_t),unsigned int _n);                \
                                                                     \
 /* exp2 shift|add */                                                \
-extern const Q(_t) Q(_exp2_shiftadd_Ak_tab)[32];                    \
-extern const Q(_t) Q(_exp2_shiftadd_nmax);                          \
 Q(_t) Q(_exp2_shiftadd)(Q(_t),unsigned int _n);                     \
 Q(_t) Q(_exp2_shiftadd_base)(Q(_t),unsigned int _n);
 
