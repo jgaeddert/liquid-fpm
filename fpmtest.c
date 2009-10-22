@@ -15,6 +15,7 @@ void fpmtest_q32_add();
 void fpmtest_q32_sub();
 void fpmtest_q32_mul();
 void fpmtest_q32_div();
+void fpmtest_q32_div_inv_newton();
 void fpmtest_q32_log2();
 void fpmtest_q32_exp2();
 void fpmtest_q32_inv_newton();
@@ -39,6 +40,7 @@ int main() {
     fpmtest_q32_sub();
     fpmtest_q32_mul();
     fpmtest_q32_div();
+    fpmtest_q32_div_inv_newton();
     fpmtest_q32_log2();
     fpmtest_q32_exp2();
     fpmtest_q32_sqrt_newton();
@@ -79,6 +81,7 @@ int main() {
     */
 
     fpmtest_q32_inv_newton();
+    fpmtest_q32_div_inv_newton();
 
     printf("done.\n");
     return 0;
@@ -200,6 +203,27 @@ void fpmtest_q32_div()
         q32_fixed_to_float(r), x/y);
 
 }
+
+void fpmtest_q32_div_inv_newton()
+{
+    printf("testing div [inverse|Newton]...\n");
+    float x = 1/3.0f;
+    float y = 2.25f;
+    unsigned int n=16;
+
+    q32_t a = q32_float_to_fixed(x);
+    q32_t b = q32_float_to_fixed(y);
+    q32_t r = q32_div_inv_newton(a,b,n);
+    printf("    0x%.8x / 0x%.8x = 0x%.8x\n", a, b, r);
+    printf("    %10.7f / %10.7f = %10.7f\n",
+        q32_fixed_to_float(a),
+        q32_fixed_to_float(b),
+        q32_fixed_to_float(r));
+    printf("    computed %10.7f (expected %10.7f)\n",
+        q32_fixed_to_float(r), x/y);
+
+}
+
 void fpmtest_q32_dotprod()
 {
     printf("testing dot product...\n");

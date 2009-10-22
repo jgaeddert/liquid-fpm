@@ -42,27 +42,28 @@ dependencies	= $(patsubst %.c,%.d,$(sources))
 all:
 
 
-sources  +=			\
-	q32_dotprod.port.c	\
-	q32_div.port.c		\
+sources  +=				\
+	q32_dotprod.port.c		\
+	q32_div.port.c			\
+	q32_div.inv.newton.c		\
 	src/inv.newton.c		\
-	src/clz.c		\
+	src/clz.c			\
 	src/log2.polyfit.c		\
 	src/log2.shiftadd.c		\
 	src/exp2.polyfit.c		\
 	src/exp2.shiftadd.c		\
-	src/log.port.c		\
-	src/exp.port.c		\
+	src/log.port.c			\
+	src/exp.port.c			\
 	src/sqrt.newton.c		\
 	src/sincos.pwpolyfit.c		\
 	src/sincos.cordic.c		\
 	src/atan.pwpolyfit.c		\
-	src/cq32.c	\
-	src/msb_index.c		\
+	src/cq32.c			\
+	src/msb_index.c			\
 	gentab/q32_tables.c
 
-extra_clean		+=	\
-	gentab/gentab_q32	\
+extra_clean		+=		\
+	gentab/gentab_q32		\
 	gentab/q32_tables.c
 
 #objects		+= gentab/q32_tables.o
