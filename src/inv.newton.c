@@ -13,9 +13,10 @@
 //   x[k+1] = x[k] + x[k]*(1 - d*x[k])
 q32_t q32_inv( q32_t _x, unsigned int _n )
 {
-    // initial guess
-    // TODO : choose better starting value
-    q32_t x0 = q32_one;
+    // initial guess: x0 = 2^-floor(log2(_x))
+    int b = msb_index(_x) - 1;      // base index
+    int s = (int)q32_fracbits - b;  // shift amount
+    q32_t x0 = s>0 ? q32_one<<s : q32_one>>(-s);
 
     q32_t x1=0;
     q32_t y0=0;

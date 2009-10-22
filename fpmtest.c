@@ -458,7 +458,7 @@ void fpmtest_q32_inv()
     printf("testing inv() [Newton]...\n");
     float xf, invxf;
     q32_t x,  invx;
-    unsigned int n=32;
+    unsigned int n=16;
 
     xf = 3.1415926f;
     invxf = 1.0f / xf;
