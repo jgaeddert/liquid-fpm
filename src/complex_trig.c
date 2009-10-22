@@ -10,6 +10,12 @@ Q(_t) CQ(_abs2)(CQ(_t) _x)
     return x2;
 }
 
+// compute magnitude
+Q(_t) CQ(_abs)(CQ(_t) _x)
+{
+    return Q(_sqrt_newton)(CQ(_abs2)(_x), 16);
+}
+
 // compute complex exponent
 CQ(_t) CQ(_cexp)(CQ(_t) _x)
 {

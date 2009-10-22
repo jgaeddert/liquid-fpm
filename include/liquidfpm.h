@@ -137,8 +137,7 @@ CQ(_t) CQ(_clog)(CQ(_t) _x);                                        \
 static inline Q(_t) CQ(_carg)(CQ(_t) _x)                            \
     { return Q(_atan2)(_x.imag, _x.real); };                        \
 Q(_t) CQ(_abs2) (CQ(_t) _x);                                        \
-static inline Q(_t) CQ(_abs) (CQ(_t) _x)                            \
-    {return Q(_sqrt)(CQ(_abs2)(_x));};
+Q(_t) CQ(_abs) (CQ(_t) _x);
 
 LIQUIDFPM_DEFINE_COMPLEX_API(LIQUIDFPM_MANGLE_CQ32, LIQUIDFPM_MANGLE_Q32)
 
