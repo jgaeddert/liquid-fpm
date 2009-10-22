@@ -84,6 +84,7 @@ static inline Q(_t) Q(_add)(Q(_t) _a, Q(_t) _b) {return _a + _b;};  \
 static inline Q(_t) Q(_sub)(Q(_t) _a, Q(_t) _b) {return _a - _b;};  \
 Q(_t) Q(_mul)(Q(_t) _a, Q(_t) _b);                                  \
 Q(_t) Q(_div)(Q(_t) _a, Q(_t) _b);                                  \
+Q(_t) Q(_inv)(Q(_t) _x, unsigned int _n); /* compute 1/_x */        \
                                                                     \
 /* trig */                                                          \
 Q(_t) Q(_sin)(Q(_t) _theta);                                        \

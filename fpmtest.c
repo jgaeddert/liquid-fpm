@@ -15,6 +15,7 @@ void fpmtest_q32_add();
 void fpmtest_q32_sub();
 void fpmtest_q32_mul();
 void fpmtest_q32_div();
+void fpmtest_q32_inv();
 void fpmtest_q32_log2();
 void fpmtest_q32_exp2();
 void fpmtest_q32_sqrt();
@@ -72,10 +73,12 @@ int main() {
 
     // test log2 shift|add
     fpmtest_log2_shiftadd();
-    */
 
     // test exp2 shift|add
     fpmtest_exp2_shiftadd();
+    */
+
+    fpmtest_q32_inv();
 
     printf("done.\n");
     return 0;
@@ -447,6 +450,24 @@ void fpmtest_exp2_shiftadd()
     }
     rmse = sqrt(rmse / (float)n);
     printf("rmse : %e\n", rmse);
+}
+
+
+void fpmtest_q32_inv()
+{
+    printf("testing inv() [Newton]...\n");
+    float xf, invxf;
+    q32_t x,  invx;
+    unsigned int n=32;
+
+    xf = 3.1415926f;
+    invxf = 1.0f / xf;
+    x = q32_float_to_fixed(xf);
+    invx = q32_inv(x,n);
+
+    printf("inv(%12.8f) = %12.8f (%12.8f)\n", xf,
+                                              q32_fixed_to_float(invx),
+                                              invxf);
 }
 
 

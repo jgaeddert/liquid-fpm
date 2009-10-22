@@ -45,6 +45,7 @@ all:
 sources  +=			\
 	q32_dotprod.port.c	\
 	q32_div.port.c		\
+	src/inv.newton.c		\
 	src/clz.c		\
 	src/log2.polyfit.c		\
 	src/log2.shiftadd.c		\
