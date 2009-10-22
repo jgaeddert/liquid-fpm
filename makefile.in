@@ -163,7 +163,7 @@ fpmtest: fpmtest.o libliquidfpm.a
 benchmark_headers = 				\
 	bench/q32_atan2_benchmark.h		\
 	bench/q32_sin_benchmark.h		\
-	bench/q32_sqrt_benchmark.h		\
+	bench/q32_sqrt_newton_benchmark.h	\
 	bench/q32_log2_benchmark.h		\
 	bench/q32_log2_shiftadd_benchmark.h
 

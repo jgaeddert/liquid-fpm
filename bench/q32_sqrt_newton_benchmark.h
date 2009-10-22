@@ -12,7 +12,7 @@
 
 #define DEBUG_SQRT_BENCH 0
 
-void precision_q32_sqrt(unsigned int _res, float * _rmse, float *_maxe)
+void precision_q32_sqrt_newton(unsigned int _res, float * _rmse, float *_maxe)
 {
     float e, rms_error=0.0f, max_error=0.0f;
     float xf_min = 0.01f;
@@ -21,13 +21,14 @@ void precision_q32_sqrt(unsigned int _res, float * _rmse, float *_maxe)
     float xf = xf_min;
     float yf;
     unsigned int i;
+    unsigned int n=6;
 
     q32_t x, y;
     for (i=0; i<_res; i++) {
         yf = sqrtf(xf);
 
         x = q32_float_to_fixed(xf);
-        y = q32_sqrt(x);
+        y = q32_sqrt_newton(x,n);
 
         e = fabsf(yf - q32_fixed_to_float(y));
         rms_error += e*e;
@@ -47,20 +48,21 @@ void precision_q32_sqrt(unsigned int _res, float * _rmse, float *_maxe)
     *_maxe = max_error;
 }
 
-void benchmark_q32_sqrt(struct rusage *_start,
+void benchmark_q32_sqrt_newton(struct rusage *_start,
                     struct rusage *_finish,
                     unsigned long int *_num_trials)
 {
     unsigned long int i;
     q32_t x;
+    unsigned int n=6;
 
     // start trials
     getrusage(RUSAGE_SELF, _start);
     for (i=0; i<(*_num_trials); i++) {
-        x = q32_sqrt(0x00000234);
-        x = q32_sqrt(0x00083018);
-        x = q32_sqrt(0x28591728);
-        x = q32_sqrt(0x02850337);
+        x = q32_sqrt_newton(0x00000234,n);
+        x = q32_sqrt_newton(0x00083018,n);
+        x = q32_sqrt_newton(0x28591728,n);
+        x = q32_sqrt_newton(0x02850337,n);
     }
     getrusage(RUSAGE_SELF, _finish);
 
