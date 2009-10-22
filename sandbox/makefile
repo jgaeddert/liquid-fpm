@@ -12,7 +12,9 @@ src	=				\
 	log.shiftadd.test.c		\
 	q32_log.shiftadd.test.c		\
 	sincos.cordic.test.c		\
-	q32_sincos.cordic.test.c
+	q32_sincos.cordic.test.c	\
+	atan2.cordic.test.c		\
+	q32_atan2.cordic.test.c
 
 obj	= $(patsubst %.c,%.o,$(src))
 bin	= $(patsubst %.c,%,  $(src))
