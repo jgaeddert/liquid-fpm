@@ -60,14 +60,16 @@ sources  +=				\
 	src/atan.pwpolyfit.c		\
 	src/atan.cordic.c		\
 	src/cordic.tab.c		\
-	src/shiftadd.tab.c		\
 	src/cq32.c			\
 	src/msb_index.c			\
-	gentab/q32_tables.c
+	gentab/q32_tables.c		\
+	gentab/shiftadd.q32.tab.c
 
 extra_clean		+=		\
 	gentab/gentab_q32		\
-	gentab/q32_tables.c
+	gentab/q32_tables.c		\
+	gentab/gentab_q32.shiftadd	\
+	gentab/shiftadd.q32.tab.c
 
 #objects		+= gentab/q32_tables.o
 
@@ -78,7 +80,13 @@ gentab/gentab_q32: gentab/gentab_q32.c
 	$(CC) $(CFLAGS) -lm $< -o $@
 
 gentab/q32_tables.c: gentab/gentab_q32
-	./gentab/gentab_q32 > gentab/q32_tables.c
+	./$< > $@
+
+gentab/gentab_q32.shiftadd: gentab/gentab_q32.shiftadd.c
+	$(CC) $(CFLAGS) -lm $< -o $@
+
+gentab/shiftadd.q32.tab.c: gentab/gentab_q32.shiftadd
+	./$< > $@
 
 # PPC mul source code generator
 qtype_mul.ppc.gen : qtype_mul.ppc.s.c

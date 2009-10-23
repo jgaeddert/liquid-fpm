@@ -100,7 +100,7 @@ Q(_t) Q(_exp2)(Q(_t) _x);                                           \
 Q(_t) Q(_log) (Q(_t) _x);                                           \
 Q(_t) Q(_exp) (Q(_t) _x);                                           \
 Q(_t) Q(_sqrt)(Q(_t) _x);                                           \
-Q(_t) Q(_pow) (Q(_t) _x);                                           \
+Q(_t) Q(_pow) (Q(_t) _x, Q(_t) _y);                                 \
                                                                     \
 /* vector operations */                                             \
 Q(_t) Q(_dotprod)(Q(_t) * _x, Q(_t) * _v, unsigned int _n);
