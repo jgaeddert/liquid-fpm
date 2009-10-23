@@ -11,6 +11,10 @@
 
 #define Q(name)         LIQUIDFPM_CONCAT(q32,name)
 
+#if DEBUG_MATH_TRANSCENDENTALS
+#   include <math.h>
+#endif
+
 // log(gamma(z))
 Q(_t) Q(_lngamma)(Q(_t) _z)
 {
@@ -53,7 +57,6 @@ Q(_t) Q(_lngamma)(Q(_t) _z)
 #endif
 
 #if DEBUG_MATH_TRANSCENDENTALS
-    #include <math.h>
     float zf    = Q(_fixed_to_float)(_z);
     float z1f   = Q(_fixed_to_float)(z1);
     float g0f   = Q(_fixed_to_float)(g0);
@@ -111,7 +114,6 @@ Q(_t) Q(_lngamma2)(Q(_t) _z)
     Q(_t) g2 = Q(_log_shiftadd)(_z + g1, _n);
 
 #if DEBUG_MATH_TRANSCENDENTALS
-    #include <math.h>
     float zf    = Q(_fixed_to_float)(_z);
     float g0f   = Q(_fixed_to_float)(g0);
     float g1f   = Q(_fixed_to_float)(g1);
