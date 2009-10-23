@@ -102,6 +102,13 @@ Q(_t) Q(_exp) (Q(_t) _x);                                           \
 Q(_t) Q(_sqrt)(Q(_t) _x);                                           \
 Q(_t) Q(_pow) (Q(_t) _x, Q(_t) _y);                                 \
                                                                     \
+/* math: transcendentals */                                         \
+Q(_t) Q(_gamma)(Q(_t) _z);                                          \
+Q(_t) Q(_lngamma)(Q(_t) _z);                                        \
+Q(_t) Q(_besseli0)(Q(_t) _z);                                       \
+Q(_t) Q(_besselj0)(Q(_t) _z);                                       \
+Q(_t) Q(_sinc)(Q(_t) _z);                                           \
+                                                                    \
 /* vector operations */                                             \
 Q(_t) Q(_dotprod)(Q(_t) * _x, Q(_t) * _v, unsigned int _n);
 

@@ -61,6 +61,7 @@ sources  +=				\
 	src/atan.cordic.c		\
 	src/cq32.c			\
 	src/msb_index.c			\
+	src/math.transcendentals.c	\
 	gentab/q32_tables.c		\
 	gentab/shiftadd.q32.tab.c	\
 	gentab/cordic.q32.tab.c
