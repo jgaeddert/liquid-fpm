@@ -28,6 +28,7 @@ void fpmtest_log2_shiftadd();
 void fpmtest_exp2_shiftadd();
 void fpmtest_atan2();
 void fpmtest_atan2_cordic();
+void fpmtest_lngamma();
 
 void fpmtest_q32_dotprod();
 
@@ -82,9 +83,11 @@ int main() {
 
     fpmtest_q32_inv_newton();
     fpmtest_q32_div_inv_newton();
-    */
 
     fpmtest_atan2_cordic();
+    */
+
+    fpmtest_lngamma();
 
     printf("done.\n");
     return 0;
@@ -508,6 +511,7 @@ void fpmtest_atan2()
     printf("atan2(%12.8f,%12.8f) = %12.8f (%12.8f)\n",
             yf,xf,thetaf, q32_angle_fixed_to_float(theta));
 }
+
 void fpmtest_atan2_cordic()
 {
     printf("testing atan2|cordic...\n");
@@ -529,5 +533,43 @@ void fpmtest_atan2_cordic()
             xf,
             thetaf,
             q32_angle_fixed_to_float(theta));
+}
+
+void fpmtest_lngamma()
+{
+    printf("testing lngamma...\n");
+    float zmin = 0.001f;
+    float zmax = 7.5f;
+    float alpha = 1.1f;
+
+    float zf = zmin;
+    float lngammazf;
+    q32_t z;
+    q32_t lngammaz;
+    unsigned int n=0;
+    FILE * fid = fopen("fpmtest_lngamma.m","w");
+    fprintf(fid,"%% auto-generated file\n");
+    fprintf(fid,"clear all;\n");
+    fprintf(fid,"close all;\n");
+    while (zf < zmax) {
+        printf("z : %12.8f\n", zf);
+        fprintf(fid,"z(%4u) = %12.4e;\n", n+1,zf);
+        z = q32_float_to_fixed(zf);
+
+        // compute lngamma
+        lngammaz = q32_lngamma(z);
+        lngammazf = q32_fixed_to_float(lngammaz);
+
+        fprintf(fid,"lngammaz(%4u) = %12.4e;\n", n+1,lngammazf);
+        zf *= alpha;
+        n++;
+    }
+
+    // plot results
+    fprintf(fid,"figure;\n");
+    fprintf(fid,"semilogx(z,log(gamma(z)),z,lngammaz);\n");
+    fprintf(fid,"grid on;\n");
+    fclose(fid);
+    printf("results written to fpmtest_lngamma.m\n");
 }
 
