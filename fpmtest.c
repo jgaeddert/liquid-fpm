@@ -546,6 +546,19 @@ void fpmtest_lngamma()
     float lngammazf;
     q32_t z;
     q32_t lngammaz;
+
+#if 1
+    zf = 2.0f;
+    z = q32_float_to_fixed(zf);
+    lngammaz = q32_lngamma(z);
+    lngammazf = q32_fixed_to_float(lngammaz);
+    printf("lngamma(%12.8f) = %12.8f (%12.8f)\n",
+            zf,
+            lngammazf,
+            logf(tgamma(zf)));
+    return;
+#endif
+
     unsigned int n=0;
     FILE * fid = fopen("fpmtest_lngamma.m","w");
     fprintf(fid,"%% auto-generated file\n");
