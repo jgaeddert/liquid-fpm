@@ -12,19 +12,19 @@
 #define DEBUG_LOG2_SHIFTADD     0
 
 // natural logarithm
-//    ln(x) = log2(x) / ln(2)
-//          = log2(x) * log2(e)
+//    ln(x) = log2(x) / log2(e)
+//          = log2(x) * log(2)
 q32_t q32_log_shiftadd(q32_t _x, unsigned int _n)
 {
-    return q32_mul(q32_log2_shiftadd(_x,_n), q32_log2_e);
+    return q32_mul(q32_log2_shiftadd(_x,_n), q32_ln2);
 }
 
 // base-10 logarithm
-//    log10(x) = log2(x) / log10(2)
-//             = log2(x) * log2(10)
+//    log10(x) = log2(x) / log2(10)
+//             = log2(x) * log10(2)
 q32_t q32_log10_shiftadd(q32_t _x, unsigned int _n)
 {
-    return q32_mul(q32_log2_shiftadd(_x,_n), q32_log2_10);
+    return q32_mul(q32_log2_shiftadd(_x,_n), q32_log10_2);
 }
 
 // Computes y = log2(x) by pre-shifting the input _x such

@@ -49,11 +49,11 @@ int main() {
     printf("const unsigned int q32_log2_shiftadd_nmax = %u;\n\n", nmax);
 
     // compute base conversion constants
-    float log2_e  = log2f(expf(1));
-    float log2_10 = log2f(10);
+    float ln2  = logf(2);
+    float log10_2 = log10f(2);
     printf("// constants for logarithm base conversions\n");
-    printf("const q32_t q32_log2_e  = 0x%.8x; // log2(e)\n",  q32_float_to_fixed(log2_e));
-    printf("const q32_t q32_log2_10 = 0x%.8x; // log2(10)\n", q32_float_to_fixed(log2_10));
+    printf("const q32_t q32_ln2  = 0x%.8x; // log(2)\n",  q32_float_to_fixed(ln2));
+    printf("const q32_t q32_log10_2 = 0x%.8x; // log(10)\n", q32_float_to_fixed(log10_2));
     printf("\n");
 
     return 0;
