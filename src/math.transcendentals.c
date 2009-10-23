@@ -155,6 +155,12 @@ Q(_t) Q(_sinc)(Q(_t) _z)
 
     Q(_t) zmin = Q(_one) >> ( Q(_intbits) - 1 );
 
+    // pi : b0010 0000 0000 0000
+    _z = Q(_abs)(_z);
+
+    // compute pi*z, represented in fixed-point angular notation
+    Q(_t) pi_z  = _z << (Q(_intbits)-2); // TODO : validate this shift
+
     // z ~ 0 approximation
     // sinc(z) = gamma(1+z)/gamma(1-z)
     //if (Q(_abs)(_z) < zmin )
@@ -163,15 +169,16 @@ Q(_t) Q(_sinc)(Q(_t) _z)
     // z ~ 0 approximation
     // sinc(z) = \prod_{k=1}^{\infty}{ cos(\pi z / 2^k) }
     if (Q(_abs)(_z) < zmin ) {
-        //return cosf(M_PI*_x/2.0f)*cosf(M_PI*_x/4.0f)*cosf(M_PI*_x/8.0f);
-        //Q(_t) cos_z_by_2 = Q(_cos)(_z >> (Q(_intbits)-1));
+        //return Q(_one);
+
+        Q(_t) cos_pi_z_by_2 = Q(_cos)(pi_z>>1);
+        Q(_t) cos_pi_z_by_4 = Q(_cos)(pi_z>>2);
+        Q(_t) cos_pi_z_by_8 = Q(_cos)(pi_z>>3);
+        return Q(_mul)(cos_pi_z_by_2, Q(_mul)(cos_pi_z_by_4, cos_pi_z_by_8));
     }
 
     // sin(pi*z)/(pi*z)
 
-    // pi : b0010 0000 0000 0000
-    _z = Q(_abs)(_z);
-    Q(_t) pi_z  = _z << (Q(_intbits)-2); // TODO : validate this shift
     Q(_t) sin_z = Q(_sin)( pi_z );
 
     // invert z

@@ -487,7 +487,7 @@ void fpmtest_q32_inv_newton()
     q32_t x,  invx;
     unsigned int n=16;
 
-    xf = 3.1415926f;
+    xf = 0.49999651f;
     invxf = 1.0f / xf;
     x = q32_float_to_fixed(xf);
     invx = q32_inv_newton(x,n);
@@ -592,8 +592,8 @@ void fpmtest_lngamma()
 void fpmtest_sinc()
 {
     printf("testing sinc...\n");
-    float zmin = -6.0f;
-    float zmax =  6.0f;
+    float zmin = -7.5f;
+    float zmax =  7.5f;
     float dz = 0.1f;
 
     float zf = zmin;
@@ -602,7 +602,7 @@ void fpmtest_sinc()
     q32_t sincz;
 
 #if 0
-    zf = 0.2f;
+    zf = 0.49999651f;
     z = q32_float_to_fixed(zf);
     sincz = q32_sinc(z);
     sinczf = q32_fixed_to_float(sincz);
@@ -636,15 +636,7 @@ void fpmtest_sinc()
 
     // plot results
     fprintf(fid,"figure;\n");
-    fprintf(fid,"sz = zeros(1,length(z));\n");
-    fprintf(fid,"for i=1:length(z),\n");
-    fprintf(fid,"  if (abs(z(i))>1e-6),\n");
-    fprintf(fid,"    sz(i) = sin(pi*z(i)/(pi*z(i)));\n");
-    fprintf(fid,"  else,\n");
-    fprintf(fid,"    sz(i) = 1.0;\n");
-    fprintf(fid,"  end;\n");
-    fprintf(fid,"end;\n");
-    fprintf(fid,"plot(z,sz,z,sincz);\n");
+    fprintf(fid,"plot(z,sin(pi*z)./(pi*z),z,sincz);\n");
     fprintf(fid,"grid on;\n");
     fclose(fid);
     printf("results written to fpmtest_sinc.m\n");
