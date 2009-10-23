@@ -45,8 +45,13 @@ Q(_t) Q(_lngamma)(Q(_t) _z)
     Q(_t) z1 = _z + Q(_one);
     Q(_t) g0 = _z - (Q(_one)>>1); // _z + (Q(_one)>>1)
     Q(_t) g1 = Q(_log_shiftadd)(_z,_n);
+#if 0
     Q(_t) g2 = z1 < Q(_one) ? Q(_inv_newton)( (z1<<3) + (z1<<2), _n )   // inv(z1*12)
                             : Q(_mul)(Q(_inv12),Q(_inv_newton)(z1,_n)); // inv(z1)*inv(12)
+#else
+    Q(_t) g2 = Q(_mul)(Q(_inv12),Q(_inv_newton)(z1,_n)); // inv(z1)*inv(12)
+#endif
+
 #if DEBUG_MATH_TRANSCENDENTALS
     #include <math.h>
     float zf    = Q(_fixed_to_float)(_z);
