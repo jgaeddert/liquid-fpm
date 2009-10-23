@@ -43,6 +43,13 @@ q32_t q32_inv_newton( q32_t _x, unsigned int _n )
         x0y0 = q32_mul(x0,y0);
         x1   = x0 + x0y0;
 
+        // break if multiplier is zero
+        if (y0 == 0) break;
+
+        // OR : conditional break if below tolerance
+        // q32_t tol = 0x000000ff;
+        // if (q32_abs(x0y0) < tol) break;
+
         x0 = x1;
     }
 
