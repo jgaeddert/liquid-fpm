@@ -34,40 +34,36 @@ Q(_t) Q(_lngamma)(Q(_t) _z)
     // NOTE: because this approximation is not particularly good for z < 1,
     //       it is useful to invoke identity (1) above to improve its
     //       accuracy.  However, this is really only necessary if z < 1.
-    // z -> z_hat = z+1
-    //Q(_t) z_hat = _z + Q(_one);
-    Q(_t) z_hat = _z;
+    if (_z < Q(_one))
+        return Q(_lngamma)(_z + Q(_one)) - Q(_log_shiftadd)(_z,_n);
 
     // variables:
-    //   z1 : z_hat + 1
-    //   g0 : z_hat - 0.5
-    //   g1 : ln(z_hat)
-    //   g2 : 1/(12*(z_hat+1))
-    Q(_t) z1 = z_hat + Q(_one);
-    Q(_t) g0 = z_hat - (Q(_one)>>1); // _z + (Q(_one)>>1)
-    Q(_t) g1 = Q(_log_shiftadd)(z_hat,_n);
+    //   z1 : z + 1
+    //   g0 : z - 0.5
+    //   g1 : ln(z)
+    //   g2 : 1/(12*(z+1))
+    Q(_t) z1 = _z + Q(_one);
+    Q(_t) g0 = _z - (Q(_one)>>1); // _z + (Q(_one)>>1)
+    Q(_t) g1 = Q(_log_shiftadd)(_z,_n);
     Q(_t) g2 = z1 < Q(_one) ? Q(_inv_newton)( (z1<<3) + (z1<<2), _n )   // inv(z1*12)
                             : Q(_mul)(Q(_inv12),Q(_inv_newton)(z1,_n)); // inv(z1)*inv(12)
 #if DEBUG_MATH_TRANSCENDENTALS
+    #include <math.h>
     float zf    = Q(_fixed_to_float)(_z);
-    float z_hatf= Q(_fixed_to_float)(z_hat);
     float z1f   = Q(_fixed_to_float)(z1);
     float g0f   = Q(_fixed_to_float)(g0);
     float g1f   = Q(_fixed_to_float)(g1);
     float g2f   = Q(_fixed_to_float)(g2);
     printf("  z     : %12.8f\n", zf);
-    printf("  z_hat : %12.8f\n", z_hatf);
     printf("  z1    : %12.8f\n", z1f);
     printf("  g0    : %12.8f\n", g0f);
     printf("  g1    : %12.8f\n", g1f);
     printf("  g2    : %12.8f\n", g2f);
-    printf("  f(z)  : %12.8f\n", g0f*g1f - z_hatf + logf(2.0f*3.14159)*0.5f + g2f);
+    printf("  f(z)  : %12.8f\n", g0f*g1f - zf + logf(2.0f*M_PI)*0.5f + g2f);
+    printf("  true  : %12.8f\n", logf(tgammaf(zf)));
 #endif
 
-    // lngamma(z_hat) = g0*g1 - z_hat + log(2*pi)/2 + g2
-    // lngamma(z) = lngamma(z_hat) - ln(z)
-    //return Q(_mul)(g0,g1) - z_hat + (Q(_log2pi)>>1) + g2 - Q(_log_shiftadd)(_z,_n);
-    return Q(_mul)(g0,g1) - z_hat + (Q(_log2pi)>>1) + g2;
+    return Q(_mul)(g0,g1) - _z + (Q(_log2pi)>>1) + g2;
 }
 
 // gamma(z) = exp(lngamma(z))

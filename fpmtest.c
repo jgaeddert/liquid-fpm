@@ -538,16 +538,16 @@ void fpmtest_atan2_cordic()
 void fpmtest_lngamma()
 {
     printf("testing lngamma...\n");
-    float zmin = 0.001f;
+    float zmin = 0.005f;
     float zmax = 7.5f;
-    float alpha = 1.1f;
+    float alpha = 1.02f;
 
     float zf = zmin;
     float lngammazf;
     q32_t z;
     q32_t lngammaz;
 
-#if 1
+#if 0
     zf = 2.0f;
     z = q32_float_to_fixed(zf);
     lngammaz = q32_lngamma(z);
