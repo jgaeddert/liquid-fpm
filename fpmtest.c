@@ -29,6 +29,7 @@ void fpmtest_exp2_shiftadd();
 void fpmtest_atan2();
 void fpmtest_atan2_cordic();
 void fpmtest_lngamma();
+void fpmtest_sinc();
 
 void fpmtest_q32_dotprod();
 
@@ -85,9 +86,11 @@ int main() {
     fpmtest_q32_div_inv_newton();
 
     fpmtest_atan2_cordic();
-    */
 
     fpmtest_lngamma();
+    */
+
+    fpmtest_sinc();
 
     printf("done.\n");
     return 0;
@@ -584,5 +587,66 @@ void fpmtest_lngamma()
     fprintf(fid,"grid on;\n");
     fclose(fid);
     printf("results written to fpmtest_lngamma.m\n");
+}
+
+void fpmtest_sinc()
+{
+    printf("testing sinc...\n");
+    float zmin = -6.0f;
+    float zmax =  6.0f;
+    float dz = 0.1f;
+
+    float zf = zmin;
+    float sinczf;
+    q32_t z;
+    q32_t sincz;
+
+#if 0
+    zf = 0.2f;
+    z = q32_float_to_fixed(zf);
+    sincz = q32_sinc(z);
+    sinczf = q32_fixed_to_float(sincz);
+    printf("sinc(%12.8f) = %12.8f (%12.8f)\n",
+            zf,
+            sinczf,
+            fabsf(zf) > 1e-6f ? sinf(M_PI*zf)/(M_PI*zf)
+                              : 1.0f
+            );
+    return;
+#endif
+
+    unsigned int n=0;
+    FILE * fid = fopen("fpmtest_sinc.m","w");
+    fprintf(fid,"%% auto-generated file\n");
+    fprintf(fid,"clear all;\n");
+    fprintf(fid,"close all;\n");
+    while (zf < zmax) {
+        printf("z : %12.8f\n", zf);
+        fprintf(fid,"z(%4u) = %12.4e;\n", n+1,zf);
+        z = q32_float_to_fixed(zf);
+
+        // compute sinc
+        sincz = q32_sinc(z);
+        sinczf = q32_fixed_to_float(sincz);
+
+        fprintf(fid,"sincz(%4u) = %12.4e;\n", n+1,sinczf);
+        zf += dz;
+        n++;
+    }
+
+    // plot results
+    fprintf(fid,"figure;\n");
+    fprintf(fid,"sz = zeros(1,length(z));\n");
+    fprintf(fid,"for i=1:length(z),\n");
+    fprintf(fid,"  if (abs(z(i))>1e-6),\n");
+    fprintf(fid,"    sz(i) = sin(pi*z(i)/(pi*z(i)));\n");
+    fprintf(fid,"  else,\n");
+    fprintf(fid,"    sz(i) = 1.0;\n");
+    fprintf(fid,"  end;\n");
+    fprintf(fid,"end;\n");
+    fprintf(fid,"plot(z,sz,z,sincz);\n");
+    fprintf(fid,"grid on;\n");
+    fclose(fid);
+    printf("results written to fpmtest_sinc.m\n");
 }
 

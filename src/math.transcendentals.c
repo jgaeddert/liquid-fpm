@@ -150,11 +150,44 @@ Q(_t) Q(_besselj0)(Q(_t) _z)
 // sinc(z) = sin(pi*z)/(pi*z)
 Q(_t) Q(_sinc)(Q(_t) _z)
 {
+    unsigned int _n = 10;
+    Q(_t) Q(_inv_pi) = Q(_float_to_fixed)(0.318309886183791); // 1/pi
+
+    Q(_t) zmin = Q(_one) >> ( Q(_intbits) - 1 );
+
+    // z ~ 0 approximation
+    // sinc(z) = gamma(1+z)/gamma(1-z)
+    //if (Q(_abs)(_z) < zmin )
+    //    return Q(_exp_shiftadd)( -Q(_lngamma2)(1+_z) - Q(_lngamma2)(1-_z), _n );
+
     // z ~ 0 approximation
     // sinc(z) = \prod_{k=1}^{\infty}{ cos(\pi z / 2^k) }
-    if (Q(_abs)(_z) < (Q(_one)>>6))
-        return 0;
+    if (Q(_abs)(_z) < zmin ) {
+        //return cosf(M_PI*_x/2.0f)*cosf(M_PI*_x/4.0f)*cosf(M_PI*_x/8.0f);
+        //Q(_t) cos_z_by_2 = Q(_cos)(_z >> (Q(_intbits)-1));
+    }
 
-    return 0;
+    // sin(pi*z)/(pi*z)
+
+    // pi : b0010 0000 0000 0000
+    _z = Q(_abs)(_z);
+    Q(_t) pi_z  = _z << (Q(_intbits)-2); // TODO : validate this shift
+    Q(_t) sin_z = Q(_sin)( pi_z );
+
+    // invert z
+    Q(_t) z_inv = Q(_inv_newton)(_z,_n);
+
+#if DEBUG_MATH_TRANSCENDENTALS
+    float zf        = Q(_fixed_to_float)(_z);
+    float pizf      = Q(_angle_fixed_to_float)(pi_z);
+    float sinzf     = Q(_fixed_to_float)(sin_z);
+    float z_invf    = Q(_fixed_to_float)(z_inv);
+    printf("  z     :   %12.8f\n", zf);
+    printf("  pizf  :   %12.8f\n", pizf);
+    printf("  sinz  :   %12.8f\n", sinzf);
+    printf("  z_inv :   %12.8f\n", z_invf);
+#endif
+
+    return Q(_mul)(sin_z,Q(_mul)(z_inv,Q(_inv_pi)));
 }
 
