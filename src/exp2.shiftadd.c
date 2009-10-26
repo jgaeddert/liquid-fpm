@@ -15,14 +15,14 @@
 //    e^(x) = 2^(x * log2(e))
 q32_t q32_exp_shiftadd(q32_t _x, unsigned int _n)
 {
-    return q32_log2_shiftadd( q32_mul(_x,q32_log2_e), _n );
+    return q32_exp2_shiftadd( q32_mul(_x,q32_log2_e), _n );
 }
 
 // base-10 logarithm
 //    10^(x) = 2^(x * log2(10))
 q32_t q32_exp10_shiftadd(q32_t _x, unsigned int _n)
 {
-    return q32_log2_shiftadd( q32_mul(_x,q32_log2_10), _n );
+    return q32_exp2_shiftadd( q32_mul(_x,q32_log2_10), _n );
 }
 
 // Computes y = exp2(x)
