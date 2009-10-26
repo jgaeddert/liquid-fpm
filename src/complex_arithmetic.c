@@ -44,10 +44,19 @@ CQ(_t) CQ(_mul)(CQ(_t) _a, CQ(_t) _b)
 // divide 2 complex numbers
 CQ(_t) CQ(_div)(CQ(_t) _a, CQ(_t) _b)
 {
+    unsigned int _n=20; // number of iterations (precision)
+
+    // compute the raw quotient
     CQ(_t) quot = CQ(_mul)(_a, CQ(_conj)(_b));
+
+    // compute scaling factor (and its inverse)
     Q(_t) scale = Q(_mul)(_b.real,_b.real) + Q(_mul)(_b.imag,_b.imag);
-    quot.real = Q(_div)(quot.real,scale);
-    quot.imag = Q(_div)(quot.imag,scale);
+    Q(_t) scale_inv = Q(_inv_newton)(scale,_n);
+
+    // multiply the raw quotient by the inverse of the scaling factor
+    quot.real = Q(_mul)(quot.real,scale_inv);
+    quot.imag = Q(_mul)(quot.imag,scale_inv);
+
     return quot;
 }
 
