@@ -14,9 +14,9 @@ int main() {
     double sinhtab[n];
     double inv_2_n   = 1.0;
     unsigned int k;
-    for (k=1; k<n; k++) {
-        inv_2_n *= 0.5;
+    for (k=0; k<n; k++) {
         sinhtab[k] = atanh(inv_2_n);
+        inv_2_n *= 0.5;
     }
 
     double kp_inv = 1.2074970677630721288777210113109158368;
