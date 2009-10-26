@@ -628,7 +628,7 @@ void fpmtest_lngamma()
 #if 0
     zf = 2.0f;
     z = q32_float_to_fixed(zf);
-    lngammaz = q32_lngamma2(z);
+    lngammaz = q32_lngamma(z);
     lngammazf = q32_fixed_to_float(lngammaz);
     printf("lngamma(%12.8f) = %12.8f (%12.8f)\n",
             zf,
@@ -648,7 +648,7 @@ void fpmtest_lngamma()
         z = q32_float_to_fixed(zf);
 
         // compute lngamma
-        lngammaz = q32_lngamma2(z);
+        lngammaz = q32_lngamma(z);
         lngammazf = q32_fixed_to_float(lngammaz);
 
         fprintf(fid,"lngammaz(%4u) = %12.4e;\n", n+1,lngammazf);
