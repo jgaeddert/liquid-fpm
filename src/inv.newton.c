@@ -9,46 +9,48 @@
 
 #define DEBUG_INV_NEWTON 1
 
+#define Q(name)     LIQUIDFPM_CONCAT(q32,name)
+
 // computes x = inv(d) = 1/d using iterative Newtonian method:
 //   x[k+1] = x[k] + x[k]*(1 - d*x[k])
-q32_t q32_inv_newton( q32_t _x, unsigned int _n )
+Q(_t) Q(_inv_newton)( Q(_t) _x, unsigned int _n )
 {
     // initial guess: x0 = 2^-floor(log2(_x))
     int b = msb_index(_x) - 1;      // base index
-    int s = (int)q32_fracbits - b - 1;  // shift amount
-    q32_t x0 = s>0 ? q32_one<<s : q32_one>>(-s);
+    int s = (int)Q(_fracbits) - b - 1;  // shift amount
+    Q(_t) x0 = s>0 ? Q(_one)<<s : Q(_one)>>(-s);
 
-    q32_t x1=0;
-    q32_t y0=0;
-    q32_t d=_x;
-    q32_t dx0=0;
-    q32_t x0y0=0;
+    Q(_t) x1=0;
+    Q(_t) y0=0;
+    Q(_t) d=_x;
+    Q(_t) dx0=0;
+    Q(_t) x0y0=0;
 
     unsigned int i;
 #if DEBUG_INV_NEWTON
-    printf("   x : %12.8f\n", q32_fixed_to_float(_x));
-    printf("  x0 : %12.8f\n", q32_fixed_to_float(x0));
+    printf("   x : %12.8f\n", Q(_fixed_to_float)(_x));
+    printf("  x0 : %12.8f\n", Q(_fixed_to_float)(x0));
     printf("   n :         d*x0           y0        x0*y0           x1\n");
 #endif
     for (i=0; i<_n; i++) {
 #if DEBUG_INV_NEWTON
         printf("%4u : %12.8f %12.8f %12.8f %12.8f\n", i,
-                                 q32_fixed_to_float(dx0),
-                                 q32_fixed_to_float(y0),
-                                 q32_fixed_to_float(x0y0),
-                                 q32_fixed_to_float(x1));
+                                 Q(_fixed_to_float)(dx0),
+                                 Q(_fixed_to_float)(y0),
+                                 Q(_fixed_to_float)(x0y0),
+                                 Q(_fixed_to_float)(x1));
 #endif
-        dx0  = q32_mul(d,x0);
-        y0   = q32_one - dx0;
-        x0y0 = q32_mul(x0,y0);
+        dx0  = Q(_mul)(d,x0);
+        y0   = Q(_one) - dx0;
+        x0y0 = Q(_mul)(x0,y0);
         x1   = x0 + x0y0;
 
         // break if multiplier is zero
         if (y0 == 0) break;
 
         // OR : conditional break if below tolerance
-        // q32_t tol = 0x000000ff;
-        // if (q32_abs(x0y0) < tol) break;
+        // Q(_t) tol = 0x000000ff;
+        // if (Q(_abs)(x0y0) < tol) break;
 
         x0 = x1;
     }
