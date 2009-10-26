@@ -99,6 +99,8 @@ extern const Q(_t) Q(_log2_shiftadd_Ak_tab)[32];                    \
 extern const unsigned int Q(_log2_shiftadd_nmax);                   \
 extern const Q(_t) Q(_ln2);     /* log(2)   */                      \
 extern const Q(_t) Q(_log10_2); /* log10(2) */                      \
+extern const Q(_t) Q(_log2_e);  /* log2(e) */                       \
+extern const Q(_t) Q(_log2_10); /* log2(10) */                      \
                                                                     \
 /* log2 shift|add */                                                \
 Q(_t) Q(_log2_shiftadd)(Q(_t) _x, unsigned int _n);                 \
