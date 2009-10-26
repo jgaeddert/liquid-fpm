@@ -536,7 +536,7 @@ void fpmtest_exp10_shiftadd()
         x  = q32_float_to_fixed(xf);
 
         exp10x  = q32_exp10_shiftadd(x,k);
-        exp10xf = exp10f(xf);
+        exp10xf = powf(10.0f,xf);
 
         error = exp10xf - q32_fixed_to_float(exp10x);
         rmse += error*error;
