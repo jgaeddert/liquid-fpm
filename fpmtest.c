@@ -26,6 +26,8 @@ void fpmtest_cos();
 void fpmtest_sincos_cordic();
 void fpmtest_log2_shiftadd();
 void fpmtest_exp2_shiftadd();
+void fpmtest_exp_shiftadd();
+void fpmtest_exp10_shiftadd();
 void fpmtest_atan2();
 void fpmtest_atan2_cordic();
 void fpmtest_lngamma();
@@ -88,9 +90,12 @@ int main() {
     fpmtest_atan2_cordic();
 
     fpmtest_lngamma();
-    */
 
     fpmtest_sinc();
+    */
+
+    fpmtest_exp_shiftadd();
+    fpmtest_exp10_shiftadd();
 
     printf("done.\n");
     return 0;
@@ -471,6 +476,86 @@ void fpmtest_exp2_shiftadd()
                 xf,
                 q32_fixed_to_float(exp2x),
                 exp2xf,
+                error);
+
+        xf += dx;
+    }
+    rmse = sqrt(rmse / (float)n);
+    printf("rmse : %e\n", rmse);
+}
+
+
+void fpmtest_exp_shiftadd()
+{
+    printf("testing exp [shift|add]...\n");
+    unsigned int i=0;
+    unsigned int n=30;  // number of tests
+    unsigned int k=15;  // number of internal iterations (precision)
+    float xf, expxf;
+    q32_t x,  expx;
+    float error;
+    float rmse=0.0f;
+
+    // determine valid range of inputs
+    float x0 = -5.5451f;    // minimum input:   ln(2^-8.0f)
+    float x1 =  2.0794f;    // maximium input:  ln(8.0f)
+    float dx = (x1-x0)/(float)(n); 
+
+    xf = x0;
+    for (i=0; i<n+1; i++) {
+        x  = q32_float_to_fixed(xf);
+
+        expx  = q32_exp_shiftadd(x,k);
+        expxf = expf(xf);
+
+        error = expxf - q32_fixed_to_float(expx);
+        rmse += error*error;
+
+        printf("%4u : x:%12.8f, exp(x):%12.8f(%12.8f), e:%12.8f\n",
+                i,
+                xf,
+                q32_fixed_to_float(expx),
+                expxf,
+                error);
+
+        xf += dx;
+    }
+    rmse = sqrt(rmse / (float)n);
+    printf("rmse : %e\n", rmse);
+}
+
+
+void fpmtest_exp10_shiftadd()
+{
+    printf("testing exp10 [shift|add]...\n");
+    unsigned int i=0;
+    unsigned int n=30;  // number of tests
+    unsigned int k=15;  // number of internal iterations (precision)
+    float xf, exp10xf;
+    q32_t x,  exp10x;
+    float error;
+    float rmse=0.0f;
+
+    // determine valid range of inputs
+    float x0 = -2.4082f;    // minimum input:   log10(2^-8.0f)
+    float x1 =  0.9030f;    // maximium input:  log10(8.0f)
+    float dx = (x1-x0)/(float)(n); 
+
+    xf = x0;
+    for (i=0; i<n+1; i++) {
+        x  = q32_float_to_fixed(xf);
+
+        exp10x  = q32_exp10_shiftadd(x,k);
+        exp10xf = exp10f(xf);
+
+        error = exp10xf - q32_fixed_to_float(exp10x);
+        rmse += error*error;
+
+        printf("%4u : x:%12.8f, exp10(x):%12.8f(%12.8f), e:%12.8f\n",
+                i,
+                xf,
+                q32_fixed_to_float(exp10x),
+                exp10xf,
                 error);
 
         xf += dx;
