@@ -13,6 +13,7 @@ src	=				\
 	q32_log.shiftadd.test.c		\
 	sincos.cordic.test.c		\
 	q32_sincos.cordic.test.c	\
+	sinhcosh.cordic.test.c		\
 	atan2.cordic.test.c		\
 	q32_atan2.cordic.test.c
 
