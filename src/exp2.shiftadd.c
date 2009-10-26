@@ -27,6 +27,16 @@ Q(_t) Q(_exp10_shiftadd)(Q(_t) _x, unsigned int _n)
     return Q(_exp2_shiftadd)( Q(_mul)(_x,Q(_log2_10)), _n );
 }
 
+// power function
+//    b^(x) = 2^(x * log2(b))
+Q(_t) Q(_pow_shiftadd)(Q(_t) _b,
+                       Q(_t) _x,
+                       unsigned int _n)
+{
+    Q(_t) log2_b = Q(_log2_shiftadd)(_b,_n);
+    return Q(_exp2_shiftadd)( Q(_mul)(_x,log2_b), _n );
+}
+
 // Computes y = exp2(x)
 Q(_t) Q(_exp2_shiftadd)(Q(_t) _x,
                         unsigned int _n)
