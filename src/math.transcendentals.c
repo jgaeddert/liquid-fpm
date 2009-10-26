@@ -132,7 +132,8 @@ Q(_t) Q(_lngamma2)(Q(_t) _z)
 // gamma(z) = exp(lngamma(z))
 Q(_t) Q(_gamma)(Q(_t) _z)
 {
-    return Q(_log)( Q(_lngamma)(_z) );
+    unsigned int _n=20;
+    return Q(_log_shiftadd)( Q(_lngamma)(_z), _n );
 }
 
 // BesselI_0(z)

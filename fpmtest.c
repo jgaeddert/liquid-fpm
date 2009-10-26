@@ -60,16 +60,6 @@ int main() {
     cq32_t y = {3,5};
     printf("y = %d + j %d\n", y.real, y.imag);
 
-    printf("testing log...\n");
-    float t = 5.0f;
-    q32_t x = q32_log( q32_float_to_fixed(t) );
-    printf("log(%f) = %f (%f)\n", t, logf(t), q32_fixed_to_float(x));
-
-    printf("testing exp...\n");
-    t = 0.5f;
-    x = q32_exp( q32_float_to_fixed(t) );
-    printf("exp(%f) = %f (%f)\n", t, expf(t), q32_fixed_to_float(x));
-
     printf("testing one...\n");
     printf("%12.8f (expected 1.0)\n", q32_fixed_to_float(q32_one));
 
