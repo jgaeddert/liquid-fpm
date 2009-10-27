@@ -21,6 +21,13 @@ Q(f_t) Q(f_float_to_fixed)(float _x)
 {
     Q(f_t) xqf;
 
+    // check for zero condition
+    if (_x == 0.0f) {
+        xqf.base = 0;
+        xqf.frac = 0;
+        return xqf;
+    }
+
     // base = 2^floor(log2(|x|))
     xqf.base = (int)(floorf(log2f(fabsf(_x))));
 
@@ -133,19 +140,24 @@ Q(f_t) Q(f_div)(Q(f_t) _x, Q(f_t) _y)
     return quot;
 }
 
-// constrain fractional portion: 1 <= fx < 2
+// constrain fractional portion: 1 <= _x.frac < 2
 void Q(f_constrain)(Q(f_t) * _x)
 {
+    // check for zero condidtion
     if (_x->frac == 0) {
         _x->base = 0;
         return _x;
     }
 
+    // ensure _x.frac < 2
+    // TODO : use msb_index for faster implementation
     while (Q(_abs)(_x->frac) >= (Q(_one)<<1)) {
         _x->frac >>= 1;
         _x->base++;
     }
 
+    // ensure _x.frac >= 1
+    // TODO : use msb_index for faster implementation
     while (Q(_abs)(_x->frac) < Q(_one)) {
         _x->frac <<= 1;
         _x->base--;
