@@ -45,9 +45,10 @@ loop1:
             goto loop1;
         }
 
-        // c = x;
-        // s = y;
     }
 
+    printf("true:%12.8f %12.8f\n",cosh(theta),sinh(theta));
+    // c = x;
+    // s = y;
     return 0;
 }
