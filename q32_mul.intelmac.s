@@ -6,11 +6,16 @@
 .text
 .globl _q32_mul
 _q32_mul:
-    pushl   %ebp            # create the stack frame
-    movl    %esp, %ebp
+    pushq   %rbp            # create the stack frame
+    movq    %rsp, %rbp
 
-    movl    12(%ebp),%eax   # grab the first argument
-    movl    8(%ebp),%ecx    # grab the second argument
+    #movl    12(%ebp),%eax   # grab the first argument
+    #movl    8(%ebp),%ecx    # grab the second argument
+    #imull   %ecx            # multiply arguments (signed long)
+                            # with result stored in %edx:%eax
+
+    movl    %edi, %eax      # grab the first argument
+    movl    %esi, %ecx      # grab the second argument
     imull   %ecx            # multiply arguments (signed long)
                             # with result stored in %edx:%eax
 
@@ -21,6 +26,6 @@ _q32_mul:
     mov     $28, %cl        # set shift amount in %cl
     shrdl   %edx,%eax       # shift right double, store in %eax
 
-    popl    %ebp            # restore the base pointer
+    leave                   # restore the base pointer
     ret                     # return from routine
 
