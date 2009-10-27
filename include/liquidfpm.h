@@ -79,6 +79,7 @@ static inline Q(_t) Q(_angle_float_to_fixed)(float _x)              \
     { return Q(_float_to_fixed(_x)) / Q(_angle_scalar); };          \
                                                                     \
 /* arithmetic */                                                    \
+static inline Q(_t) Q(_sign)(Q(_t) _x) {return (_x<0) ? -1 : 1;};   \
 static inline Q(_t) Q(_abs)(Q(_t) _x) {return (_x<0) ? -_x : _x;};  \
 static inline Q(_t) Q(_add)(Q(_t) _a, Q(_t) _b) {return _a + _b;};  \
 static inline Q(_t) Q(_sub)(Q(_t) _a, Q(_t) _b) {return _a - _b;};  \
@@ -109,7 +110,7 @@ Q(f_t) Q(f_add)(Q(f_t) _x, Q(f_t) _y);                              \
 Q(f_t) Q(f_sub)(Q(f_t) _x, Q(f_t) _y);                              \
 Q(f_t) Q(f_mul)(Q(f_t) _x, Q(f_t) _y);                              \
 Q(f_t) Q(f_div)(Q(f_t) _x, Q(f_t) _y);                              \
-Q(f_t) Q(f_constrain)(Q(f_t) _x);                                   \
+void Q(f_constrain)(Q(f_t) * _x);                                   \
                                                                     \
 /* math: transcendentals */                                         \
 Q(_t) Q(_gamma)(Q(_t) _z);                                          \

@@ -768,8 +768,8 @@ void fpmtest_sinc()
 void fpmtest_q32f_add()
 {
     printf("testing add...\n");
-    float x =  0.25f;
-    float y =  2.25f;
+    float x =  2.20f;
+    float y = -2.25f;
 
     q32f_t a = q32f_float_to_fixed(x);
     q32f_t b = q32f_float_to_fixed(y);
