@@ -16,7 +16,8 @@ src	=				\
 	sinhcosh.cordic.test.c		\
 	q32_sinhcosh.cordic.test.c	\
 	atan2.cordic.test.c		\
-	q32_atan2.cordic.test.c
+	q32_atan2.cordic.test.c		\
+	loglogbesseli0.pwpoly.test.c
 
 obj	= $(patsubst %.c,%.o,$(src))
 bin	= $(patsubst %.c,%,  $(src))
