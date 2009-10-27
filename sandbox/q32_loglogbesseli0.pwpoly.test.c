@@ -15,13 +15,13 @@ q32_t r1;
 q32_t r2;
 
 // polynomials: regions 1, 2, and 3
-float pr1[2] = { 1.99633460984142f,  -1.48964958686991f};
-float pr2[3] = {-0.10796167699674f,   1.886907222877594f,  -1.541787670447069};
-float pr3[2] = {1.0653957921855701f,  0.0641482899467989f};
+float pr1[3] = {-0.00222366247658237,   1.98104537987517237,  -1.50937654453105186};
+float pr2[4] = {-0.00790733914732779,  -0.09084663076980067,   1.89386805800983127,  -1.55014876006534097};
+float pr3[3] = {-0.0324598018218461,   1.3988322953579679,  -0.7739663642620151};
 
-q32_t q32_pr1[2];
-q32_t q32_pr2[3];
-q32_t q32_pr3[2];
+q32_t q32_pr1[3];
+q32_t q32_pr2[4];
+q32_t q32_pr3[3];
 
 q32_t q32_kaiser(unsigned int _n, unsigned int _N, q32_t _beta);
 q32_t q32_loglogbesseli0(q32_t _z);
@@ -36,16 +36,16 @@ int main() {
 
     unsigned int k;
     // convert polynomials to fixed-point
-    for (k=0; k<2; k++) {
+    for (k=0; k<3; k++) {
         q32_pr1[k] = q32_float_to_fixed(pr1[k]);
         q32_pr2[k] = q32_float_to_fixed(pr2[k]);
         q32_pr3[k] = q32_float_to_fixed(pr3[k]);
     }
-    q32_pr2[2] = q32_float_to_fixed(pr2[2]);
+    q32_pr2[k] = q32_float_to_fixed(pr2[k]);
 
     // convert boundaries
-    r1 = q32_float_to_fixed(-0.2f);
-    r2 = q32_float_to_fixed( 1.2f);
+    r1 = q32_float_to_fixed(-0.18f);
+    r2 = q32_float_to_fixed( 0.84f);
 
     q32_t wk;
     for (k=0; k<n; k++) {
@@ -138,15 +138,20 @@ q32_t q32_loglogbesseli0(q32_t _z)
     
     if (t < r1) {
         //y = pr1[0]*t + pr1[1];
-        y = q32_mul(q32_pr1[0],t) + q32_pr1[1];
+        y = q32_mul(q32_mul(q32_pr1[0],t),t) +
+            q32_mul(q32_pr1[1],t) +
+            q32_pr1[2];
     } else if (t < r2) {
         //y = pr2[0]*t*t + pr2[1]*t + pr2[2];
-        y = q32_mul(q32_mul(q32_pr2[0],t),t) +
-            q32_mul(q32_pr2[1],t) +
-            q32_pr2[2];
+        y = q32_mul(q32_mul(q32_mul(q32_pr2[0],t),t),t) +
+            q32_mul(q32_mul(q32_pr2[1],t),t) +
+            q32_mul(q32_pr2[2],t) +
+            q32_pr2[3];
     } else {
         //y = pr3[0]*t + pr3[1];
-        y = q32_mul(q32_pr3[0],t) + q32_pr3[1];
+        y = q32_mul(q32_mul(q32_pr3[0],t),t) +
+            q32_mul(q32_pr3[1],t) +
+            q32_pr3[2];
     }
     
     return y;
