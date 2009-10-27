@@ -24,6 +24,7 @@ void fpmtest_angle();
 void fpmtest_sin();
 void fpmtest_cos();
 void fpmtest_sincos_cordic();
+void fpmtest_sinhcosh_cordic();
 void fpmtest_log2_shiftadd();
 void fpmtest_exp2_shiftadd();
 void fpmtest_exp_shiftadd();
@@ -82,10 +83,12 @@ int main() {
     fpmtest_lngamma();
 
     fpmtest_sinc();
-    */
 
     fpmtest_exp_shiftadd();
     fpmtest_exp10_shiftadd();
+    */
+
+    fpmtest_sinhcosh_cordic();
 
     printf("done.\n");
     return 0;
@@ -387,6 +390,44 @@ void fpmtest_sincos_cordic()
                 cosf(thetaf),
                 q32_fixed_to_float(s),
                 sinf(thetaf),
+                error);
+    //}
+    
+    rmse = sqrt(rmse / (float)n);
+    printf("rmse : %e\n", rmse);
+}
+
+
+void fpmtest_sinhcosh_cordic()
+{
+    printf("testing sin|cos [cordic]...\n");
+    unsigned int i=0, n=20;
+    float thetaf;
+    q32_t theta;
+    q32_t s,c;
+    float sf,cf;
+    float error;
+    float rmse=0.0f;
+
+    //for (i=0; i<n+1; i++) {
+        //thetaf = 4.0f * (float)(i) / ((float)(n)) * M_PI - 2*M_PI;
+        thetaf = 1.0f;
+        theta  = q32_float_to_fixed(thetaf);
+
+        q32_sinhcosh_cordic(theta,&s,&c,18);
+        sf = sinf(thetaf);
+        cf = cosf(thetaf);
+        error = fabsf(cf - q32_fixed_to_float(c) +
+                      sf - q32_fixed_to_float(s) );
+        rmse += error*error;
+
+        printf("%4u : theta=%12.8f, cos:%12.8f(%12.8f), sin:%12.8f(%12.8f), e:%12.8f\n",
+                i,
+                thetaf,
+                q32_fixed_to_float(c),
+                coshf(thetaf),
+                q32_fixed_to_float(s),
+                sinhf(thetaf),
                 error);
     //}
     

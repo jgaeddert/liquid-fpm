@@ -114,7 +114,12 @@ Q(_t) Q(_exp2_shiftadd_base)(Q(_t) _x, unsigned int _n);            \
 Q(_t) Q(_exp_shiftadd)(Q(_t) _x, unsigned int _n);                  \
 Q(_t) Q(_exp10_shiftadd)(Q(_t) _x, unsigned int _n);                \
                                                                     \
-Q(_t) Q(_pow_shiftadd)(Q(_t) _b, Q(_t) _x, unsigned int _n);
+Q(_t) Q(_pow_shiftadd)(Q(_t) _b, Q(_t) _x, unsigned int _n);        \
+                                                                    \
+/* hyperbolic trig */                                               \
+extern const Q(_t) Q(_sinhcosh_cordic_Ak_tab)[32];                  \
+extern const Q(_t) Q(_sinhcosh_cordic_kp_inv);                      \
+void Q(_sinhcosh_cordic)(Q(_t) _x, Q(_t) *_sinh, Q(_t) *_cosh, unsigned int _n);
 
 LIQUIDFPM_DEFINE_INTERNAL_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)
 

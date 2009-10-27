@@ -55,6 +55,7 @@ sources  +=				\
 	src/sqrt.newton.c		\
 	src/sincos.pwpolyfit.c		\
 	src/sincos.cordic.c		\
+	src/sinhcosh.cordic.c		\
 	src/atan.pwpolyfit.c		\
 	src/atan.cordic.c		\
 	src/cq32.c			\
@@ -62,7 +63,8 @@ sources  +=				\
 	src/math.transcendentals.c	\
 	gentab/q32_tables.c		\
 	gentab/shiftadd.q32.tab.c	\
-	gentab/cordic.q32.tab.c
+	gentab/cordic.q32.tab.c		\
+	gentab/sinhcosh.cordic.q32.tab.c
 
 extra_clean		+=		\
 	gentab/gentab_q32		\
@@ -70,7 +72,9 @@ extra_clean		+=		\
 	gentab/gentab_q32.shiftadd	\
 	gentab/shiftadd.q32.tab.c	\
 	gentab/gentab_q32.cordic	\
-	gentab/cordic.q32.tab.c
+	gentab/cordic.q32.tab.c		\
+	gentab/gentab.sinhcosh.cordic	\
+	gentab/sinhcosh.cordic.q32.tab.c
 
 #objects		+= gentab/q32_tables.o
 
@@ -93,6 +97,13 @@ gentab/gentab_q32.cordic: gentab/gentab_q32.cordic.c
 	$(CC) $(CFLAGS) -lm $< -o $@
 
 gentab/cordic.q32.tab.c: gentab/gentab_q32.cordic
+	./$< > $@
+
+# sinh|cosh cordic look-up tables
+gentab/gentab.sinhcosh.cordic: gentab/gentab.sinhcosh.cordic.c
+	$(CC) $(CFLAGS) -lm $< -o $@
+
+gentab/sinhcosh.cordic.q32.tab.c: gentab/gentab.sinhcosh.cordic
 	./$< > $@
 
 # PPC mul source code generator

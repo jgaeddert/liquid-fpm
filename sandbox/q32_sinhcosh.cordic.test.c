@@ -13,7 +13,7 @@ int main() {
     float thetaf = 1.0f;
     q32_t theta = q32_float_to_fixed(thetaf);
 
-    int print_table=0;
+    int print_table=1;
 
     // generate table
     q32_t sinhtab[n];
