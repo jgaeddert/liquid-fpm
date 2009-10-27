@@ -11,6 +11,9 @@
 
 #define Q(name)     LIQUIDFPM_CONCAT(q32,name)
 
+// compute hyperbolic trig functions
+// NOTE: the CORDIC algorithm is only valid for a limited range:
+//   |_theta| < 1.118173015526...
 void Q(_sinhcosh_cordic)(Q(_t) _theta,
                          Q(_t) * _sinh,
                          Q(_t) * _cosh,

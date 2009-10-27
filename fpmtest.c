@@ -34,6 +34,12 @@ void fpmtest_atan2_cordic();
 void fpmtest_lngamma();
 void fpmtest_sinc();
 
+// fixed|float
+void fpmtest_q32f_add();
+void fpmtest_q32f_sub();
+void fpmtest_q32f_mul();
+void fpmtest_q32f_div();
+
 void fpmtest_q32_dotprod();
 
 int main() {
@@ -86,9 +92,10 @@ int main() {
 
     fpmtest_exp_shiftadd();
     fpmtest_exp10_shiftadd();
-    */
 
     fpmtest_sinhcosh_cordic();
+    */
+    fpmtest_q32f_add();
 
     printf("done.\n");
     return 0;
@@ -756,5 +763,25 @@ void fpmtest_sinc()
     fprintf(fid,"grid on;\n");
     fclose(fid);
     printf("results written to fpmtest_sinc.m\n");
+}
+
+void fpmtest_q32f_add()
+{
+    printf("testing add...\n");
+    float x =  0.25f;
+    float y =  2.25f;
+
+    q32f_t a = q32f_float_to_fixed(x);
+    q32f_t b = q32f_float_to_fixed(y);
+    q32f_t r = q32f_add(a,b);
+    printf(" a = %12.8f = 2^(%4d) * %12.8f\n",x,a.base,q32_fixed_to_float(a.frac));
+    printf(" b = %12.8f = 2^(%4d) * %12.8f\n",y,b.base,q32_fixed_to_float(b.frac));
+    printf("    %10.7f + %10.7f = %10.7f\n",
+        q32f_fixed_to_float(a),
+        q32f_fixed_to_float(b),
+        q32f_fixed_to_float(r));
+    printf("    computed %10.7f (expected %10.7f)\n",
+        q32f_fixed_to_float(r), x+y);
+
 }
 

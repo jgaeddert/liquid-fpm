@@ -94,13 +94,22 @@ Q(_t) Q(_tan)(Q(_t) _theta);                                        \
 Q(_t) Q(_atan2)(Q(_t) _x, Q(_t) _y);                                \
                                                                     \
 /* log, etc. */                                                     \
-typedef struct {int base; Q(_t) frac;} Q(_log2_t);                  \
 Q(_t) Q(_log2)(Q(_t) _x);                                           \
 Q(_t) Q(_exp2)(Q(_t) _x);                                           \
 Q(_t) Q(_log) (Q(_t) _x);                                           \
 Q(_t) Q(_exp) (Q(_t) _x);                                           \
 Q(_t) Q(_sqrt)(Q(_t) _x);                                           \
 Q(_t) Q(_pow) (Q(_t) _x, Q(_t) _y);                                 \
+                                                                    \
+/* fixed|float type */                                              \
+typedef struct {int base; Q(_t) frac;} Q(f_t);                      \
+float Q(f_fixed_to_float)(Q(f_t) _x);                               \
+Q(f_t) Q(f_float_to_fixed)(float _x);                               \
+Q(f_t) Q(f_add)(Q(f_t) _x, Q(f_t) _y);                              \
+Q(f_t) Q(f_sub)(Q(f_t) _x, Q(f_t) _y);                              \
+Q(f_t) Q(f_mul)(Q(f_t) _x, Q(f_t) _y);                              \
+Q(f_t) Q(f_div)(Q(f_t) _x, Q(f_t) _y);                              \
+Q(f_t) Q(f_constrain)(Q(f_t) _x);                                   \
                                                                     \
 /* math: transcendentals */                                         \
 Q(_t) Q(_gamma)(Q(_t) _z);                                          \

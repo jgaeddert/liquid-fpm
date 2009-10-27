@@ -90,8 +90,6 @@ void Q(_atan2_cordic_base)(Q(_t) _y,                                \
                            unsigned int _n);                        \
                                                                     \
 /* log (old) */                                                     \
-Q(_t) Q(_log2_convert_forward) (Q(_log2_t) _logtype);               \
-Q(_log2_t) Q(_log2_convert_reverse) (Q(_t) _x);                     \
 extern const Q(_t) Q(_log2_fraction_table)[256];                    \
                                                                     \
 /* */                                                               \
