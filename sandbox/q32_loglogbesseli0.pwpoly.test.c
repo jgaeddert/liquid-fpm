@@ -116,7 +116,7 @@ q32_t q32_kaiser(unsigned int _n, unsigned int _N, q32_t _beta)
     p = q32_mul(p,d.frac);
     //printf("    p: %12.8f\n", q32_fixed_to_float(p));
 
-    q32_t w = q32_exp2_shiftadd(p,_n);
+    q32_t w = q32_exp2_shiftadd(p,n);
 
     //w = q32_float_to_fixed(powf(2.0f, q32f_fixed_to_float(d)));
 
