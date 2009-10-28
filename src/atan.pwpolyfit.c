@@ -9,8 +9,10 @@
 
 #define DEBUG_ATAN_PWPOLY 0
 
+#define Q(name)     LIQUIDFPM_CONCAT(q32,name)
+
 // polynomial coefficients
-q32_t q32_atan_table_pwpolyfit[16][3] = {
+Q(_t) Q(_atan_table_pwpolyfit)[16][3] = {
     {0xffe5d86c, 0x01c827e0, 0x04000000},
     {0xffbee1aa, 0x01ed9826, 0x03f7058c},
     {0xffb22b62, 0x02056ca8, 0x03ebe750},
@@ -29,15 +31,15 @@ q32_t q32_atan_table_pwpolyfit[16][3] = {
     {0xfffe8aa1, 0x001ad367, 0x0781a508}
 };
 
-q32_t q32_atan_polyval_p2(q32_t _x,
-                          q32_t _c0,
-                          q32_t _c1,
-                          q32_t _c2)
+Q(_t) Q(_atan_polyval_p2)(Q(_t) _x,
+                          Q(_t) _c0,
+                          Q(_t) _c1,
+                          Q(_t) _c2)
 {
-    return _c0 + q32_mul(_c1,_x) + q32_mul(_x,q32_mul(_c2,_x));
+    return _c0 + Q(_mul)(_c1,_x) + Q(_mul)(_x,Q(_mul)(_c2,_x));
 }
 
-q32_t q32_atan2( q32_t _y, q32_t _x )
+Q(_t) Q(_atan2)( Q(_t) _y, Q(_t) _x )
 {
     // For all practical purposes we are observing r = y/x so the decimal
     // place in fixed point math can be ignored and we can treat y and x
@@ -63,7 +65,7 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
     // positive
     if (_y < _x) {
         // swap _x and _y values
-        q32_t tmp = _x;
+        Q(_t) tmp = _x;
         _x = _y;
         _y = tmp;
         invert = 1;
@@ -73,7 +75,7 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
     // block of code achieves this with simple bit shifts, comparisons
     // and a 32-value lookup table.
 
-    //\todo explain what is going on here to compute log2(abs(y/x))
+    // TODO : explain what is going on here to compute log2(abs(y/x))
 
     // Extract location of MSB for _y and _x; keep values in register as
     // operations on them will be computed very quickly
@@ -94,9 +96,9 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
 
         // four conditions exist
         if (invert) {
-            return (sub_from_pi) ? FPM_Q32_PI : 0;
+            return (sub_from_pi) ? Q(_pi) : 0;
         } else {
-            return (negate) ? -FPM_Q32_PI_BY_2 : FPM_Q32_PI_BY_2;
+            return (negate) ? -Q(_pi_by_2) : Q(_pi_by_2);
         }
     }
     unsigned int shift = 31 - ( (msb_index_x > msb_index_y) ? msb_index_x : msb_index_y );
@@ -104,47 +106,48 @@ q32_t q32_atan2( q32_t _y, q32_t _x )
     _y <<= shift;
         
 #if DEBUG_ATAN_PWPOLY
-    float yf = q32_fixed_to_float(_y);
-    float xf = q32_fixed_to_float(_x);
+    float yf = Q(_fixed_to_float)(_y);
+    float xf = Q(_fixed_to_float)(_x);
     printf("  y > %12.8f, log2(y) : %12.8f\n", yf, log2(yf));
     printf("  x > %12.8f, log2(x) : %12.8f\n", xf, log2(xf));
     printf("  true log2diff : %12.8f\n", log2(yf) - log2(xf));
 #endif
-    q32_t log2diff = q32_log2(_y) - q32_log2(_x);
+    Q(_t) log2diff = Q(_log2)(_y) - Q(_log2)(_x);
 
     unsigned int index = (log2diff >> 27) & 0x000f;
 #if DEBUG_ATAN_PWPOLY
-    printf("  log2diff : %f > %d (index=%u)\n", q32_fixed_to_float(log2diff), q32_intpart(log2diff), index);
+    printf("  log2diff : %f > %d (index=%u)\n", Q(_fixed_to_float)(log2diff), Q(_intpart)(log2diff), index);
     printf("  log2diff : 0x%.8x\n", log2diff);
 #endif
 
     // if negative, overflow (use high ratio approximation)
     if (log2diff < 0) { return 0; };
 
-    q32_t c0 = q32_atan_table_pwpolyfit[index][2];
-    q32_t c1 = q32_atan_table_pwpolyfit[index][1];
-    q32_t c2 = q32_atan_table_pwpolyfit[index][0];
+    Q(_t) c0 = Q(_atan_table_pwpolyfit)[index][2];
+    Q(_t) c1 = Q(_atan_table_pwpolyfit)[index][1];
+    Q(_t) c2 = Q(_atan_table_pwpolyfit)[index][0];
 #if DEBUG_ATAN_PWPOLY
-    printf("    c0 : %12.8f\n", q32_fixed_to_float(c0));
-    printf("    c1 : %12.8f\n", q32_fixed_to_float(c1));
-    printf("    c2 : %12.8f\n", q32_fixed_to_float(c2));
+    printf("    c0 : %12.8f\n", Q(_fixed_to_float)(c0));
+    printf("    c1 : %12.8f\n", Q(_fixed_to_float)(c1));
+    printf("    c2 : %12.8f\n", Q(_fixed_to_float)(c2));
 #endif
 
-    q32_t phi = q32_atan_polyval_p2(log2diff,c0,c1,c2);
+    Q(_t) phi = Q(_atan_polyval_p2)(log2diff,c0,c1,c2);
 
 #if DEBUG_ATAN_PWPOLY
-    printf("  polyval   : %f\n", q32_fixed_to_float(phi));
+    printf("  polyval   : %f\n", Q(_fixed_to_float)(phi));
 #endif
+    // TODO : validate this shift amount
     phi <<= 2;
 #if DEBUG_ATAN_PWPOLY
-    printf("  angle     : %f\n", q32_angle_fixed_to_float(phi));
+    printf("  angle     : %f\n", Q(_angle_fixed_to_float)(phi));
 #endif
 
     // invert if necessary
-    if (invert) phi = FPM_Q32_PI_BY_2 - phi;
+    if (invert) phi = Q(_pi_by_2) - phi;
 
     // if in quadrants 3, 4 subtract from pi
-    if (sub_from_pi) phi = FPM_Q32_PI - phi;
+    if (sub_from_pi) phi = Q(_pi) - phi;
 
     // negate if necessary
     if (negate) phi = -phi;
