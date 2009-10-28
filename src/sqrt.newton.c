@@ -14,9 +14,12 @@
 Q(_t) Q(_sqrt_newton)( Q(_t) _x, unsigned int _n)
 {
     if (_x < 0) {
-        perror("error: q[type]_sqrt(), x must be > 0");
+        printf("error: qtype_sqrt_newton(), x must be >= 0");
         return 0;
     }
+
+    if (_x == 0)
+        return 0;
 
     // initial guess: x0 = _x
     //Q(_t) x0 = _x;

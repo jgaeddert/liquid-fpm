@@ -216,7 +216,8 @@ clean-bench:
 # autotest
 .PHONY: autotest
 autotest_headers = 				\
-	autotest/inv_newton_autotest.h
+	autotest/inv_newton_autotest.h		\
+	autotest/sqrt_newton_autotest.h
 
 autotestgen_prog	= autotestgen
 autotest_prog		= xautotest
