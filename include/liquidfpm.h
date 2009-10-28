@@ -103,7 +103,7 @@ Q(_t) Q(_sqrt)(Q(_t) _x);                                           \
 Q(_t) Q(_pow) (Q(_t) _x, Q(_t) _y);                                 \
                                                                     \
 /* fixed|float type */                                              \
-typedef struct {int base; Q(_t) frac;} Q(f_t);                      \
+typedef struct {T base; Q(_t) frac;} Q(f_t);                        \
 float Q(f_fixed_to_float)(Q(f_t) _x);                               \
 Q(f_t) Q(f_float_to_fixed)(float _x);                               \
 Q(f_t) Q(f_add)(Q(f_t) _x, Q(f_t) _y);                              \
