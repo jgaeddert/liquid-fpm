@@ -15,8 +15,11 @@
 //   x[k+1] = x[k] + x[k]*(1 - d*x[k])
 Q(_t) Q(_inv_newton)( Q(_t) _x, unsigned int _n )
 {
-    // initial guess: x0 = 2^-floor(log2(_x))
-    int b = msb_index(_x) - 1;      // base index
+    int negate = (_x < 0);
+    _x = Q(_abs)(_x);
+
+    // initial guess: x0 = 2^-floor(log2(|_x|))
+    int b = msb_index(_x) - 1;          // base index
     int s = (int)Q(_fracbits) - b - 1;  // shift amount
     Q(_t) x0 = s>0 ? Q(_one)<<s : Q(_one)>>(-s);
 
@@ -55,6 +58,6 @@ Q(_t) Q(_inv_newton)( Q(_t) _x, unsigned int _n )
         x0 = x1;
     }
 
-    return x1;
+    return negate ? -x1 : x1;
 }
 
