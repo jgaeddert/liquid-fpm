@@ -83,24 +83,31 @@ gentabs := 				\
 #   gentab_sources  : gentab/gentab.math.transcendentals.c
 #   gentab_targets  : gentab/math.transcendentals.qtype.c
 
-gentab_programs	= $(patsubst %,gentab/gentab.,$(gentabs))
+gentab_programs	= $(patsubst %,gentab/gentab.%,$(gentabs))
 gentab_sources	= $(patsubst %,%.c,$(gentab_programs))
-gentab_targets	= $(patsubst %,gentab/%.q32.c,$(gentabs))
+gentab_targets	= $(patsubst %,gentab/%.$(qtype).c,$(gentabs))
 
 sources  += $(gentab_targets)
 
+# Build the gentab program.  This is done natively as the
+# result is a program that generates a source file to be
+# built for the target system.
 gentab/gentab.% : gentab/gentab.%.c
-	gcc -I ./include -lm $< -o $@
+	$(CC) $(INCLUDE_CFLAGS) -lm $< -o $@
 
-gentab/%.q32.c : gentab/gentab.%
+# Run the natively-built program to generate the source
+# file.  This file is to be built for the target system.
+gentab/%.$(qtype).c : gentab/gentab.%
 	./$< > $@
 
-# label the programs and targets as 'precious' so that
-# make won't delete them after they have been created
+# Label the programs and targets as 'precious' so that
+# make won't delete them after they have been created.
 .PRECIOUS : $(gentab_programs)
 .PRECIOUS : $(gentab_targets)
 
-clean-gentabs :
+# Clean the intermediate gentab programs and targets
+# marked as 'precious.'
+clean-gentab :
 	$(RM) $(gentab_programs)
 	$(RM) $(gentab_targets)
 
@@ -220,7 +227,7 @@ clean-bench:
 #
 # clean
 #
-clean: clean-bench clean-gentabs
+clean: clean-bench clean-gentab
 	$(RM) $(objects)
 	$(RM) $(dependencies)
 	$(RM) $(SHARED_LIB)
