@@ -43,6 +43,10 @@ dnl Check size of certain variables
 AC_CHECK_SIZEOF(int)
 dnl AC_CHECK_SIZEOF(unsigned int)
 
+QTYPE="q32"
+QTYPE_INTBITS="4"
+QTYPE_FRACBITS="28"
+
 dnl Check canonical system
 AC_CANONICAL_SYSTEM
 case $target_cpu in
@@ -74,7 +78,7 @@ arm)
     AC_DEFINE(FPM_ARM, 1, [ARM])
     ;;
 mips)
-    fpm_optiON="-DFPM_MIPS"
+    FPM_OPTION="-DFPM_MIPS"
     MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_MIPS, 1, [MIPS])
     ;;
@@ -112,6 +116,11 @@ AC_SUBST(ARCH_OPTION)
 dnl MLIBS defined the additional architecture-specific library objects to
 dnl build.
 AC_SUBST(MLIBS)
+
+dnl 
+AC_SUBST(QTYPE)
+AC_SUBST(QTYPE_INTBITS)
+AC_SUBST(QTYPE_FRACBITS)
 
 AC_SUBST(DEBUG_OPTION)
 AC_SUBST(FPM_OPTION)

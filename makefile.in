@@ -28,7 +28,9 @@ ARFLAGS		= r
 ASFLAGS		+= -g
 #ASFLAGS		+= -arch ppc7400
 
-qtype		= q32
+qtype		= @QTYPE@
+qtype_intbits	= @QTYPE_INTBITS@
+qtype_fracbits	= @QTYPE_FRACBITS@
 
 # Target collection
 #
@@ -154,8 +156,8 @@ libliquidfpm.so: $(libraries)
 #
 
 # generate other sources
-q32_mul.ppc.s : qtype_mul.ppc.gen
-	./$< -nq32 -i4 -f28 -o $@
+$(qtype)_mul.ppc.s : qtype_mul.ppc.gen
+	./$< -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
 
 # library objects
 $(LIBS) : %.o : src/%.c
