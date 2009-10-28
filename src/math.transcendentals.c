@@ -15,13 +15,15 @@
 #   include <math.h>
 #endif
 
+// externally-defined constants (gentab/gentab.math.transcendentals.c)
+extern const Q(_t) Q(_log2pi);  // log(2*pi)
+extern const Q(_t) Q(_inv_12);  // 1/12
+extern const Q(_t) Q(_inv_pi);  // 1/pi
+
 // log(gamma(z))
 Q(_t) Q(_lngamma)(Q(_t) _z)
 {
     unsigned int _n = 10; // number of iterations
-    // constants
-    Q(_t) Q(_log2pi) = Q(_float_to_fixed)(1.83787706640935);    // log(2*pi)
-    Q(_t) Q(_inv12)  = Q(_float_to_fixed)(0.08333333333333);    // 1/12
 
     // approximation:
     //   ln(gamma(z)) ~ 0.5*[ln(2*pi) - ln(z)] +
@@ -51,9 +53,9 @@ Q(_t) Q(_lngamma)(Q(_t) _z)
     Q(_t) g0 = (Q(_log2pi) - Q(_log_shiftadd)(_z,_n))>>1;
 #if 0
     Q(_t) g1 = z1 < Q(_one) ? Q(_inv_newton)( (_z<<3) + (_z<<2), _n )   // inv(z*12)
-                            : Q(_mul)(Q(_inv12),Q(_inv_newton)(_z,_n)); // inv(z)*inv(12)
+                            : Q(_mul)(Q(_inv_12),Q(_inv_newton)(_z,_n)); // inv(z)*inv(12)
 #else
-    Q(_t) g1 = Q(_mul)(Q(_inv12),Q(_inv_newton)(_z,_n)); // inv(z)*inv(12)
+    Q(_t) g1 = Q(_mul)(Q(_inv_12),Q(_inv_newton)(_z,_n)); // inv(z)*inv(12)
 #endif
     Q(_t) g2 = Q(_log_shiftadd)(_z + g1, _n);
 
@@ -96,7 +98,6 @@ Q(_t) Q(_besselj0)(Q(_t) _z)
 Q(_t) Q(_sinc)(Q(_t) _z)
 {
     unsigned int _n = 10;
-    Q(_t) Q(_inv_pi) = Q(_float_to_fixed)(0.318309886183791); // 1/pi
 
     Q(_t) zmin = Q(_one) >> ( Q(_intbits) - 1 );
 
