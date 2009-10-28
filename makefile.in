@@ -28,6 +28,8 @@ ARFLAGS		= r
 ASFLAGS		+= -g
 #ASFLAGS		+= -arch ppc7400
 
+qtype		= q32
+
 # Target collection
 #
 # Information about targets is collected in these variables
@@ -37,7 +39,7 @@ libraries		:=
 extra_clean		:=
 
 objects		= $(patsubst %.c,%.o,$(sources))
-dependencies	= $(patsubst %.c,%.d,$(sources))
+#dependencies	= $(patsubst %.c,%.d,$(sources))
 
 all:
 
@@ -62,61 +64,46 @@ sources  +=				\
 	src/cq32.c			\
 	src/msb_index.c			\
 	src/math.transcendentals.c	\
-	src/loglogbesseli0.pwpoly.c	\
-	gentab/q32_tables.c		\
-	gentab/shiftadd.q32.tab.c	\
-	gentab/cordic.q32.tab.c		\
-	gentab/sinhcosh.cordic.q32.tab.c\
-	gentab/math.transcendentals.q32.c
+	src/loglogbesseli0.pwpoly.c
 
-extra_clean		+=		\
-	gentab/gentab_q32		\
-	gentab/q32_tables.c		\
-	gentab/gentab_q32.shiftadd	\
-	gentab/shiftadd.q32.tab.c	\
-	gentab/gentab_q32.cordic	\
-	gentab/cordic.q32.tab.c		\
-	gentab/gentab.sinhcosh.cordic	\
-	gentab/sinhcosh.cordic.q32.tab.c\
-	gentab/gentab.math.transcendentals	\
-	gentab/math.transcendentals.q32.c
-
-#objects		+= gentab/q32_tables.o
+extra_clean		+=
 
 #
 # Auto-generated tables
 #
-gentab/gentab_q32: gentab/gentab_q32.c
-	$(CC) $(CFLAGS) -lm $< -o $@
+gentabs := 				\
+	math.transcendentals 		\
+	logsin				\
+	sincos.cordic			\
+	sinhcosh.cordic			\
+	logexp.shiftadd
 
-gentab/q32_tables.c: gentab/gentab_q32
+# Examples:
+#   gentab_programs : gentab/gentab.math.transcendentals
+#   gentab_sources  : gentab/gentab.math.transcendentals.c
+#   gentab_targets  : gentab/math.transcendentals.qtype.c
+
+gentab_programs	= $(patsubst %,gentab/gentab.,$(gentabs))
+gentab_sources	= $(patsubst %,%.c,$(gentab_programs))
+gentab_targets	= $(patsubst %,gentab/%.q32.c,$(gentabs))
+
+sources  += $(gentab_targets)
+
+gentab/gentab.% : gentab/gentab.%.c
+	gcc -I ./include -lm $< -o $@
+
+gentab/%.q32.c : gentab/gentab.%
 	./$< > $@
 
-gentab/gentab_q32.shiftadd: gentab/gentab_q32.shiftadd.c
-	$(CC) $(CFLAGS) -lm $< -o $@
+# label the programs and targets as 'precious' so that
+# make won't delete them after they have been created
+.PRECIOUS : $(gentab_programs)
+.PRECIOUS : $(gentab_targets)
 
-gentab/shiftadd.q32.tab.c: gentab/gentab_q32.shiftadd
-	./$< > $@
+clean-gentabs :
+	$(RM) $(gentab_programs)
+	$(RM) $(gentab_targets)
 
-gentab/gentab_q32.cordic: gentab/gentab_q32.cordic.c
-	$(CC) $(CFLAGS) -lm $< -o $@
-
-gentab/cordic.q32.tab.c: gentab/gentab_q32.cordic
-	./$< > $@
-
-# sinh|cosh cordic look-up tables
-gentab/gentab.sinhcosh.cordic: gentab/gentab.sinhcosh.cordic.c
-	$(CC) $(CFLAGS) -lm $< -o $@
-
-gentab/sinhcosh.cordic.q32.tab.c: gentab/gentab.sinhcosh.cordic
-	./$< > $@
-
-# math transcendentals
-gentab/gentab.math.transcendentals: gentab/gentab.math.transcendentals.c
-	$(CC) $(CFLAGS) -lm $< -o $@
-
-gentab/math.transcendentals.q32.c: gentab/gentab.math.transcendentals
-	./$< > $@
 
 # PPC mul source code generator
 qtype_mul.ppc.gen : qtype_mul.ppc.s.c
@@ -127,9 +114,9 @@ qtype_mul.ppc.gen : qtype_mul.ppc.s.c
 # and create a list of dependencies.  Each list is stored in a
 # .d file and included, below.
 #
-%.d: %.c 
-	$(CC) $(CFLAGS) -MM -MG $< | $(SED) 's,\($(notdir $*)\.o\) *:,$(dir $@)\1 $@: ,' > $@
-include $(dependencies)
+#%.d: %.c 
+#	$(CC) $(CFLAGS) -MM -MG $< | $(SED) 's,\($(notdir $*)\.o\) *:,$(dir $@)\1 $@: ,' > $@
+#include $(dependencies)
 
 objects += @MLIBS@
 XLIBS = clz.o msb_index.o trig.o libmad_fixed.o \
@@ -233,7 +220,7 @@ clean-bench:
 #
 # clean
 #
-clean: clean-bench
+clean: clean-bench clean-gentabs
 	$(RM) $(objects)
 	$(RM) $(dependencies)
 	$(RM) $(SHARED_LIB)
