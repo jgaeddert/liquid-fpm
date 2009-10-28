@@ -77,7 +77,7 @@ Q(_t) Q(_lngamma)(Q(_t) _z)
 Q(_t) Q(_gamma)(Q(_t) _z)
 {
     unsigned int _n=20;
-    return Q(_log_shiftadd)( Q(_lngamma)(_z), _n );
+    return Q(_exp_shiftadd)( Q(_lngamma)(_z), _n );
 }
 
 // BesselI_0(z)
