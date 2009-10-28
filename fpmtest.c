@@ -96,6 +96,9 @@ int main() {
     fpmtest_sinhcosh_cordic();
     */
     fpmtest_q32f_add();
+    fpmtest_q32f_sub();
+    fpmtest_q32f_mul();
+    fpmtest_q32f_div();
 
     printf("done.\n");
     return 0;
@@ -782,6 +785,66 @@ void fpmtest_q32f_add()
         q32f_fixed_to_float(r));
     printf("    computed %10.7f (expected %10.7f)\n",
         q32f_fixed_to_float(r), x+y);
+
+}
+
+void fpmtest_q32f_sub()
+{
+    printf("testing sub...\n");
+    float x =  2.20f;
+    float y = -2.25f;
+
+    q32f_t a = q32f_float_to_fixed(x);
+    q32f_t b = q32f_float_to_fixed(y);
+    q32f_t r = q32f_sub(a,b);
+    printf(" a = %12.8f = 2^(%4d) * %12.8f\n",x,a.base,q32_fixed_to_float(a.frac));
+    printf(" b = %12.8f = 2^(%4d) * %12.8f\n",y,b.base,q32_fixed_to_float(b.frac));
+    printf("    %10.7f + %10.7f = %10.7f\n",
+        q32f_fixed_to_float(a),
+        q32f_fixed_to_float(b),
+        q32f_fixed_to_float(r));
+    printf("    computed %10.7f (expected %10.7f)\n",
+        q32f_fixed_to_float(r), x-y);
+
+}
+
+void fpmtest_q32f_mul()
+{
+    printf("testing mul...\n");
+    float x =  2.20f;
+    float y = -2.25f;
+
+    q32f_t a = q32f_float_to_fixed(x);
+    q32f_t b = q32f_float_to_fixed(y);
+    q32f_t r = q32f_mul(a,b);
+    printf(" a = %12.8f = 2^(%4d) * %12.8f\n",x,a.base,q32_fixed_to_float(a.frac));
+    printf(" b = %12.8f = 2^(%4d) * %12.8f\n",y,b.base,q32_fixed_to_float(b.frac));
+    printf("    %10.7f + %10.7f = %10.7f\n",
+        q32f_fixed_to_float(a),
+        q32f_fixed_to_float(b),
+        q32f_fixed_to_float(r));
+    printf("    computed %10.7f (expected %10.7f)\n",
+        q32f_fixed_to_float(r), x*y);
+
+}
+
+void fpmtest_q32f_div()
+{
+    printf("testing div...\n");
+    float x =  2.20f;
+    float y = -2.25f;
+
+    q32f_t a = q32f_float_to_fixed(x);
+    q32f_t b = q32f_float_to_fixed(y);
+    q32f_t r = q32f_div(a,b);
+    printf(" a = %12.8f = 2^(%4d) * %12.8f\n",x,a.base,q32_fixed_to_float(a.frac));
+    printf(" b = %12.8f = 2^(%4d) * %12.8f\n",y,b.base,q32_fixed_to_float(b.frac));
+    printf("    %10.7f + %10.7f = %10.7f\n",
+        q32f_fixed_to_float(a),
+        q32f_fixed_to_float(b),
+        q32f_fixed_to_float(r));
+    printf("    computed %10.7f (expected %10.7f)\n",
+        q32f_fixed_to_float(r), x/y);
 
 }
 
