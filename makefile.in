@@ -62,10 +62,12 @@ sources  +=				\
 	src/cq32.c			\
 	src/msb_index.c			\
 	src/math.transcendentals.c	\
+	src/loglogbesseli0.pwpoly.c	\
 	gentab/q32_tables.c		\
 	gentab/shiftadd.q32.tab.c	\
 	gentab/cordic.q32.tab.c		\
-	gentab/sinhcosh.cordic.q32.tab.c
+	gentab/sinhcosh.cordic.q32.tab.c\
+	gentab/math.transcendentals.q32.c
 
 extra_clean		+=		\
 	gentab/gentab_q32		\
@@ -75,7 +77,9 @@ extra_clean		+=		\
 	gentab/gentab_q32.cordic	\
 	gentab/cordic.q32.tab.c		\
 	gentab/gentab.sinhcosh.cordic	\
-	gentab/sinhcosh.cordic.q32.tab.c
+	gentab/sinhcosh.cordic.q32.tab.c\
+	gentab/gentab.math.transcendentals	\
+	gentab/math.transcendentals.q32.c
 
 #objects		+= gentab/q32_tables.o
 
@@ -105,6 +109,13 @@ gentab/gentab.sinhcosh.cordic: gentab/gentab.sinhcosh.cordic.c
 	$(CC) $(CFLAGS) -lm $< -o $@
 
 gentab/sinhcosh.cordic.q32.tab.c: gentab/gentab.sinhcosh.cordic
+	./$< > $@
+
+# math transcendentals
+gentab/gentab.math.transcendentals: gentab/gentab.math.transcendentals.c
+	$(CC) $(CFLAGS) -lm $< -o $@
+
+gentab/math.transcendentals.q32.c: gentab/gentab.math.transcendentals
 	./$< > $@
 
 # PPC mul source code generator
