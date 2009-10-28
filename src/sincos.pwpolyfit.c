@@ -9,8 +9,10 @@
 
 #define DEBUG_SINCOS_PWPOLY 0
 
+#define Q(name)     LIQUIDFPM_CONCAT(q32,name)
+
 // polynomial coefficients
-q32_t q32_sine_table_pwpolyfit[16][3] = {
+Q(_t) Q(_sine_table_pwpolyfit)[16][3] = {
     {0xff081964, 0x19272520, 0x00000000},
     {0xfd1aaf59, 0x1964c8e0, 0xfffe1330},
     {0xfb3468f9, 0x19de4780, 0xfff67c76},
@@ -29,21 +31,24 @@ q32_t q32_sine_table_pwpolyfit[16][3] = {
     {0xec49dce1, 0x276c7700, 0xfc49ac31}
 };
 
-q32_t q32_polyval_p2(q32_t _x,
-                     q32_t _c0,
-                     q32_t _c1,
-                     q32_t _c2)
+Q(_t) Q(_polyval_p2)(Q(_t) _x,
+                     Q(_t) _c0,
+                     Q(_t) _c1,
+                     Q(_t) _c2)
 {
-    return _c0 + q32_mul(_c1,_x) + q32_mul(_c2,q32_mul(_x,_x));
+    return _c0 + Q(_mul)(_c1,_x) + Q(_mul)(_c2,Q(_mul)(_x,_x));
 }
 
-void q32_angle_quadrant_index(q32_t _theta, unsigned int *_quadrant, unsigned int *_index, q32_t * _x)
+void Q(_angle_quadrant_index)(Q(_t) _theta,
+                              unsigned int *_quadrant,
+                              unsigned int *_index,
+                              Q(_t) * _x)
 {
     // Ensure theta >= 0
-    // Because the Q4.28 representation of angles is [-2*pi,2*pi] we can guarantee
+    // Because the qtype representation of angles is [-2*pi,2*pi] we can guarantee
     // adding 2*pi will make theta non-negative
     if ( _theta < 0 )
-        _theta += FPM_Q32_2_PI;
+        _theta += Q(_2pi);
 
     // _theta now has the form : 0QQB BBBB BBBx xxxx xxxx xxxx xxxx xxxx
     // Q : 2-bit quadrant
@@ -63,92 +68,92 @@ void q32_angle_quadrant_index(q32_t _theta, unsigned int *_quadrant, unsigned in
     *_x = (_theta >> 1) & 0x0fffffff;
 }
 
-q32_t q32_sin( q32_t _theta )
+Q(_t) Q(_sin)( Q(_t) _theta )
 {
     unsigned int quadrant;
     unsigned int index;
-    q32_t x;
+    Q(_t) x;
 
     // Extract 2-bit quadrant and 8-bit phase index
     // Q1 | Q0
     // ---+---
     // Q2 | Q3
-    q32_angle_quadrant_index(_theta, &quadrant, &index, &x);
+    Q(_angle_quadrant_index)(_theta, &quadrant, &index, &x);
 
 #if DEBUG_SINCOS_PWPOLY
-    printf("    theta : %12.8f (0x%.8x > %12.8f)\n", q32_angle_fixed_to_float(_theta), _theta, q32_fixed_to_float(_theta));
+    printf("    theta : %12.8f (0x%.8x > %12.8f)\n", Q(_angle_fixed_to_float)(_theta), _theta, Q(_fixed_to_float)(_theta));
     printf("    quadrant : %u\n", quadrant);
     printf("    index    : %u\n", index);
-    printf("    x        : %f\n", q32_fixed_to_float(x));
+    printf("    x        : %f\n", Q(_fixed_to_float)(x));
 #endif
 
     // sine: for quadrants Q1 & Q3 phase is inverted
     if (quadrant & 0x01) {
-        x = (1<<q32_fracbits) - x;
+        x = (1<<Q(_fracbits)) - x;
         index = 15 - index;
 #if DEBUG_SINCOS_PWPOLY
-        printf("    x        : %f (phase inversion)\n", q32_fixed_to_float(x));
+        printf("    x        : %f (phase inversion)\n", Q(_fixed_to_float)(x));
         printf("    index    : %u (phase inversion)\n", index);
 #endif
     }
 
-    q32_t c2 = q32_sine_table_pwpolyfit[index][0];
-    q32_t c1 = q32_sine_table_pwpolyfit[index][1];
-    q32_t c0 = q32_sine_table_pwpolyfit[index][2];
+    Q(_t) c2 = Q(_sine_table_pwpolyfit)[index][0];
+    Q(_t) c1 = Q(_sine_table_pwpolyfit)[index][1];
+    Q(_t) c0 = Q(_sine_table_pwpolyfit)[index][2];
 #if DEBUG_SINCOS_PWPOLY
-    printf("    c0 : %12.8f\n", q32_fixed_to_float(c0));
-    printf("    c1 : %12.8f\n", q32_fixed_to_float(c1));
-    printf("    c2 : %12.8f\n", q32_fixed_to_float(c2));
+    printf("    c0 : %12.8f\n", Q(_fixed_to_float)(c0));
+    printf("    c1 : %12.8f\n", Q(_fixed_to_float)(c1));
+    printf("    c2 : %12.8f\n", Q(_fixed_to_float)(c2));
 #endif
 
     // sine: for quadrants Q2 & Q3 value is negated
-    q32_t retval = q32_polyval_p2(x,c0,c1,c2);
+    Q(_t) retval = Q(_polyval_p2)(x,c0,c1,c2);
     if (quadrant & 0x02)
         retval = -retval;
 
     return retval;
 }
 
-q32_t q32_cos( q32_t _theta )
+Q(_t) Q(_cos)( Q(_t) _theta )
 {
     unsigned int quadrant;
     unsigned int index;
-    q32_t x;
+    Q(_t) x;
 
     // Extract 2-bit quadrant and 8-bit phase index
     // Q1 | Q0
     // ---+---
     // Q2 | Q3
-    q32_angle_quadrant_index(_theta, &quadrant, &index, &x);
+    Q(_angle_quadrant_index)(_theta, &quadrant, &index, &x);
 
 #if DEBUG_SINCOS_PWPOLY
-    printf("    theta : %12.8f (0x%.8x > %12.8f)\n", q32_angle_fixed_to_float(_theta), _theta, q32_fixed_to_float(_theta));
+    printf("    theta : %12.8f (0x%.8x > %12.8f)\n", Q(_angle_fixed_to_float)(_theta), _theta, Q(_fixed_to_float)(_theta));
     printf("    quadrant : %u\n", quadrant);
     printf("    index    : %u\n", index);
-    printf("    x        : %f\n", q32_fixed_to_float(x));
+    printf("    x        : %f\n", Q(_fixed_to_float)(x));
 #endif
 
     // cosine: for quadrants Q0 & Q2 phase is inverted
     if ( quadrant==0 || quadrant==2 ) {
-        x = (1<<q32_fracbits) - x;
+        x = (1<<Q(_fracbits)) - x;
         index = 15 - index;
 #if DEBUG_SINCOS_PWPOLY
-        printf("    x        : %f (phase inversion)\n", q32_fixed_to_float(x));
+        printf("    x        : %f (phase inversion)\n", Q(_fixed_to_float)(x));
         printf("    index    : %u (phase inversion)\n", index);
 #endif
     }
 
-    q32_t c2 = q32_sine_table_pwpolyfit[index][0];
-    q32_t c1 = q32_sine_table_pwpolyfit[index][1];
-    q32_t c0 = q32_sine_table_pwpolyfit[index][2];
+    Q(_t) c2 = Q(_sine_table_pwpolyfit)[index][0];
+    Q(_t) c1 = Q(_sine_table_pwpolyfit)[index][1];
+    Q(_t) c0 = Q(_sine_table_pwpolyfit)[index][2];
 #if DEBUG_SINCOS_PWPOLY
-    printf("    c0 : %12.8f\n", q32_fixed_to_float(c0));
-    printf("    c1 : %12.8f\n", q32_fixed_to_float(c1));
-    printf("    c2 : %12.8f\n", q32_fixed_to_float(c2));
+    printf("    c0 : %12.8f\n", Q(_fixed_to_float)(c0));
+    printf("    c1 : %12.8f\n", Q(_fixed_to_float)(c1));
+    printf("    c2 : %12.8f\n", Q(_fixed_to_float)(c2));
 #endif
 
     // cosine: for quadrants Q1 & Q2 value is negated
-    q32_t retval = q32_polyval_p2(x,c0,c1,c2);
+    Q(_t) retval = Q(_polyval_p2)(x,c0,c1,c2);
     if ( quadrant==1 || quadrant==2 )
         retval = -retval;
 
@@ -156,9 +161,9 @@ q32_t q32_cos( q32_t _theta )
 
 }
 
-void q32_sincos( q32_t _theta, q32_t *_sin, q32_t *_cos )
+void Q(_sincos)( Q(_t) _theta, Q(_t) *_sin, Q(_t) *_cos )
 {
     // TODO: implement more efficient method
-    *_sin = q32_sin(_theta);
-    *_cos = q32_cos(_theta);
+    *_sin = Q(_sin)(_theta);
+    *_cos = Q(_cos)(_theta);
 }
