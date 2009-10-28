@@ -212,10 +212,37 @@ bench: $(benchmark_prog)
 clean-bench:
 	$(RM) $(benchmarkgen_prog) $(benchmark_prog) $(benchmark_include)
 
+
+# autotest
+.PHONY: autotest
+autotest_headers = 				\
+	autotest/inv_newton_autotest.h
+
+autotestgen_prog	= autotestgen
+autotest_prog		= xautotest
+autotest_include	= autotest_include.h
+
+AUTOTEST_CFLAGS		= $(INCLUDE_CFLAGS)
+
+$(autotestgen_prog): autotest/autotestgen.c
+	$(CC) -Wall -o $@ $<
+
+$(autotest_include): $(autotestgen_prog) $(autotest_headers)
+	./$(autotestgen_prog) $(autotest_headers) > $@
+
+$(autotest_prog): autotest/autotest.c $(autotest_include) libliquidfpm.a
+	$(CC) $(AUTOTEST_CFLAGS) -lm $< $(LDFLAGS) libliquidfpm.a -o $@
+
+check: $(autotest_prog)
+	./$<
+
+clean-autotest:
+	$(RM) $(autotestgen_prog) $(autotest_prog) $(autotest_include)
+
 #
 # clean
 #
-clean: clean-bench clean-gentab
+clean: clean-bench clean-autotest clean-gentab
 	$(RM) $(objects)
 	$(RM) $(dependencies)
 	$(RM) $(SHARED_LIB)
