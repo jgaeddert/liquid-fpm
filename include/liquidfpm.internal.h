@@ -8,23 +8,6 @@
 #include "liquidfpm.h"
 #include "config.h"
 
-//
-// Trigonometric helper functions, arrays, constants
-// TODO: auto-compute these values
-//
-#define FPM_Q32_2_PI       0x7FFFFFFF  ///< \f$2\pi\f$
-#define FPM_Q32_PI         0x3FFFFFFF  ///< \f$\pi\f$
-#define FPM_Q32_PI_BY_2    0x1FFFFFFF  ///< \f$\pi/2\f$
-#define FPM_Q32_PI_BY_4    0x0FFFFFFF  ///< \f$\pi/4\f$
-
-#define FPM_Q32_1_BY_SQRT_2 0x0B504F33 ///< \f$ 1/sqrt(2) \f$
-
-//#define q32_angle_scalar (M_PI/4.0f)
-//#define q32_angle_fixed_to_float(x) (q32_fixed_to_float(x) * q32_angle_scalar)
-//#define q32_angle_float_to_fixed(x) (q32_float_to_fixed(x /  q32_angle_scalar)-1)
-
-//extern const q32_t sin_table_q32_256[256];
-
 // fractional portion, \f$ f \f$ of log2, \f$ log2(x) = b + f/256 \f$
 //extern const unsigned int log2_fraction_table_256[256];
 extern const unsigned int log2_fraction_table_32[32];
