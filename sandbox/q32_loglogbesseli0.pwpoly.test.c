@@ -89,36 +89,25 @@ q32_t q32_kaiser(unsigned int _n, unsigned int _N, q32_t _beta)
     //q32f_t log2b = powf(2.0f, loglogbesseli0(_beta));
     //float w = powf(2.0f, log2a - log2b);
 
-    q32f_t log2a = q32f_exp2_q32(t0);
-    q32f_t log2b = q32f_exp2_q32(t1);
-    q32f_t d = q32f_sub(log2a,log2b);
+    q32f_t log2a = q32f_exp2_q32(t0);   // compute log2(a) = 2^t0 (fixed|float)
+    q32f_t log2b = q32f_exp2_q32(t1);   // compute log2(b) = 2^t1 (fixed|float)
+    q32f_t d = q32f_sub(log2a,log2b);   // compute log2(a/b) = log2(a) - log2(b)
     /*
     printf("    d: %12.8f = 2^(%4d) * %12.8f\n",q32f_fixed_to_float(d),
                                                 d.base,
                                                 q32_fixed_to_float(d.frac));
     */
 
-    // at this point, d.base <= 0
-    /*
-    if (d.base < -(q32_intbits-1)) {
-        printf("underflow\n");
-        return 0;
-    } else if (d.base > (q32_intbits-1)) {
-        // overflow will occur
-        printf("overflow\n");
-        return q32_max;
-    }
-    */
-
-    // convert to q32_t
-    q32_t p = d.base > 0 ? q32_one <<   d.base :
-                           q32_one >> (-d.base);
-    p = q32_mul(p,d.frac);
+    // convert from fixed|float to fixed
+    //   p = 2^d.base * d.frac
+    // NOTE: because the Kaiser window w[n] is in [0,1],
+    //       d should be in [-infty,0]
+    q32_t p = d.base > 0 ? d.frac <<   d.base : // <- this case should never happen
+                           d.frac >> (-d.base);
     //printf("    p: %12.8f\n", q32_fixed_to_float(p));
 
+    // compute w = 2^p
     q32_t w = q32_exp2_shiftadd(p,n);
-
-    //w = q32_float_to_fixed(powf(2.0f, q32f_fixed_to_float(d)));
 
     return w;
 }
@@ -157,6 +146,9 @@ q32_t q32_loglogbesseli0(q32_t _z)
     return y;
 }
 
+// computes y = 2^x where
+//   x : q32_t  (fixed)
+//   y : q32f_t (fixed|float)
 q32f_t q32f_exp2_q32(q32_t _x)
 {
     unsigned int _n=32;
