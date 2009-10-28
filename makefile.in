@@ -39,7 +39,6 @@ libraries		:=
 extra_clean		:=
 
 objects		= $(patsubst %.c,%.o,$(sources))
-#dependencies	= $(patsubst %.c,%.d,$(sources))
 
 all:
 
@@ -92,7 +91,7 @@ sources  += $(gentab_targets)
 # Build the gentab program.  This is done natively as the
 # result is a program that generates a source file to be
 # built for the target system.
-gentab/gentab.% : gentab/gentab.%.c
+gentab/gentab.% : gentab/gentab.%.c ./include/liquidfpm.h
 	$(CC) $(INCLUDE_CFLAGS) -lm $< -o $@
 
 # Run the natively-built program to generate the source
@@ -116,21 +115,13 @@ clean-gentab :
 qtype_mul.ppc.gen : qtype_mul.ppc.s.c
 	$(CC) $(CFLAGS) $< -o $@
 
+# 
 # Dependencies
-# Use compiler's -M flags (and equivalent) to parse source files
-# and create a list of dependencies.  Each list is stored in a
-# .d file and included, below.
 #
-#%.d: %.c 
-#	$(CC) $(CFLAGS) -MM -MG $< | $(SED) 's,\($(notdir $*)\.o\) *:,$(dir $@)\1 $@: ,' > $@
-#include $(dependencies)
+# Force objects to be dependent upon headers
+$(objects) : ./include/liquidfpm.h ./include/liquidfpm.internal.h ./config.h
 
 objects += @MLIBS@
-XLIBS = clz.o msb_index.o trig.o libmad_fixed.o \
-	sin_table_q32_256.o \
-	log2_fraction_table_32.o \
-	log2_fraction_table_256.o \
-	atan_table_q32_32_8.o
 
 SHARED_LIB = @SH_LIB@
 
@@ -161,11 +152,6 @@ libliquidfpm.so: $(libraries)
 # 
 # LIBRARIES
 #
-
-# generate tables
-#$(GENTABS) : % : src/%.c
-#	$(CC) $(CFLAGS) -c $< -o $@
-#	./$< > src/$<.lut.c
 
 # generate other sources
 q32_mul.ppc.s : qtype_mul.ppc.gen
