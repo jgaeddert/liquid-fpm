@@ -71,6 +71,9 @@ void sinc_autotest()
         xf += dx;
     }
 
+    // ensure test of zero condition
+    CONTEND_DELTA( Q(_fixed_to_float)(Q(_sinc)(0)), 1.0f, tol);
+
 }
 
 #endif // LIQUIDFPM_SINC_AUTOTEST_H
