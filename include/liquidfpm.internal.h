@@ -45,6 +45,7 @@ unsigned int msb_index(unsigned int _x);
 extern const Q(_t) Q(_sin_table)[256];                              \
                                                                     \
 /* arithmetic */                                                    \
+Q(_t) Q(_div_inv_newton)(Q(_t) _x, Q(_t) _y, unsigned int _n);      \
 Q(_t) Q(_inv_newton)(Q(_t), unsigned int _n);                       \
 Q(_t) Q(_inv_logexp)(Q(_t), unsigned int _n);                       \
 Q(_t) Q(_sqrt_newton)(Q(_t), unsigned int _n);                      \
