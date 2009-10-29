@@ -49,24 +49,31 @@ void Q(_test_mul)(float _xf,
     CONTEND_DELTA(zf,ztest,_tol);
 
     if (_autotest_verbose) {
-        printf("%12.8f + %12.8f = %12.8f (%12.8f)\n",
+        printf("%12.8f * %12.8f = %12.8f (%12.8f)\n",
                 _xf,     _yf,     ztest,  zf);
     }
 }
 
 void qtype_mul_autotest()
 {
-    float tol = Q(_fixed_to_float)(Q(_min));
+    float tol = Q(_fixed_to_float)(1<<Q(_intbits));
 
     // basic tests
     Q(_test_mul)( 0.25f, 2.25f, tol);
     Q(_test_mul)( 0.25f,-2.25f, tol);
 
+    float a = Q(_fixed_to_float)(Q(_max))*0.7f;
+    float b = Q(_fixed_to_float)(Q(_one))/3.0f;
+    Q(_test_mul)(a, b, tol);
+
     // extremes
-    Q(_t) x = Q(_max)>>1;   // max / 2
-    Q(_t) y = Q(_one)<<1;   // 2
-    Q(_t) qtol = 1<<4;      // fixed-point tolerance
-    CONTEND_DELTA(Q(_mul)(x,y), Q(_max), qtol);
+    Q(_t) x = Q(_max);      // max
+    Q(_t) y = Q(_one)>>1;   // 1/2
+    Q(_t) z = Q(_mul)(x,y); // 
+    Q(_t) z_test = Q(_max)>>1;
+
+    Q(_t) qtol = 1<<Q(_intbits);      // fixed-point tolerance
+    CONTEND_DELTA(z, z_test, qtol);
 }
 
 #endif // LIQUIDFPM_QTYPE_MUL_AUTOTEST_H
