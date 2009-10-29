@@ -112,10 +112,17 @@ clean-gentab :
 	$(RM) $(gentab_programs)
 	$(RM) $(gentab_targets)
 
+# 
+# Additional auto-generated sources
+#
 
 # PPC mul source code generator
 qtype_mul.ppc.gen : qtype_mul.ppc.s.c
 	$(CC) $(CFLAGS) $< -o $@
+
+# generate other sources
+$(qtype)_mul.ppc.s : qtype_mul.ppc.gen
+	./$< -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
 
 # 
 # Dependencies
@@ -123,9 +130,18 @@ qtype_mul.ppc.gen : qtype_mul.ppc.s.c
 # Force objects to be dependent upon headers
 $(objects) : ./include/liquidfpm.h ./include/liquidfpm.internal.h ./config.h
 
+# add target-specific libraries
 objects += @MLIBS@
 
+# target-specific library definition:
+#   libliquidfpm.dylib    (darwin)
+#   libliquidfpm.so       (linux, et al.)
 SHARED_LIB = @SH_LIB@
+
+# rebind libraries:
+#   ldconfig (linux, et al.)
+#   No need to rebind on OS X/darwin systems
+REBIND = @REBIND@
 
 all: libliquidfpm.a $(SHARED_LIB)
 
@@ -133,7 +149,7 @@ install:
 	@echo "installing..."
 	mkdir -p @libdir@
 	install -m 644 -p $(SHARED_LIB) libliquidfpm.a @libdir@
-	@REBIND@
+	$(REBIND)
 	mkdir -p $(prefix)/include
 	mkdir -p $(prefix)/include/liquid
 	install -m 644 -p include/liquidfpm.h $(prefix)/include/liquid
@@ -150,18 +166,6 @@ libliquidfpm.dylib: $(objects)
 # linux, et al
 libliquidfpm.so: $(libraries)
 	$(CC) -shared -Xlinker -soname=$@ -o $@ -Wl,-whole-archive $^ -Wl,-no-whole-archive -lc
-
-# 
-# LIBRARIES
-#
-
-# generate other sources
-$(qtype)_mul.ppc.s : qtype_mul.ppc.gen
-	./$< -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
-
-# library objects
-$(LIBS) : %.o : src/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
 
 #
 # Tests
