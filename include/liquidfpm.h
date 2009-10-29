@@ -123,7 +123,7 @@ Q(_t) Q(_sinc)(Q(_t) _z);                                           \
 Q(_t) Q(_dotprod)(Q(_t) * _x, Q(_t) * _v, unsigned int _n);
 
 
-LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)
+LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, 7, 25)
 
 /* API definition macro (complex types)
  *

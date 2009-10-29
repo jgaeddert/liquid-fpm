@@ -15,10 +15,10 @@ q32_mul:
                             # with result stored in %edx:%eax
 
     # Now we need to shift the 64-bit number %edx:%eax to the
-    # right by 28 (FRACBITS). This can be easily accomplished
+    # right by 25 (FRACBITS). This can be easily accomplished
     # using the shrd instruction
 
-    mov     $28, %cl        # set shift amount in %cl
+    mov     $25, %cl        # set shift amount in %cl
     shrdl   %edx,%eax       # shift right double, store in %eax
 
     popl    %ebp            # restore the base pointer
