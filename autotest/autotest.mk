@@ -8,6 +8,7 @@
 autotest_headers =				\
 	autotest/exp2_shiftadd_autotest.h	\
 	autotest/inv_newton_autotest.h		\
+	autotest/sinc_autotest.h		\
 	autotest/sincos_cordic_autotest.h	\
 	autotest/sqrt_newton_autotest.h
 
