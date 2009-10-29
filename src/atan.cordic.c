@@ -7,7 +7,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG_ATAN_CORDIC 1
+#define DEBUG_ATAN_CORDIC 0
 
 #define Q(name)     LIQUIDFPM_CONCAT(q32,name)
 
