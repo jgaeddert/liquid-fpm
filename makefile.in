@@ -122,7 +122,7 @@ qtype_mul.ppc.gen : qtype_mul.ppc.s.c
 
 # generate other sources
 $(qtype)_mul.ppc.s : qtype_mul.ppc.gen
-	./$< -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
+	./$< -a ppc -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
 
 # 
 # Dependencies
