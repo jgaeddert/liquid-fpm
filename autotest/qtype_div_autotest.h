@@ -49,8 +49,33 @@ void Q(_test_div)(float _xf,
     CONTEND_DELTA(zf,ztest,_tol);
 
     if (_autotest_verbose) {
-        printf("%12.8f + %12.8f = %12.8f (%12.8f)\n",
+        printf("%12.8f / %12.8f = %12.8f (%12.8f)\n",
                 _xf,     _yf,     ztest,  zf);
+    }
+}
+
+// helper function to keep code base small
+void Q(_test_div_qtype)(Q(_t) _x,
+                        Q(_t) _y,
+                        float _tol)
+{
+    // convert to fixed-point
+    float xf = Q(_fixed_to_float)(_x);
+    float yf = Q(_fixed_to_float)(_y);
+
+    // execute operation
+    Q(_t) z = Q(_div)(_x,_y);
+    float zf = xf / yf;
+
+    // convert to floating-point
+    float ztest = Q(_fixed_to_float)(z);
+
+    // run comparison
+    CONTEND_DELTA(zf,ztest,_tol);
+
+    if (_autotest_verbose) {
+        printf("%12.8f / %12.8f = %12.8f (%12.8f)\n",
+                xf,      yf,      ztest,  zf);
     }
 }
 
@@ -65,8 +90,7 @@ void qtype_div_autotest()
     // extremes
     Q(_t) x = Q(_max);      // max
     Q(_t) y = Q(_one)<<1;   // 2
-    Q(_t) qtol = 1<<4;      // fixed-point tolerance
-    CONTEND_DELTA(Q(_div)(x,y), Q(_max)>>1, qtol);
+    Q(_test_div_qtype)(x,y,tol);
 }
 
 #endif // LIQUIDFPM_QTYPE_DIV_AUTOTEST_H
