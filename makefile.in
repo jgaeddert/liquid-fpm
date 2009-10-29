@@ -225,7 +225,7 @@ autotest_include	= autotest_include.h
 
 AUTOTEST_CFLAGS		= $(INCLUDE_CFLAGS)
 
-$(autotestgen_prog): autotest/autotestgen.c
+$(autotestgen_prog): autotest/autotestgen.c $(libraries)
 	$(CC) -Wall -o $@ $<
 
 $(autotest_include): $(autotestgen_prog) $(autotest_headers)
