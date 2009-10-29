@@ -50,25 +50,51 @@ void Q(_test_div_inv_newton)(float _xf,
     CONTEND_DELTA(zf,ztest,_tol);
 
     if (_autotest_verbose) {
-        printf("%12.8f + %12.8f = %12.8f (%12.8f)\n",
+        printf("%12.8f / %12.8f = %12.8f (%12.8f)\n",
                 _xf,     _yf,     ztest,  zf);
     }
 }
 
+// helper function to keep code base small
+void Q(_test_div_inv_newton_qtype)(Q(_t) _x,
+                                   Q(_t) _y,
+                                   unsigned int _n,
+                                   float _tol)
+{
+    // convert to fixed-point
+    float xf = Q(_fixed_to_float)(_x);
+    float yf = Q(_fixed_to_float)(_y);
+
+    // execute operation
+    Q(_t) z = Q(_div_inv_newton)(_x,_y,_n);
+    float zf = xf / yf;
+
+    // convert to floating-point
+    float ztest = Q(_fixed_to_float)(z);
+
+    // run comparison
+    CONTEND_DELTA(zf,ztest,_tol);
+
+    if (_autotest_verbose) {
+        printf("%12.8f / %12.8f = %12.8f (%12.8f)\n",
+                xf,      yf,      ztest,  zf);
+    }
+}
+
+
 void qtype_div_inv_newton_autotest()
 {
     unsigned int n=32;  // precision
-    float tol = Q(_fixed_to_float)(Q(_min)<<6);
+    float tol = Q(_fixed_to_float)(1<<Q(_intbits));
 
     // basic tests
     Q(_test_div_inv_newton)( 0.25f, 2.25f, n, tol);
     Q(_test_div_inv_newton)( 0.25f,-2.25f, n, tol);
 
     // extremes
-    Q(_t) x = Q(_max);      // max
-    Q(_t) y = Q(_one)<<1;   // 2
-    Q(_t) qtol = 1<<4;      // fixed-point tolerance
-    CONTEND_DELTA(Q(_div_inv_newton)(x,y,n), Q(_max)>>1, qtol);
+    Q(_test_div_inv_newton_qtype)( Q(_max), Q(_one)<<1, n, tol);
+    Q(_test_div_inv_newton_qtype)( Q(_max), Q(_max),    n, tol);
+    Q(_test_div_inv_newton_qtype)( Q(_one), Q(_max),    n, tol);
 }
 
 #endif // LIQUIDFPM_QTYPE_div_inv_newton_INV_NEWTON_AUTOTEST_H
