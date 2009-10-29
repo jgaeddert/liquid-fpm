@@ -12,3 +12,4 @@ autotest_headers =				\
 	autotest/sincos_cordic_autotest.h	\
 	autotest/sqrt_newton_autotest.h
 
+#	autotest/sinhcosh_cordic_autotest.h	\
