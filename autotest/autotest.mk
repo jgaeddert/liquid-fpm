@@ -13,6 +13,7 @@ autotest_headers =				\
 	autotest/qtype_sub_autotest.h		\
 	autotest/qtype_mul_autotest.h		\
 	autotest/qtype_div_autotest.h		\
+	autotest/qtype_div_inv_newton_autotest.h\
 	autotest/sinc_autotest.h		\
 	autotest/sincos_cordic_autotest.h	\
 	autotest/sqrt_newton_autotest.h
