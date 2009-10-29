@@ -9,7 +9,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG_EXP2_SHIFTADD     0
+#define DEBUG_EXP2_SHIFTADD     1
 
 #define Q(name)     LIQUIDFPM_CONCAT(q32,name)
 
@@ -49,11 +49,19 @@ Q(_t) Q(_exp2_shiftadd)(Q(_t) _x,
     Q(_t) f = Q(_fracpart)(_x);
 
 #if DEBUG_EXP2_SHIFTADD
-    printf("x : %12.8f  > %12.8f\n", Q(_fixed_to_float)(_x), 
-                                     Q(_fixed_to_float)(f));
+    printf("x : %12.8f  > %d + %12.8f\n", Q(_fixed_to_float)(_x), 
+                                          b,
+                                          Q(_fixed_to_float)(f));
     printf("b : %d\n", b);
     printf("f : %f\n", Q(_fixed_to_float)(f));
 #endif
+
+    // test if base is larger than data type
+    // example: for a 32-bit fixed-point data type with 20
+    //          fraction bits, 2^-20 is effectively 0
+    if ( abs(b) >= Q(_fracbits) ) {
+        if (b < 0) return 0;
+    }
 
     // compute the fractional portion using the iterative
     // shift|add algorithm.
