@@ -33,10 +33,17 @@ void log2_shiftadd_autotest()
 {
     unsigned int n=32;  // precision
     unsigned int num_steps = 37;
-    float xmin = powf(2.0f,-(1<<(Q(_intbits)-1)));
-    float xmax = Q(_fixed_to_float(Q(_max)));
+    float xmin = Q(_fixed_to_float)( Q(_min) ); // min input
+    float xmax = Q(_fixed_to_float)( Q(_max) ); // max input
+    float ymin = Q(_fixed_to_float)(-Q(_max) ); // min output
+    //float ymax = Q(_fixed_to_float)( Q(_max) ); // max output
+    
+    // adjust input accordingly
+    if (xmin < exp2f(ymin)) xmin = exp2f(ymin);
+    //if (xmax > exp2f(ymax)) xmax = exp2f(ymax);
+
     //float dx = (xmax - xmin)/((float)(num_steps-1));
-    float sigma = powf(xmin/xmax,-1.0f/(float)(num_steps-1));
+    float sigma = powf(xmin/xmax,-(1.0f - 1e-6f)/(float)(num_steps-1));
     float tol = 1e-4f;
 
     // testing variables
@@ -49,12 +56,16 @@ void log2_shiftadd_autotest()
     unsigned int i;
     xf = xmin;
     for (i=0; i<num_steps; i++) {
-        // compute true output (floating-point)
-        yf = log2f(xf);
+        if (xf > Q(_fixed_to_float)(Q(_max)))
+            continue;
 
         // compute fixed-point output
         x = Q(_float_to_fixed)(xf);
         y = Q(_log2_shiftadd)(x,n);
+
+        // compute true output (floating-point, converted
+        // from fixed-point input)
+        yf = log2f( Q(_fixed_to_float)(x) );
 
         ytest = Q(_fixed_to_float)(y);
 
