@@ -37,11 +37,17 @@ static unsigned long int _autotest_num_passed=0;
 static unsigned long int _autotest_num_failed=0;
 
 static bool _autotest_verbose = true;
+static bool _autotest_exitonfail = false;
 
 static inline void test_failed()
 {
     _autotest_num_checks++;
     _autotest_num_failed++;
+
+    if (_autotest_exitonfail) {
+        printf("_autotest_exitonfail == true\n");
+        exit(1);
+    }
 }
 
 static inline void test_passed()
