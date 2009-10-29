@@ -217,7 +217,9 @@ clean-bench:
 	$(RM) $(benchmarkgen_prog) $(benchmark_prog) $(benchmark_include)
 
 
+# 
 # autotest
+#
 .PHONY: autotest
 
 # include autotest makefile which defines autotest_headers
@@ -229,7 +231,7 @@ autotest_include	= autotest_include.h
 
 AUTOTEST_CFLAGS		= $(INCLUDE_CFLAGS)
 
-$(autotestgen_prog): autotest/autotestgen.c $(libraries)
+$(autotestgen_prog): autotest/autotestgen.c $(libraries) autotest/autotest.h
 	$(CC) -Wall -o $@ $<
 
 $(autotest_include): $(autotestgen_prog) $(autotest_headers)
