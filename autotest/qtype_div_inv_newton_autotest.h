@@ -40,7 +40,7 @@ void Q(_test_div_inv_newton)(float _xf,
     Q(_t) y = Q(_float_to_fixed)(_yf);
 
     // execute operation
-    Q(_t) z = Q(_div_inv_newton)(x,y);
+    Q(_t) z = Q(_div_inv_newton)(x,y,_n);
     float zf = _xf / _yf;
 
     // convert to floating-point
