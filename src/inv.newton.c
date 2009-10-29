@@ -48,12 +48,10 @@ Q(_t) Q(_inv_newton)( Q(_t) _x, unsigned int _n )
         x0y0 = Q(_mul)(x0,y0);
         x1   = x0 + x0y0;
 
-        // break if multiplier is zero
-        if (y0 == 0) break;
-
-        // OR : conditional break if below tolerance
-        // Q(_t) tol = 0x000000ff;
-        // if (Q(_abs)(x0y0) < tol) break;
+        // break if multiplier is zero: all further
+        // iterations will result in the same value
+        // for x1
+        if (!y0 || !x0y0) break;
 
         x0 = x1;
     }
