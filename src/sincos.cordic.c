@@ -30,6 +30,22 @@ unsigned int Q(_quadrant_cordic)(Q(_t) _theta)
     return (_theta >> (Q(_bits)-3)) & 0x00000003;
 }
 
+Q(_t) Q(_sin_cordic)(Q(_t) _theta, unsigned int _n)
+{
+    Q(_t) sine;
+    Q(_t) cosine;
+    Q(_sincos_cordic)(_theta,&sine,&cosine,_n);
+    return sine;
+}
+
+Q(_t) Q(_cos_cordic)(Q(_t) _theta, unsigned int _n)
+{
+    Q(_t) sine;
+    Q(_t) cosine;
+    Q(_sincos_cordic)(_theta,&sine,&cosine,_n);
+    return cosine;
+}
+
 void Q(_sincos_cordic)(Q(_t) _theta,
                        Q(_t) * _sin,
                        Q(_t) * _cos,

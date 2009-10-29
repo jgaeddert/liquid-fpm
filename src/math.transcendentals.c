@@ -97,7 +97,7 @@ Q(_t) Q(_besselj0)(Q(_t) _z)
 // sinc(z) = sin(pi*z)/(pi*z)
 Q(_t) Q(_sinc)(Q(_t) _z)
 {
-    unsigned int _n = 10;
+    unsigned int _n = 32;
 
     Q(_t) zmin = Q(_one) >> ( Q(_intbits) - 1 );
 
@@ -117,15 +117,21 @@ Q(_t) Q(_sinc)(Q(_t) _z)
     if (Q(_abs)(_z) < zmin ) {
         //return Q(_one);
 
-        Q(_t) cos_pi_z_by_2 = Q(_cos)(pi_z>>1);
-        Q(_t) cos_pi_z_by_4 = Q(_cos)(pi_z>>2);
-        Q(_t) cos_pi_z_by_8 = Q(_cos)(pi_z>>3);
+        Q(_t) cos_pi_z_by_2 = Q(_cos_cordic)(pi_z>>1, _n);
+        Q(_t) cos_pi_z_by_4 = Q(_cos_cordic)(pi_z>>2, _n);
+        Q(_t) cos_pi_z_by_8 = Q(_cos_cordic)(pi_z>>3, _n);
+#if DEBUG_MATH_TRANSCENDENTALS
+        printf("  pi*z          :   %12.8f\n", Q(_angle_fixed_to_float)(pi_z));
+        printf("  cos(pi*z/2)   :   %12.8f\n", Q(_fixed_to_float)(cos_pi_z_by_2));
+        printf("  cos(pi*z/4)   :   %12.8f\n", Q(_fixed_to_float)(cos_pi_z_by_4));
+        printf("  cos(pi*z/8)   :   %12.8f\n", Q(_fixed_to_float)(cos_pi_z_by_8));
+#endif
         return Q(_mul)(cos_pi_z_by_2, Q(_mul)(cos_pi_z_by_4, cos_pi_z_by_8));
     }
 
     // sin(pi*z)/(pi*z)
 
-    Q(_t) sin_z = Q(_sin)( pi_z );
+    Q(_t) sin_z = Q(_sin_cordic)( pi_z, _n );
 
     // invert z
     Q(_t) z_inv = Q(_inv_newton)(_z,_n);
