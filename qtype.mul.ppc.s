@@ -6,10 +6,8 @@
 
     ;rlmi    ...    ; only available for POWER architectures
 
-    srwi    r5,r11,25   ; shift lower >> by 25
-    ;andi.   r5,r5,0x0f  ; mask with 0x0f
-
-    slwi    r6,r12,7    ; shift upper << by 7
+    srwi    r5,r11,qfrac ; shift lower >> by qfrac (FRACBITS)
+    slwi    r6,r12,qint  ; shift upper << by qint  (INTBITS)
 
     or      r3,r5,r6    ; mask the upper with the lower
 
