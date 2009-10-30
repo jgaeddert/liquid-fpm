@@ -57,7 +57,7 @@ i386|i486|i586|i686)
 
     case $target_os in
     darwin*)
-        MLIBS="q32_mul.intelmac.o"
+        MLIBS="q32.intelmac.o"
         ;;
     *)
         dnl MLIBS="q32_mul.x86.o"
