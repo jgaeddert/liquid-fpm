@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
         strcpy(archname,"x86");
     } else if (arch == ARCH_INTELMAC) {
         comment_char = '#';
-        strcpy(name_mangler,"");
+        strcpy(name_mangler,"_");
         strcpy(archname,"intelmac");
     } else {
         comment_char = '#';

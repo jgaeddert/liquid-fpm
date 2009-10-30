@@ -3,11 +3,11 @@
 # multiplies 2 q32_t fixed-point numbers
 #
 
-.include "q32.include.s"
 
-.text
-.globl _q32_mul
-_q32_mul:
+#.text
+#.globl _q32_mul
+#_q32_mul:
+
     pushq   %rbp            # create the stack frame
     movq    %rsp, %rbp
 
