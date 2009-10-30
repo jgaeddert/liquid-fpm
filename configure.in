@@ -60,7 +60,8 @@ i386|i486|i586|i686)
         MLIBS="q32_mul.intelmac.o"
         ;;
     *)
-        MLIBS="q32_mul.x86.o"
+        dnl MLIBS="q32_mul.x86.o"
+        MLIBS="q32.x86.o"
         ;;
     esac
 

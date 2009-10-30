@@ -125,6 +125,32 @@ $(qtype)_mul.ppc.s : qtype_mul.ppc.gen
 	./$< -a ppc -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
 
 # 
+# qtype.s.gen
+#
+# Program to generate assembly code which defines
+# the precision (intbits, fracbits) in the native
+# target assembly language, and then includes the
+# architecture-specific assembly routines for
+# certain functions (e.g. q32_mul).
+qtype.s.gen : qtype.s.gen.c
+	$(CC) $(CFLAGS) $< -o $@
+
+# TODO : summarize the assembly routines below
+
+# PowerPC assembly
+$(qtype).ppc.s : qtype.s.gen
+	./$< -a ppc -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
+
+# x86 assembly
+$(qtype).x86.s : qtype.s.gen
+	./$< -a x86 -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
+
+# intelmac assembly
+$(qtype).intelmac.s : qtype.s.gen
+	./$< -a intelmac -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
+
+
+# 
 # Dependencies
 #
 # Force objects to be dependent upon headers
