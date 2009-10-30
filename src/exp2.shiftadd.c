@@ -9,7 +9,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG_EXP2_SHIFTADD     1
+#define DEBUG_EXP2_SHIFTADD     0
 
 #define Q(name)     LIQUIDFPM_CONCAT(q32,name)
 

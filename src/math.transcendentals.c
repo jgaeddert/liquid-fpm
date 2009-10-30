@@ -7,7 +7,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG_MATH_TRANSCENDENTALS 1
+#define DEBUG_MATH_TRANSCENDENTALS 0
 
 #define Q(name)         LIQUIDFPM_CONCAT(q32,name)
 

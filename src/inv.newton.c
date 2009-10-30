@@ -7,7 +7,7 @@
 
 #include "liquidfpm.internal.h"
 
-#define DEBUG_INV_NEWTON 1
+#define DEBUG_INV_NEWTON 0
 
 #define Q(name)     LIQUIDFPM_CONCAT(q32,name)
 
