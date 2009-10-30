@@ -86,12 +86,36 @@ int main() {
 
 q32_t q32_kaiser(unsigned int _n, unsigned int _N, q32_t _beta)
 {
-    unsigned int n=32;
+    unsigned int n=32;  // precision
 
+    /*
     float tf = (float)_n - (float)(_N-1)/2;
     float rf = 2.0f*tf / (float)(_N);
 
     q32_t r = q32_float_to_fixed(rf);
+    */
+
+    // validate input
+    if (_n > _N) {
+        printf("error: q32_kaiser(), n > N\n");
+        exit(1);
+    } else if (_N > ((1<<q32_fracbits)-1)) {
+        printf("error: q32_kaiser(), array size index exceeds fixed-point precision\n");
+        exit(1);
+    }
+
+    q32_t nq = _n << q32_fracbits;  // convert integer _n to qtype
+    q32_t Nq = _N << q32_fracbits;  // convert integer _N to qtype
+
+    // t = n - (N-1)/2
+    q32_t tq = nq - ((Nq-q32_one)>>1);
+
+    // r = 2*t/N
+    q32_t r  = q32_div_inv_newton(tq,Nq,n)<<1;
+
+    //printf("    t = %12.8f (%12.8f)\n", tf, q32_fixed_to_float(tq));
+    //printf("    r = %12.8f (%12.8f)\n", rf, q32_fixed_to_float(r));
+
     //printf("  r     : %12.8f\n", q32_fixed_to_float(r));
     //printf("  beta  : %12.8f\n", q32_fixed_to_float(_beta));
 
@@ -107,8 +131,8 @@ q32_t q32_kaiser(unsigned int _n, unsigned int _N, q32_t _beta)
     float w = powf(2.0f, log2a - log2b);
     */
 
+    // g0 = sqrt(1 - r*r)
     q32_t g0 = q32_sqrt_newton(q32_one - q32_mul(r,r), n);
-    g0 = q32_float_to_fixed(sqrtf(1.0f-rf*rf));
     //printf("g0     = %12.8f\n", q32_fixed_to_float(g0));
     q32_t t0 = q32_loglogbesseli0( q32_mul(_beta,g0) );
     q32_t t1 = q32_loglogbesseli0( _beta );
