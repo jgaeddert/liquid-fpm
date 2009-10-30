@@ -61,7 +61,7 @@ int main() {
     for (k=0; k<n; k++) {
         wk = q32_kaiser(k,n,beta);
         printf("w(%3u) = %12.8f;\n", k+1, q32_fixed_to_float(wk));
-        fprintf(fid,"w0(%3u) = %12.8f;\n", k+1, q32_fixed_to_float(wk));
+        fprintf(fid,"w0(%3u) = %12.4e;\n", k+1, q32_fixed_to_float(wk));
     }
 
     fprintf(fid,"\n\n");
