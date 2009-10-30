@@ -10,6 +10,8 @@
 
 #include "../include/liquidfpm.internal.h"
 
+#define OUTPUT_FILENAME "q32_kaiser_test.m"
+
 // region boundaries
 q32_t r1;
 q32_t r2;
@@ -32,7 +34,16 @@ q32f_t q32f_exp2_q32(q32_t _x);
 int main() {
     // Kaiser window paramters
     unsigned int n = 21;    // window length
-    q32_t beta = q32_float_to_fixed(7.0f); // taper parameter
+    float betaf = 7.0f;
+    q32_t beta = q32_float_to_fixed(betaf); // taper parameter
+
+    //
+    FILE * fid = fopen(OUTPUT_FILENAME,"w");
+    fprintf(fid,"%% %s : auto-generated file\n", OUTPUT_FILENAME);
+    fprintf(fid,"close all;\n");
+    fprintf(fid,"clear all;\n");
+    fprintf(fid,"n = %u;\n", n);
+    fprintf(fid,"beta = %12.8f;\n", betaf);
 
     unsigned int k;
     // convert polynomials to fixed-point
@@ -50,7 +61,25 @@ int main() {
     for (k=0; k<n; k++) {
         wk = q32_kaiser(k,n,beta);
         printf("w(%3u) = %12.8f;\n", k+1, q32_fixed_to_float(wk));
+        fprintf(fid,"w0(%3u) = %12.8f;\n", k+1, q32_fixed_to_float(wk));
     }
+
+    fprintf(fid,"\n\n");
+    fprintf(fid,"nfft = 512;\n");
+    fprintf(fid,"w1 = kaiser(n,beta);\n");
+    fprintf(fid,"f = [0:(nfft-1)]/nfft - 0.5;\n");
+    fprintf(fid,"W0 = 20*log10(abs(fftshift(fft(w0,nfft))));\n");
+    fprintf(fid,"W1 = 20*log10(abs(fftshift(fft(w1,nfft))));\n");
+    fprintf(fid,"figure;\n");
+    fprintf(fid,"plot(f,W0,'LineWidth',2,f,W1,'LineWidth',1);\n");
+    fprintf(fid,"grid on;\n");
+    fprintf(fid,"legend('fixed-point','floating-point',1);\n");
+    fprintf(fid,"xlabel('Normalized Frequency');\n");
+    fprintf(fid,"ylabel('Power Spectral Density [dB]');\n");
+
+    fclose(fid);
+
+    printf("results written to %s\n", OUTPUT_FILENAME);
 
     return 0;
 }
