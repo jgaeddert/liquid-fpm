@@ -116,15 +116,6 @@ clean-gentab :
 # Additional auto-generated sources
 #
 
-# PPC mul source code generator
-qtype_mul.ppc.gen : qtype_mul.ppc.s.c
-	$(CC) $(CFLAGS) $< -o $@
-
-# generate other sources
-$(qtype)_mul.ppc.s : qtype_mul.ppc.gen
-	./$< -a ppc -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
-
-# 
 # qtype.s.gen
 #
 # Program to generate assembly code which defines
