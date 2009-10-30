@@ -70,7 +70,7 @@ i386|i486|i586|i686)
 ppc|powerpc*)
     ARCH_OPTION="-fno-common -faltivec"
     FPM_OPTION="-DFPM_PPC"
-    MLIBS="q32_mul.ppc.o"
+    MLIBS="q32.ppc.o"
     AC_DEFINE(FPM_PPC, 1, [Power PC])
     ;;
 arm)
