@@ -146,6 +146,7 @@ void Q(f_constrain)(Q(f_t) * _x)
     // check for zero condidtion
     if (_x->frac == 0) {
         _x->base = 0;
+        return;
     }
 
     // ensure _x.frac < 2
