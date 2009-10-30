@@ -146,7 +146,9 @@ CQ(_t) CQ(_float_to_fixed)(liquidfpm_float_complex _x);             \
 CQ(_t) CQ(_add)(CQ(_t) _a, CQ(_t) _b);                              \
 CQ(_t) CQ(_sub)(CQ(_t) _a, CQ(_t) _b);                              \
 CQ(_t) CQ(_mul)(CQ(_t) _a, CQ(_t) _b);                              \
+CQ(_t) CQ(_mul_scalar)(CQ(_t) _a, Q(_t) _b);                        \
 CQ(_t) CQ(_div)(CQ(_t) _a, CQ(_t) _b);                              \
+CQ(_t) CQ(_div_scalar)(CQ(_t) _a, Q(_t) _b);                        \
                                                                     \
 /* trig */                                                          \
 CQ(_t) CQ(_cexp)(CQ(_t) _x);                                        \

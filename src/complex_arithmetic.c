@@ -41,10 +41,18 @@ CQ(_t) CQ(_mul)(CQ(_t) _a, CQ(_t) _b)
 #endif
 }
 
+// multiply a complex number by a scalar
+CQ(_t) CQ(_mul_scalar)(CQ(_t) _a, Q(_t) _b)
+{
+    CQ(_t) prod = { Q(_mul)(_a.real,_b),
+                    Q(_mul)(_a.imag,_b) };
+    return prod;
+}
+
 // divide 2 complex numbers
 CQ(_t) CQ(_div)(CQ(_t) _a, CQ(_t) _b)
 {
-    unsigned int _n=20; // number of iterations (precision)
+    unsigned int _n=32; // number of iterations (precision)
 
     // compute the raw quotient
     CQ(_t) quot = CQ(_mul)(_a, CQ(_conj)(_b));
@@ -56,6 +64,21 @@ CQ(_t) CQ(_div)(CQ(_t) _a, CQ(_t) _b)
     // multiply the raw quotient by the inverse of the scaling factor
     quot.real = Q(_mul)(quot.real,scale_inv);
     quot.imag = Q(_mul)(quot.imag,scale_inv);
+
+    return quot;
+}
+
+// divide a complex number by a scalar
+CQ(_t) CQ(_div_scalar)(CQ(_t) _a, Q(_t) _b)
+{
+    unsigned int _n=32; // number of iterations (precision)
+
+    // compute the inverse of the scaling factor
+    Q(_t) scale_inv = Q(_inv_newton)(_b,_n);
+
+    // compute the raw quotient
+    CQ(_t) quot = { Q(_mul)(quot.real,scale_inv),
+                    Q(_mul)(quot.imag,scale_inv)    };
 
     return quot;
 }
