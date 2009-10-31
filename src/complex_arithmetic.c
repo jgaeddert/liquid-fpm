@@ -77,8 +77,8 @@ CQ(_t) CQ(_div_scalar)(CQ(_t) _a, Q(_t) _b)
     Q(_t) scale_inv = Q(_inv_newton)(_b,_n);
 
     // compute the raw quotient
-    CQ(_t) quot = { Q(_mul)(quot.real,scale_inv),
-                    Q(_mul)(quot.imag,scale_inv)    };
+    CQ(_t) quot = { Q(_mul)(_a.real,scale_inv),
+                    Q(_mul)(_a.imag,scale_inv)  };
 
     return quot;
 }
