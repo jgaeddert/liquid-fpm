@@ -73,6 +73,7 @@ int main() {
     fprintf(fid,"figure;\n");
     fprintf(fid,"plot(f,W0,'LineWidth',2,f,W1,'LineWidth',1);\n");
     fprintf(fid,"grid on;\n");
+    fprintf(fid,"axis([-0.5 0.5 -120 10+20*log10(sum(w0))]);\n");
     fprintf(fid,"legend('fixed-point','floating-point',1);\n");
     fprintf(fid,"xlabel('Normalized Frequency');\n");
     fprintf(fid,"ylabel('Power Spectral Density [dB]');\n");
@@ -99,19 +100,12 @@ q32_t q32_kaiser(unsigned int _n, unsigned int _N, q32_t _beta)
     if (_n > _N) {
         printf("error: q32_kaiser(), n > N\n");
         exit(1);
-    } else if (_N > ((1<<q32_fracbits)-1)) {
-        printf("error: q32_kaiser(), array size index exceeds fixed-point precision\n");
-        exit(1);
     }
 
-    q32_t nq = _n << q32_fracbits;  // convert integer _n to qtype
-    q32_t Nq = _N << q32_fracbits;  // convert integer _N to qtype
-
     // t = n - (N-1)/2
-    q32_t tq = nq - ((Nq-q32_one)>>1);
-
     // r = 2*t/N
-    q32_t r  = q32_div_inv_newton(tq,Nq,n)<<1;
+    //   = 2*(n/N) - (N-1)/N
+    q32_t r = (q32_ratio(_n,_N,n)<<1) - q32_ratio(_N-1,_N,n);
 
     //printf("    t = %12.8f (%12.8f)\n", tf, q32_fixed_to_float(tq));
     //printf("    r = %12.8f (%12.8f)\n", rf, q32_fixed_to_float(r));
