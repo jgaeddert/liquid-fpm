@@ -65,7 +65,8 @@ sources  +=				\
 	src/cq32.c			\
 	src/msb_index.c			\
 	src/math.transcendentals.c	\
-	src/loglogbesseli0.pwpoly.c
+	src/loglogbesseli0.pwpoly.c	\
+	src/ratio.c
 
 extra_clean		+=
 

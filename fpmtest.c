@@ -33,6 +33,7 @@ void fpmtest_atan2();
 void fpmtest_atan2_cordic();
 void fpmtest_lngamma();
 void fpmtest_sinc();
+void fpmtest_ratio();
 
 // fixed|float
 void fpmtest_q32f_add();
@@ -94,11 +95,13 @@ int main() {
     fpmtest_exp10_shiftadd();
 
     fpmtest_sinhcosh_cordic();
-    */
     fpmtest_q32f_add();
     fpmtest_q32f_sub();
     fpmtest_q32f_mul();
     fpmtest_q32f_div();
+    */
+
+    fpmtest_ratio();
 
     printf("done.\n");
     return 0;
@@ -845,6 +848,20 @@ void fpmtest_q32f_div()
         q32f_fixed_to_float(r));
     printf("    computed %10.7f (expected %10.7f)\n",
         q32f_fixed_to_float(r), x/y);
+
+}
+
+void fpmtest_ratio()
+{
+    printf("testing ratio..\n");
+    int a = -10;
+    int b = 1024;
+    unsigned int n=32;  // precision
+
+    q32_t r = q32_ratio(a,b,n);
+    printf(" a = %d\n", a);
+    printf(" b = %d\n", b);
+    printf(" r = %12.8f (%12.8f)\n", q32_fixed_to_float(r),(float)(a) / (float)(b));
 
 }
 
