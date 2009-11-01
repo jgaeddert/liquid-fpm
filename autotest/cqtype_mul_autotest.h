@@ -45,7 +45,8 @@ void CQ(_test_mul)(float complex _xf,
     float complex ztest = CQ(_fixed_to_float)(z);
 
     // run comparison
-    CONTEND_DELTA(zf,ztest,_tol);
+    CONTEND_DELTA(crealf(zf),crealf(ztest),_tol);
+    CONTEND_DELTA(cimagf(zf),cimagf(ztest),_tol);
 
     if (_autotest_verbose) {
         printf("(%9.4f,%9.4f) * (%9.4f,%9.4f) = (%9.4f,%9.4f), expected: (%9.4f,%9.4f)\n",

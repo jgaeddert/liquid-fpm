@@ -28,32 +28,35 @@
 #include "liquidfpm.internal.h"
 #include "autotest.h"
 
-#if 0
 // helper function to keep code base small
-void CQ(_test_add)(float _xf,
-                   float _yf,
+void CQ(_test_add)(float complex _xf,
+                   float complex _yf,
                    float _tol)
 {
     // convert to fixed-point
-    Q(_t) x = Q(_float_to_fixed)(_xf);
-    Q(_t) y = Q(_float_to_fixed)(_yf);
+    CQ(_t) x = CQ(_float_to_fixed)(_xf);
+    CQ(_t) y = CQ(_float_to_fixed)(_yf);
 
     // execute operation
-    Q(_t) z = Q(_add)(x,y);
-    float zf = _xf + _yf;
+    CQ(_t) z = CQ(_add)(x,y);
+    float complex zf = _xf + _yf;
 
     // convert to floating-point
-    float ztest = Q(_fixed_to_float)(z);
+    float complex ztest = CQ(_fixed_to_float)(z);
 
     // run comparison
-    CONTEND_DELTA(zf,ztest,_tol);
+    CONTEND_DELTA(crealf(zf),crealf(ztest),_tol);
+    CONTEND_DELTA(cimagf(zf),cimagf(ztest),_tol);
 
     if (_autotest_verbose) {
-        printf("%9.4f + %9.4f = %9.4f (%9.4f)\n",
-                _xf,     _yf,     ztest,  zf);
+        printf("(%9.4f,%9.4f) + (%9.4f,%9.4f) = (%9.4f,%9.4f), expected: (%9.4f,%9.4f)\n",
+                crealf(_xf), cimagf(_xf),
+                crealf(_yf), cimagf(_yf),
+                crealf(ztest), cimagf(ztest),
+                crealf(zf), cimagf(zf));
     }
+
 }
-#endif
 
 // helper function to keep code base small
 void CQ(_test_add_qtype)(CQ(_t) _x,
@@ -89,10 +92,15 @@ void cqtype_add_autotest()
 {
     float tol = Q(_fixed_to_float)(Q(_min));
 
+    // floatint-point tests
+    float complex xf = 1.0f + _Complex_I*0.5f;
+    float complex yf = 0.5f - _Complex_I*0.9f;
+    CQ(_test_add)(xf,yf,tol);
+
+    // basic tests
     CQ(_t) a;
     CQ(_t) b;
 
-    // basic tests
     a.real =  q32_one;      //  1.0
     a.imag = -q32_one;      // -1.0
     b.real =  q32_one>>1;   //  0.5
