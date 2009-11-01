@@ -105,7 +105,8 @@ q32_t q32_kaiser(unsigned int _n, unsigned int _N, q32_t _beta)
     // t = n - (N-1)/2
     // r = 2*t/N
     //   = 2*(n/N) - (N-1)/N
-    q32_t r = (q32_ratio(_n,_N,n)<<1) - q32_ratio(_N-1,_N,n);
+    //   = (2*n - N + 1)/N
+    q32_t r = q32_ratio((_n<<1) - _N + 1, _N, n);
 
     //printf("    t = %12.8f (%12.8f)\n", tf, q32_fixed_to_float(tq));
     //printf("    r = %12.8f (%12.8f)\n", rf, q32_fixed_to_float(r));
