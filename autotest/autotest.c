@@ -62,6 +62,8 @@ typedef struct package_s * package;
 // include auto-generated autotest header
 //
 // defines the following symbols:
+//   #define Q(name)
+//   #define CQ(name)
 //   #define NUM_AUTOTESTS
 //   struct autotest_s autotests[NUM_AUTOTESTS]
 //   #define NUM_PACKAGES

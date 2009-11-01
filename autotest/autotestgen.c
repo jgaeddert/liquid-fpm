@@ -37,6 +37,12 @@ int main(int argc, char*argv[]) {
     
     printf("#ifndef __LIQUIDFPM_AUTOTEST_INCLUDE_H__\n");
     printf("#define __LIQUIDFPM_AUTOTEST_INCLUDE_H__\n\n");
+    printf("\n");
+
+    printf("// define name-mangling macros\n");
+    printf("#define Q(name)  LIQUIDFPM_CONCAT(q32,name)\n");
+    printf("#define CQ(name) LIQUIDFPM_CONCAT(cq32,name)\n");
+    printf("\n");
 
     printf("// header files from which this file was generated\n");
     for (i=0; i<n; i++) {

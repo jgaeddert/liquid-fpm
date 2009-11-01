@@ -28,9 +28,6 @@
 #include "liquidfpm.internal.h"
 #include "autotest.h"
 
-#define CQ(name)    LIQUIDFPM_CONCAT(cq32,name)
-//#define Q(name)     LIQUIDFPM_CONCAT(q32, name)
-
 #if 0
 // helper function to keep code base small
 void CQ(_test_add)(float _xf,

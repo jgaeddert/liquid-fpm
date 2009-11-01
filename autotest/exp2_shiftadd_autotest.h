@@ -27,8 +27,6 @@
 #include "liquidfpm.internal.h"
 #include "autotest.h"
 
-#define Q(name)     LIQUIDFPM_CONCAT(q32,name)
-
 void exp2_shiftadd_autotest()
 {
     unsigned int n=32;  // precision

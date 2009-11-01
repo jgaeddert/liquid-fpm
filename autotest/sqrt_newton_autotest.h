@@ -27,8 +27,6 @@
 #include "liquidfpm.internal.h"
 #include "autotest.h"
 
-#define Q(name)     LIQUIDFPM_CONCAT(q32,name)
-
 void sqrt_newton_autotest()
 {
     if (_autotest_verbose)

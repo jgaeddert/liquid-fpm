@@ -27,8 +27,6 @@
 #include "liquidfpm.internal.h"
 #include "autotest.h"
 
-#define Q(name)     LIQUIDFPM_CONCAT(q32,name)
-
 // helper function to keep code base small
 void Q(_test_mul)(float _xf,
                   float _yf,
