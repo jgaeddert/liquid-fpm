@@ -34,6 +34,7 @@ void fpmtest_atan2_cordic();
 void fpmtest_lngamma();
 void fpmtest_sinc();
 void fpmtest_ratio();
+void fpmtest_kaiser();
 
 // fixed|float
 void fpmtest_q32f_add();
@@ -99,9 +100,11 @@ int main() {
     fpmtest_q32f_sub();
     fpmtest_q32f_mul();
     fpmtest_q32f_div();
-    */
 
     fpmtest_ratio();
+    */
+
+    fpmtest_kaiser();
 
     printf("done.\n");
     return 0;
@@ -863,5 +866,19 @@ void fpmtest_ratio()
     printf(" b = %d\n", b);
     printf(" r = %12.8f (%12.8f)\n", q32_fixed_to_float(r),(float)(a) / (float)(b));
 
+}
+
+void fpmtest_kaiser()
+{
+    unsigned int n = 21;    // window length
+    float betaf = 7.0f;
+    q32_t beta = q32_float_to_fixed(betaf); // taper parameter
+
+    q32_t wk;
+    unsigned int k;
+    for (k=0; k<n; k++) {
+        wk = q32_kaiser(k,n,beta);
+        printf("w(%3u) = %12.8f;\n", k+1, q32_fixed_to_float(wk));
+    }
 }
 

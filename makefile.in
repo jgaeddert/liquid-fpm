@@ -51,6 +51,7 @@ sources  +=				\
 	q32_div.inv.newton.c		\
 	src/qfloat.c			\
 	src/inv.newton.c		\
+	src/kaiser.c		\
 	src/clz.c			\
 	src/log2.polyfit.c		\
 	src/log2.shiftadd.c		\

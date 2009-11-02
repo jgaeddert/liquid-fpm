@@ -119,6 +119,7 @@ Q(_t) Q(_lngamma)(Q(_t) _z);                                        \
 Q(_t) Q(_besseli0)(Q(_t) _z);                                       \
 Q(_t) Q(_besselj0)(Q(_t) _z);                                       \
 Q(_t) Q(_sinc)(Q(_t) _z);                                           \
+Q(_t) Q(_kaiser)(unsigned int _n, unsigned int _N, Q(_t) _beta);    \
                                                                     \
 /* vector operations */                                             \
 Q(_t) Q(_dotprod)(Q(_t) * _x, Q(_t) * _v, unsigned int _n);
