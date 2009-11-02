@@ -11,6 +11,7 @@ autotest_headers =				\
 	autotest/cqtype_mul_autotest.h		\
 	autotest/exp2_shiftadd_autotest.h	\
 	autotest/inv_newton_autotest.h		\
+	autotest/libversion_autotest.h		\
 	autotest/log2_shiftadd_autotest.h	\
 	autotest/qtype_add_autotest.h		\
 	autotest/qtype_sub_autotest.h		\
