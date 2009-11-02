@@ -74,6 +74,8 @@ int main() {
     float maxe;
 
     estimate_cpu_clock();
+    num_trials = (unsigned long int) ( cpu_clock / 1000 );
+    num_trials = num_trials < 256 ? 256 : num_trials;
     
     unsigned int i;
 
