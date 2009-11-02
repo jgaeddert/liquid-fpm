@@ -12,24 +12,7 @@
 #define Q(name)     LIQUIDFPM_CONCAT(q32,name)
 
 // polynomial coefficients
-Q(_t) Q(_sine_table_pwpolyfit)[16][3] = {
-    {0xff081964, 0x19272520, 0x00000000},
-    {0xfd1aaf59, 0x1964c8e0, 0xfffe1330},
-    {0xfb3468f9, 0x19de4780, 0xfff67c76},
-    {0xf959f519, 0x1a9016a0, 0xffe5d3b0},
-    {0xf78fe581, 0x1b74f940, 0xffc93c07},
-    {0xf5daa371, 0x1c8614a0, 0xff9e96eb},
-    {0xf43e64f1, 0x1dbb0d60, 0xff64b26c},
-    {0xf2bf2271, 0x1f0a29c0, 0xff1b71b7},
-    {0xf1608cc1, 0x20687a80, 0xfec3eeb7},
-    {0xf0260441, 0x21ca0900, 0xfe6093dd},
-    {0xef129061, 0x232208c0, 0xfdf52d35},
-    {0xee28d841, 0x24631000, 0xfd86f035},
-    {0xed6b1c01, 0x257f5080, 0xfd1c79d1},
-    {0xecdb2fa1, 0x2668d380, 0xfcbdc271},
-    {0xec7a75c1, 0x2711b940, 0xfc7407ad},
-    {0xec49dce1, 0x276c7700, 0xfc49ac31}
-};
+extern Q(_t) Q(_sine_pwpoly_tab)[16][3];
 
 Q(_t) Q(_sincos_polyval_p2)(Q(_t) _x,
                             Q(_t) _c0,
@@ -65,9 +48,18 @@ void Q(_angle_quadrant_index)(Q(_t) _theta,
     //   2. Mask with 0x000F (15), the maximum index for lookup table
     *_index = (_theta >> 25) & 0x000F;
 
-    // TODO : set appropriate shift amount
-    // x is in [0,1)
-    *_x = (_theta >> 1) & 0x0fffffff;
+    // mask out quadrature bits:
+    // _x   :   000B BBBB BBBB BBBB BBBB BBBB BBBB BBBB
+    *_x = _theta & 0x1fffffff;
+
+    // compute shift amount such that _x is in [0,1) for
+    // qtype format
+    //
+    // NOTE: this shift amount is a constant for the qtype
+    //       data format
+    int s = Q(_bits) - 3 - Q(_fracbits);
+    *_x = s > 0 ? *_x >> s :    // shift right
+                  *_x << (-s);  // shift left
 }
 
 void Q(_sincos_pwpoly)(Q(_t) _theta,
@@ -97,7 +89,7 @@ void Q(_sincos_pwpoly)(Q(_t) _theta,
     printf("    theta : %12.8f (0x%.8x > %12.8f)\n", Q(_angle_fixed_to_float)(_theta), _theta, Q(_fixed_to_float)(_theta));
     printf("    quadrant : %u\n", quadrant);
     printf("    index    : %u\n", sin_index);
-    printf("    x        : %f\n", Q(_fixed_to_float)(x));
+    printf("    x        : %f\n", Q(_fixed_to_float)(xc));
 #endif
 
     // sine: for quadrants Q1 & Q3 phase is inverted
@@ -106,15 +98,15 @@ void Q(_sincos_pwpoly)(Q(_t) _theta,
         sin_index = 15 - sin_index;
 #if DEBUG_SINCOS_PWPOLY
         printf("  sine:\n");
-        printf("    x        : %f (phase inversion)\n", Q(_fixed_to_float)(xs));
+        printf("    x[sin]   : %f (phase inversion)\n", Q(_fixed_to_float)(xs));
         printf("    index    : %u (phase inversion)\n", sin_index);
 #endif
     }
 
     // compute sine
-    c2 = Q(_sine_table_pwpolyfit)[sin_index][0];
-    c1 = Q(_sine_table_pwpolyfit)[sin_index][1];
-    c0 = Q(_sine_table_pwpolyfit)[sin_index][2];
+    c2 = Q(_sine_pwpoly_tab)[sin_index][0];
+    c1 = Q(_sine_pwpoly_tab)[sin_index][1];
+    c0 = Q(_sine_pwpoly_tab)[sin_index][2];
 #if DEBUG_SINCOS_PWPOLY
     printf("  sine:\n");
     printf("    c0 : %12.8f\n", Q(_fixed_to_float)(c0));
@@ -132,15 +124,15 @@ void Q(_sincos_pwpoly)(Q(_t) _theta,
         cos_index = 15 - cos_index;
 #if DEBUG_SINCOS_PWPOLY
         printf("  cosine:\n");
-        printf("    x        : %f (phase inversion)\n", Q(_fixed_to_float)(xc));
+        printf("    x[cos]   : %f (phase inversion)\n", Q(_fixed_to_float)(xc));
         printf("    index    : %u (phase inversion)\n", cos_index);
 #endif
     }
 
     // compute cosine
-    c2 = Q(_sine_table_pwpolyfit)[cos_index][0];
-    c1 = Q(_sine_table_pwpolyfit)[cos_index][1];
-    c0 = Q(_sine_table_pwpolyfit)[cos_index][2];
+    c2 = Q(_sine_pwpoly_tab)[cos_index][0];
+    c1 = Q(_sine_pwpoly_tab)[cos_index][1];
+    c0 = Q(_sine_pwpoly_tab)[cos_index][2];
 #if DEBUG_SINCOS_PWPOLY
     printf("  cosine:\n");
     printf("    c0 : %12.8f\n", Q(_fixed_to_float)(c0));

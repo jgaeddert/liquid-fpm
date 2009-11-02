@@ -21,6 +21,7 @@ void fpmtest_q32_exp2();
 void fpmtest_q32_inv_newton();
 void fpmtest_q32_sqrt_newton();
 void fpmtest_angle();
+void fpmtest_sincos_pwpoly();
 void fpmtest_sin();
 void fpmtest_cos();
 void fpmtest_sincos_cordic();
@@ -59,6 +60,10 @@ int main() {
     fpmtest_q32_exp2();
     fpmtest_q32_sqrt_newton();
     fpmtest_angle();
+    */
+    fpmtest_sincos_pwpoly();
+    return 0;
+    /*
     fpmtest_sin();
     fpmtest_cos();
     fpmtest_atan2();
@@ -321,6 +326,45 @@ void fpmtest_angle()
         printf("%4u : %12.8f > 0x%.8x > %12.8f\n", i, theta0, theta1, theta2);
     }
 }
+
+void fpmtest_sincos_pwpoly()
+{
+    printf("testing sin|cos [pwpoly]...\n");
+    unsigned int i=0, n=20;
+    float thetaf;
+    q32_t theta;
+    q32_t s,c;
+    float sf,cf;
+    float error;
+    float rmse=0.0f;
+
+    for (i=0; i<n+1; i++) {
+        thetaf = 4.0f * (float)(i) / ((float)(n)) * M_PI - 2*M_PI;
+        theta  = q32_angle_float_to_fixed(thetaf);
+
+        //q32_sincos_cordic(theta,&s,&c,18);
+        q32_sincos_pwpoly(theta,&s,&c);
+        sf = sinf(thetaf);
+        cf = cosf(thetaf);
+        error = fabsf(cf - q32_fixed_to_float(c) +
+                      sf - q32_fixed_to_float(s) );
+        rmse += error*error;
+
+        printf("%4u : theta=%12.8f, cos:%12.8f(%12.8f), sin:%12.8f(%12.8f), e:%12.8f\n",
+                i,
+                thetaf,
+                q32_fixed_to_float(c),
+                cosf(thetaf),
+                q32_fixed_to_float(s),
+                sinf(thetaf),
+                error);
+    }
+    
+    rmse = sqrt(rmse / (float)n);
+    printf("rmse : %e\n", rmse);
+
+}
+
 
 void fpmtest_sin()
 {

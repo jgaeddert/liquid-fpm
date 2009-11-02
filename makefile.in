@@ -85,6 +85,7 @@ gentabs := 				\
 	math.transcendentals 		\
 	logsin				\
 	sincos.cordic			\
+	sincos.pwpoly			\
 	sinhcosh.cordic			\
 	logexp.shiftadd
 
