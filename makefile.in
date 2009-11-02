@@ -49,9 +49,10 @@ sources  +=				\
 	q32_dotprod.port.c		\
 	q32_div.port.c			\
 	q32_div.inv.newton.c		\
+	libliquidfpm.c			\
 	src/qfloat.c			\
 	src/inv.newton.c		\
-	src/kaiser.c		\
+	src/kaiser.c			\
 	src/clz.c			\
 	src/log2.polyfit.c		\
 	src/log2.shiftadd.c		\

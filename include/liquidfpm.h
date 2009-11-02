@@ -6,6 +6,34 @@
 #ifndef __LIQUIDFPM_H__
 #define __LIQUIDFPM_H__
 
+/*
+ * Make sure the version and version number macros weren't defined by
+ * some prevoiusly included header file.
+ */
+#ifdef LIQUIDFPM_VERSION
+#  undef LIQUIDFPM_VERSION
+#endif
+#ifdef LIQUIDPM_VERSION_NUMBER
+#  undef LIQUIDPM_VERSION_NUMBER
+#endif
+
+/*
+ * Compile-time version numbers
+ * 
+ * LIQUIDFPM_VERSION = "X.Y.Z"
+ * LIQUIDFPM_VERSION_NUMBER = (X*1000000 + Y*1000 + Z)
+ */
+#define LIQUIDFPM_VERSION           "0.1.0"
+#define LIQUIDFPM_VERSION_NUMBER    1000
+
+/*
+ * Run-time library version numbers
+ */
+extern const char liquidfpm_version[];
+const char * liquidfpm_libversion(void);
+int liquidfpm_libversion_number(void);
+
+
 #ifdef __cplusplus
 extern "C" {
 #   define LIQUIDFPM_USE_COMPLEX_H 0
