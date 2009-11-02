@@ -53,20 +53,27 @@ typedef struct {
 //
 #include "../benchmark_include.h"
 
+// globals
+unsigned long int num_trials = 1<<16;
+float cpu_clock = 1.0f; // cpu clock speed (Hz)
+
+// forward method declarations
 double calculate_execution_time(struct rusage _start, struct rusage _finish);
+char convert_units(float * _v);
+void estimate_cpu_clock(void);
 
 int main() {
     //
     struct rusage t0;
     struct rusage t1;
-    unsigned long int num_trials = 100000;
     unsigned long int n;
     double extime;
     double cycles_per_trial;
-    double cpu_clock = 867e6;
     unsigned int resolution = 256;
     float rmse;
     float maxe;
+
+    estimate_cpu_clock();
     
     unsigned int i;
 
@@ -84,7 +91,7 @@ int main() {
         cycles_per_trial = extime * cpu_clock / (n);
 
         // print results
-        printf("    %-16s : %10.6f s (%7.2f cycles/tr) : %10.8f rms, %10.8f max\n",
+        printf("    %-20s : %10.6f s (%7.2f cycles/tr) : %10.8f rms, %10.8f max\n",
             benchmarks[i].name,
             extime,
             cycles_per_trial,
@@ -105,4 +112,58 @@ double calculate_execution_time(struct rusage _start, struct rusage _finish)
         + 1e-6*(_finish.ru_stime.tv_usec - _start.ru_stime.tv_usec);
 }
 
+
+// convert raw value into metric units,
+//   example: "0.01397s" -> "13.97 ms"
+char convert_units(float * _v)
+{
+    char unit;
+    if (*_v < 1e-9)     {   (*_v) *= 1e12;  unit = 'p';}
+    else if (*_v < 1e-6){   (*_v) *= 1e9;   unit = 'n';}
+    else if (*_v < 1e-3){   (*_v) *= 1e6;   unit = 'u';}
+    else if (*_v < 1e+0){   (*_v) *= 1e3;   unit = 'm';}
+    else if (*_v < 1e3) {   (*_v) *= 1e+0;  unit = ' ';}
+    else if (*_v < 1e6) {   (*_v) *= 1e-3;  unit = 'k';}
+    else if (*_v < 1e9) {   (*_v) *= 1e-6;  unit = 'M';}
+    else if (*_v < 1e12){   (*_v) *= 1e-9;  unit = 'G';}
+    else                {   (*_v) *= 1e-12; unit = 'T';}
+
+    return unit;
+}
+
+
+// run basic benchmark to estimate CPU clock frequency
+void estimate_cpu_clock(void)
+{
+    printf("  estimating cpu clock frequency...\n");
+    unsigned long int i, n = 1<<4;
+    struct rusage start, finish;
+    double extime;
+    
+    do {
+        // trials
+        n <<= 1;
+        unsigned int x=0;
+        getrusage(RUSAGE_SELF, &start);
+        for (i=0; i<n; i++) {
+            // perform mindless task
+            x <<= 1;
+            x |= 1;
+            x &= 0xff;
+            x ^= 0xff;
+        }
+        getrusage(RUSAGE_SELF, &finish);
+
+        extime = calculate_execution_time(start, finish);
+    } while (extime < 0.5 && n < (1<<28));
+
+    // estimate cpu clock frequency
+    cpu_clock = 23.9 * n / extime;
+
+    printf("  performed %ld trials in %5.1f ms\n", n, extime * 1e3);
+    
+    float clock_format = cpu_clock;
+    char clock_units = convert_units(&clock_format);
+    printf("  estimated clock speed: %7.3f %cHz\n", clock_format, clock_units);
+}
 

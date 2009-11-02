@@ -239,7 +239,7 @@ $(benchmark_prog): bench/bench.c $(benchmark_include) libliquidfpm.a
 	$(CC) $(BENCH_CFLAGS) -lm $< $(LDFLAGS) libliquidfpm.a -o $@
 
 bench: $(benchmark_prog)
-	./$(benchmark_prog)
+	./$<
 
 clean-bench:
 	$(RM) $(benchmarkgen_prog) $(benchmark_prog) $(benchmark_include)
