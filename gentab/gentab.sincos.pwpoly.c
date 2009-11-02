@@ -1,17 +1,24 @@
 //
 // gentab.sincos.pwpoly.c
 //
+// Piece-wise polynomial fit to first quadrant of sin(x). Each
+// element in the table is a second-order polynomial.
+//
+// See also:
+//   scripts/piecewise_poly_fit.m
+//
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
-#include "../include/liquidfpm.h"
+#include "liquidfpm.h"
 
 #define Q(name)     LIQUIDFPM_CONCAT(q32,name)
 
 int main(int argc, char * argv[]) {
 
+    // coefficients table
     float sine_pwpoly_tab[16][3] = {
         {-0.060522662541018,   1.572056911681783,   0.000000000000000},
         {-0.180985121297741,   1.587105617228409,  -0.000469987617146},
@@ -34,7 +41,7 @@ int main(int argc, char * argv[]) {
     // initialize variables, set defaults
     const char qtype[] = "q32";
     unsigned int tabsize = 16;
-    unsigned int polyord = 3;
+    unsigned int polyorder = 3;
 
     // generate header
     unsigned int i;
@@ -46,13 +53,13 @@ int main(int argc, char * argv[]) {
 
     // generate sine table
     printf("// sine piece-wise polynomial table\n");
-    printf("const %s_t %s_sine_pwpoly_tab[%u][%u] = {\n", qtype,qtype,tabsize,polyord);
+    printf("const %s_t %s_sine_pwpoly_tab[%u][%u] = {\n", qtype,qtype,tabsize,polyorder);
     for (i=0; i<tabsize; i++) {
         printf("    {");
-        for (j=0; j<polyord; j++) {
+        for (j=0; j<polyorder; j++) {
             printf("0x%.8x", Q(_float_to_fixed)(sine_pwpoly_tab[i][j]));
 
-            if (j != (polyord-1))
+            if (j != (polyorder-1))
                 printf(", ");
         }
         printf("}");
