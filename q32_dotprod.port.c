@@ -2,17 +2,26 @@
 //
 //
 
-//#include <inttypes.h>
-//typedef int32_t q32_t;
-
 #include "include/liquidfpm.h"
 
-q32_t q32_dotprod(q32_t * _v, q32_t *_x, unsigned int _n)
+#define Q(name)     LIQUIDFPM_CONCAT(q32,name)
+
+Q(_t) Q(_dotprod_port)(Q(_t) * _v,
+                       Q(_t) *_x,
+                       unsigned int _n)
 {
     unsigned int i;
-    q32_t dp = 0;
+    Q(_t) dp = 0;
     for (i=0; i<_n; i++)
-        dp += q32_mul(_v[i],_x[i]);
+        dp += Q(_mul)(_v[i],_x[i]);
 
     return dp;
 }
+
+Q(_t) Q(_dotprod)(Q(_t) * _v,
+                  Q(_t) *_x,
+                  unsigned int _n)
+{
+    return Q(_dotprod_port)(_v,_x,_n);
+}
+
