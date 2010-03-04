@@ -42,7 +42,7 @@ AS	:= as -I./genlib
 
 # flags
 INCLUDE_CFLAGS	= $(addprefix -I ,$(include_dirs))
-CONFIG_CFLAGS	= @ARCH_OPTION@ @FPM_OPTION@ @DEBUG_OPTION@
+CONFIG_CFLAGS	= @ARCH_OPTION@ @DEBUG_OPTION@
 CFLAGS		+= $(INCLUDE_CFLAGS) -g -O2 -Wall -fPIC $(CONFIG_CFLAGS)
 LDFLAGS		+= @LIBS@
 ARFLAGS		= r
@@ -211,11 +211,11 @@ libliquidfpm.a: $(objects)
 
 # darwin
 libliquidfpm.dylib: $(objects)
-	$(CC) -dynamiclib -install_name $@ -o $@ $^
+	$(CC) $(LDFLAGS) -dynamiclib -install_name $@ -o $@ $^
 
 # linux, et al
 libliquidfpm.so: $(libraries)
-	$(CC) -shared -Xlinker -soname=$@ -o $@ -Wl,-whole-archive $^ -Wl,-no-whole-archive -lc
+	$(CC) $(LDFLAGS) -shared -Xlinker -soname=$@ -o $@ -Wl,-whole-archive $^ -Wl,-no-whole-archive -lc
 
 #
 # Tests

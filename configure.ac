@@ -68,7 +68,7 @@ AC_CHECK_HEADER(stdlib.h,   [],[AC_MSG_ERROR([need stdlib.h])])
 AC_HEADER_STDBOOL
 
 # Check for necessary library functions
-AC_CHECK_FUNC(memmove,[],[AC_MSG_ERROR([need floor])])
+#AC_CHECK_FUNC(memmove,[],[AC_MSG_ERROR([need floor])])
 
 # Check size of certain variables
 AC_CHECK_SIZEOF(int)
@@ -84,7 +84,6 @@ case $target_cpu in
 i386|i486|i586|i686)
     # ARCH_OPTION="-march=$target_cpu"
     ARCH_OPTION=""
-    FPM_OPTION="-DFPM_INTEL"
 
     case $target_os in
     darwin*)
@@ -100,32 +99,26 @@ i386|i486|i586|i686)
     ;;
 ppc|powerpc*)
     ARCH_OPTION="-fno-common -faltivec"
-    FPM_OPTION="-DFPM_PPC"
     MLIBS="genlib/q32.ppc.o"
     AC_DEFINE(FPM_PPC, 1, [Power PC])
     ;;
 arm)
-    FPM_OPTION="-DFPM_ARM"
     MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_ARM, 1, [ARM])
     ;;
 mips)
-    FPM_OPTION="-DFPM_MIPS"
     MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_MIPS, 1, [MIPS])
     ;;
 sparc)
-    FPM_OPTION="-DFPM_SPARC"
     MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_SPARC, 1, [SPARC])
     ;;
 64bit)
-    FPM_OPTION="-DFPM_64BIT"
     MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_64BIT, 1, [64-bit])
     ;;
 *)
-    FPM_OPTION="-DFPM_DEFAULT"
     MLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_DEFAULT, 1, [Default])
     ;;
@@ -155,7 +148,6 @@ AC_SUBST(QTYPE_INTBITS)
 AC_SUBST(QTYPE_FRACBITS)
 
 AC_SUBST(DEBUG_OPTION)
-AC_SUBST(FPM_OPTION)
 
 AC_CONFIG_FILES([makefile])
 AC_OUTPUT
