@@ -19,3 +19,19 @@ BENCHMARK:
     $ make bench
 
 
+======================================================================================
+ BUILD
+======================================================================================
+
+gentab (auto-generated tables)
+Some of the algorithms in liquid-fpm (such as the CORDICs) use tables
+which are automatically generated at build-time.
+These are located in the gentab/ subdirectory.
+
+For example,
+script:     gentab/gentab.sincos.cordic.c
+program:    gentab/gentab.sincos.cordic
+source:     gentab/sincos.cordic.q32.c
+object:     gentab/sincos.cordic.q32.o
+
+

@@ -156,21 +156,21 @@ clean-gentab :
 # target assembly language, and then includes the
 # architecture-specific assembly routines for
 # certain functions (e.g. q32_mul).
-qtype.s.gen : qtype.s.gen.c
+genlib/qtype.s.gen : genlib/qtype.s.gen.c
 	$(CC) $(CFLAGS) $< -o $@
 
 # TODO : summarize the assembly routines below
 
 # PowerPC assembly
-$(qtype).ppc.s : qtype.s.gen
+genlib/$(qtype).ppc.s : genlib/qtype.s.gen
 	./$< -a ppc -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
 
 # x86 assembly
-$(qtype).x86.s : qtype.s.gen
+genlib/$(qtype).x86.s : genlib/qtype.s.gen
 	./$< -a x86 -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
 
 # intelmac assembly
-$(qtype).intelmac.s : qtype.s.gen
+genlib/$(qtype).intelmac.s : genlib/qtype.s.gen
 	./$< -a intelmac -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
 
 

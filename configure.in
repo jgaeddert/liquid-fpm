@@ -78,11 +78,11 @@ i386|i486|i586|i686)
 
     case $target_os in
     darwin*)
-        MLIBS="q32.intelmac.o"
+        MLIBS="genlib/q32.intelmac.o"
         ;;
     *)
         dnl MLIBS="q32_mul.x86.o"
-        MLIBS="q32.x86.o"
+        MLIBS="genlib/q32.x86.o"
         ;;
     esac
 
@@ -91,7 +91,7 @@ i386|i486|i586|i686)
 ppc|powerpc*)
     ARCH_OPTION="-fno-common -faltivec"
     FPM_OPTION="-DFPM_PPC"
-    MLIBS="q32.ppc.o"
+    MLIBS="genlib/q32.ppc.o"
     AC_DEFINE(FPM_PPC, 1, [Power PC])
     ;;
 arm)
