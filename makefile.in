@@ -97,7 +97,7 @@ extra_clean		+=
 # Dependencies
 #
 
-src/cq32.o : src/cq32.c src/complex_arithmetic.c src/complex_conversion.c src/complex_trig.c
+src/cq32.o : src/cq32.c src/complex_arithmetic.c src/complex_conversion.c src/complex_trig.c src/complex_log.c
 
 
 #

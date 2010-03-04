@@ -31,5 +31,6 @@
 // source files
 #include "complex_arithmetic.c"
 #include "complex_conversion.c"
+#include "complex_log.c"
 #include "complex_trig.c"
 

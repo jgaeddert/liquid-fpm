@@ -197,12 +197,18 @@ CQ(_t) CQ(_div)(CQ(_t) _a, CQ(_t) _b);                              \
 CQ(_t) CQ(_div_scalar)(CQ(_t) _a, Q(_t) _b);                        \
                                                                     \
 /* trig */                                                          \
-CQ(_t) CQ(_cexp)(CQ(_t) _x);                                        \
-CQ(_t) CQ(_clog)(CQ(_t) _x);                                        \
+CQ(_t) CQ(_csin) (CQ(_t) _x);                                       \
+CQ(_t) CQ(_ccos) (CQ(_t) _x);                                       \
+CQ(_t) CQ(_ctan) (CQ(_t) _x);                                       \
 static inline Q(_t) CQ(_carg)(CQ(_t) _x)                            \
     { return Q(_atan2)(_x.imag, _x.real); };                        \
 Q(_t) CQ(_abs2) (CQ(_t) _x);                                        \
-Q(_t) CQ(_abs) (CQ(_t) _x);
+Q(_t) CQ(_abs) (CQ(_t) _x);                                         \
+                                                                    \
+/* log, etc. */                                                     \
+CQ(_t) CQ(_cexp)(CQ(_t) _x);                                        \
+CQ(_t) CQ(_clog)(CQ(_t) _x);                                        \
+CQ(_t) CQ(_csqrt)(CQ(_t) _x);
 
 LIQUIDFPM_DEFINE_COMPLEX_API(LIQUIDFPM_MANGLE_CQ32, LIQUIDFPM_MANGLE_Q32)
 
