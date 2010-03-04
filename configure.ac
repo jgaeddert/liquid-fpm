@@ -46,20 +46,29 @@ AC_ARG_ENABLE(debug,
 )
 
 # Check for necessary programs
+AC_PROG_INSTALL
+AC_PROG_RANLIB
 
 # Check for necessary libraries
 # AC_CHECK_LIB(c, malloc)
 # AC_CHECK_LIB(m, sinf)
 
+# Check for necessary C specifics
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_UINT8_T
+AC_TYPE_INT8_T
+AC_TYPE_INT16_T
+AC_TYPE_INT32_T
+AC_TYPE_INT64_T
+
 # Check for necessary header files
-AC_CHECK_HEADERS(stdio.h stdlib.h)
-if test -z "$HAVE_stdio.h"
-then
-    AC_MSG_ERROR([Need stdio.h!])
-fi
+AC_CHECK_HEADER(stdio.h,    [],[AC_MSG_ERROR([need stdio.h])])
+AC_CHECK_HEADER(stdlib.h,   [],[AC_MSG_ERROR([need stdlib.h])])
+AC_HEADER_STDBOOL
 
 # Check for necessary library functions
-# AC_CHECK_FUNCS(memset memcpy memmove)
+AC_CHECK_FUNC(memmove,[],[AC_MSG_ERROR([need floor])])
 
 # Check size of certain variables
 AC_CHECK_SIZEOF(int)
@@ -70,7 +79,7 @@ QTYPE_INTBITS="7"
 QTYPE_FRACBITS="25"
 
 # Check canonical system
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_TARGET
 case $target_cpu in
 i386|i486|i586|i686)
     # ARCH_OPTION="-march=$target_cpu"
@@ -148,4 +157,5 @@ AC_SUBST(QTYPE_FRACBITS)
 AC_SUBST(DEBUG_OPTION)
 AC_SUBST(FPM_OPTION)
 
-AC_OUTPUT(makefile)
+AC_CONFIG_FILES([makefile])
+AC_OUTPUT
