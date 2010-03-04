@@ -34,4 +34,9 @@ program:    gentab/gentab.sincos.cordic
 source:     gentab/sincos.cordic.q32.c
 object:     gentab/sincos.cordic.q32.o
 
+genlib (auto-generated assembly objects)
+Several of the low-level arithmetic functions (such as multiplication
+of two fixed-point numbers) can be computed faster by taking advantage
+of architecture-specific hardware instructions.
+These functions are generated automatically given the precision...
 

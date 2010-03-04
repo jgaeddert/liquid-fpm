@@ -38,7 +38,7 @@ RM	:= rm -f
 SED	:= sed
 AR	:= ar
 RANLIB	:= ranlib
-AS	:= as
+AS	:= as -I./genlib
 
 # flags
 INCLUDE_CFLAGS	= $(addprefix -I ,$(include_dirs))
