@@ -25,6 +25,39 @@
 #include "liquidfpm.h"
 #include "config.h"
 
+#ifndef M_PI
+#  define M_PI 3.14159265358979
+#endif
+
+// generic conversion
+static inline float qtype_fixed_to_float(int64_t _x,
+                                         unsigned int _intbits,
+                                         unsigned int _fracbits)
+{
+    return (float) (_x) / (float)(1 << _fracbits);
+};
+
+static inline int64_t qtype_float_to_fixed(float _x,
+                                           unsigned int _intbits,
+                                           unsigned int _fracbits)
+{
+    return (int64_t) (_x * (float)(1 << _fracbits) + 0.5f);
+};
+
+static inline float qtype_angle_fixed_to_float(int32_t _x,
+                                               unsigned int _intbits,
+                                               unsigned int _fracbits)
+{
+    return qtype_fixed_to_float(_x,_intbits,_fracbits) * (M_PI / (float)(1<<(_intbits-2)));
+};
+
+static inline int64_t qtype64_angle_float_to_fixed(float _x,
+                                                   unsigned int _intbits,
+                                                   unsigned int _fracbits)
+{
+    return qtype_float_to_fixed(_x,_intbits,_fracbits) / (M_PI / (float)(1<<(_intbits-2)));
+};
+
 // fractional portion, \f$ f \f$ of log2, \f$ log2(x) = b + f/256 \f$
 //extern const unsigned int log2_fraction_table_256[256];
 extern const unsigned int log2_fraction_table_32[32];
