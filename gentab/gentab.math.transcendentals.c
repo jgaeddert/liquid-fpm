@@ -79,9 +79,9 @@ int main(int argc, char*argv[]) {
     }
 
     // validate length
-    unsigned int n = intbits + fracbits;
-    if (n != 8 && n != 16 && n != 32) {
-        fprintf(stderr,"error: %s, invalid total bits (%u), must be 8,16,32\n", argv[0], n);
+    unsigned int totalbits = intbits + fracbits;
+    if (totalbits != 8 && totalbits != 16 && totalbits != 32) {
+        fprintf(stderr,"error: %s, invalid total bits (%u), must be 8,16,32\n", argv[0], totalbits);
         exit(-1);
     }
 

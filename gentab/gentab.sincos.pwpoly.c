@@ -29,15 +29,57 @@
 //   scripts/piecewise_poly_fit.m
 //
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <getopt.h>
 
-#include "liquidfpm.h"
+#include "liquidfpm.internal.h"
 
-#define Q(name)     LIQUIDFPM_CONCAT(q32,name)
+void usage(void)
+{
+    printf("gentab.sincos.pwpolyfit usage:\n");
+    printf("  u/h   :   print this help file\n");
+    printf("    n   :   name (e.g. q32b16)\n");
+    printf("    i   :   intbits (including sign bit)\n");
+    printf("    f   :   fracbits\n");
+    //printf("    o   :   output filename [default: standard output]\n");
+}
+
 
 int main(int argc, char * argv[]) {
+    // options
+    FILE * fid = stdout;
+    char qtype[64] = "q32";
+    unsigned int intbits = 7;
+    unsigned int fracbits = 25;
+
+    // read options
+    int dopt;
+    while ((dopt = getopt(argc,argv,"uhn:i:f:")) != EOF) {
+        switch (dopt) {
+        case 'u':
+        case 'h':   usage();                    return 0;
+        case 'n':   strncpy(qtype,optarg,64);   break;
+        case 'i':   intbits = atoi(optarg);     break;
+        case 'f':   fracbits = atoi(optarg);    break;
+        default:
+            fprintf(stderr,"error: %s, unknown option\n", argv[0]);
+            usage();
+            return 1;
+        }
+    }
+
+    // validate length
+    unsigned int totalbits = intbits + fracbits;
+    if (totalbits != 8 && totalbits != 16 && totalbits != 32) {
+        fprintf(stderr,"error: %s, invalid total bits (%u), must be 8,16,32\n", argv[0], totalbits);
+        exit(-1);
+    }
+
+    unsigned int tabsize = 16;
+    unsigned int polyorder = 3;
 
     // coefficients table
     float sine_pwpoly_tab[16][3] = {
@@ -59,39 +101,34 @@ int main(int argc, char * argv[]) {
         {-1.231967097931781,   2.463980625487677,  -0.232013527555895}
     };
 
-    // initialize variables, set defaults
-    const char qtype[] = "q32";
-    unsigned int tabsize = 16;
-    unsigned int polyorder = 3;
-
     // generate header
     unsigned int i;
     unsigned int j;
 
-    printf("// auto-generated file (do not edit)\n\n");
+    fprintf(fid,"// auto-generated file (do not edit)\n\n");
 
-    printf("#include \"liquidfpm.internal.h\"\n\n");
+    fprintf(fid,"#include \"liquidfpm.internal.h\"\n\n");
 
     // generate sine table
-    printf("// sine piece-wise polynomial table\n");
-    printf("const %s_t %s_sine_pwpoly_tab[%u][%u] = {\n", qtype,qtype,tabsize,polyorder);
+    fprintf(fid,"// sine piece-wise polynomial table\n");
+    fprintf(fid,"const %s_t %s_sine_pwpoly_tab[%u][%u] = {\n", qtype,qtype,tabsize,polyorder);
     for (i=0; i<tabsize; i++) {
-        printf("    {");
+        fprintf(fid,"    {");
         for (j=0; j<polyorder; j++) {
-            printf("0x%.8x", Q(_float_to_fixed)(sine_pwpoly_tab[i][j]));
+            fprintf(fid,"0x%.8x", qtype_float_to_fixed(sine_pwpoly_tab[i][j],intbits,fracbits));
 
             if (j != (polyorder-1))
-                printf(", ");
+                fprintf(fid,", ");
         }
-        printf("}");
+        fprintf(fid,"}");
 
         if ( i == (tabsize-1) )
-            printf("\n};\n");
+            fprintf(fid,"\n};\n");
         else
-            printf(",\n");
+            fprintf(fid,",\n");
     }
 
-    printf("\n\n");
+    fprintf(fid,"\n\n");
 
     return 0;
 }
