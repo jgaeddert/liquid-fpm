@@ -40,20 +40,47 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <getopt.h>
 
 #include "liquidfpm.internal.h"
+
+void usage(void)
+{
+    printf("  u/h   :   print this help file\n");
+    printf("    n   :   name (e.g. q32b16)\n");
+    printf("    i   :   intbits (including sign bit)\n");
+    printf("    f   :   fracbits\n");
+    //printf("    o   :   output filename [default: standard output]\n");
+}
 
 int main(int argc, char*argv[]) {
     // options
     FILE * fid = stdout;
-    char qtype[] = "q32";
+    char qtype[64] = "q32";
     unsigned int intbits = 7;
     unsigned int fracbits = 25;
+
+    // read options
+    int dopt;
+    while ((dopt = getopt(argc,argv,"uhn:i:f:")) != EOF) {
+        switch (dopt) {
+        case 'u':
+        case 'h':   usage();                    return 0;
+        case 'n':   strncpy(qtype,optarg,64);   break;
+        case 'i':   intbits = atoi(optarg);     break;
+        case 'f':   fracbits = atoi(optarg);    break;
+        default:
+            fprintf(stderr,"error: %s, unknown option\n", argv[0]);
+            usage();
+            return 1;
+        }
+    }
 
     // function pointer
     unsigned int n = intbits + fracbits;
     if (n != 8 && n != 16 && n != 32) {
-        fprintf(stderr,"error: %s, invalid total bits %u\n", argv[0], n);
+        fprintf(stderr,"error: %s, invalid total bits (%u), must be 8,16,32\n", argv[0], n);
         exit(-1);
     }
 
