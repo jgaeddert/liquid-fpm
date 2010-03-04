@@ -47,6 +47,7 @@
 
 void usage(void)
 {
+    printf("gentab.math.transcendentals usage:\n");
     printf("  u/h   :   print this help file\n");
     printf("    n   :   name (e.g. q32b16)\n");
     printf("    i   :   intbits (including sign bit)\n");
@@ -77,7 +78,7 @@ int main(int argc, char*argv[]) {
         }
     }
 
-    // function pointer
+    // validate length
     unsigned int n = intbits + fracbits;
     if (n != 8 && n != 16 && n != 32) {
         fprintf(stderr,"error: %s, invalid total bits (%u), must be 8,16,32\n", argv[0], n);

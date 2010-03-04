@@ -20,25 +20,64 @@
  */
 
 //
-// gentab_math.c
+// gentab.logsin.c
+//
+// Table/constant look-up table for sin, log2
 //
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <string.h>
+#include <getopt.h>
 
-#include "../include/liquidfpm.h"
+#include "liquidfpm.internal.h"
+
+void usage(void)
+{
+    printf("gentab.logsin usage:\n");
+    printf("  u/h   :   print this help file\n");
+    printf("    n   :   name (e.g. q32b16)\n");
+    printf("    i   :   intbits (including sign bit)\n");
+    printf("    f   :   fracbits\n");
+    //printf("    o   :   output filename [default: standard output]\n");
+}
 
 int main(int argc, char * argv[]) {
-
     // initialize variables, set defaults
-    //unsigned int fracbits=28;
-    //unsigned int intbits=4;
-    unsigned int sine_tabsize=256;
+    FILE * fid = stdout;
+    char qtype[64] = "q32";
+    unsigned int intbits=7;
+    unsigned int fracbits=25;
+
+    unsigned int sine_tabsize = 256;
     unsigned int log2_tabsize = 256;
 
+    // read options
+    int dopt;
+    while ((dopt = getopt(argc,argv,"uhn:i:f:")) != EOF) {
+        switch (dopt) {
+        case 'u':
+        case 'h':   usage();                    return 0;
+        case 'n':   strncpy(qtype,optarg,64);   break;
+        case 'i':   intbits = atoi(optarg);     break;
+        case 'f':   fracbits = atoi(optarg);    break;
+        default:
+            fprintf(stderr,"error: %s, unknown option\n", argv[0]);
+            usage();
+            return 1;
+        }
+    }
+
+    // validate length
+    unsigned int n = intbits + fracbits;
+    if (n != 8 && n != 16 && n != 32) {
+        fprintf(stderr,"error: %s, invalid total bits (%u), must be 8,16,32\n", argv[0], n);
+        exit(-1);
+    }
+
     unsigned int i;
-    unsigned int n=8;
+    unsigned int values_per_line=8;
 
     // generate header
 
@@ -49,15 +88,15 @@ int main(int argc, char * argv[]) {
 
     // generate sine table
     printf("// sine table\n");
-    printf("const q32_t q32_sin_table[%u] = {\n    ", sine_tabsize);
+    printf("const %s_t %s_sin_table[%u] = {\n    ", qtype,qtype,sine_tabsize);
     for (i=0; i<sine_tabsize; i++) {
         float sine = sin( (M_PI/2.0) * ((double)i) / (double)(sine_tabsize-1));
         //printf("%4u: %12.8f\n",i,sine);
 
-        printf("0x%.8x", q32_float_to_fixed(sine));
+        printf("0x%.8x", qtype_float_to_fixed(sine,intbits,fracbits));
         if ( i == (sine_tabsize-1) )
             printf("\n};\n");
-        else if ( ((i+1)%n) == 0 )
+        else if ( ((i+1)%values_per_line) == 0 )
             printf(",\n    ");
         else
             printf(", ");
@@ -66,15 +105,14 @@ int main(int argc, char * argv[]) {
     // generate log2 fraction table
     printf("\n");
     printf("// log2 fraction table\n");
-    printf("const q32_t q32_log2_fraction_table[%d] = {\n    ", log2_tabsize);
+    printf("const %s_t %s_log2_fraction_table[%d] = {\n    ", qtype,qtype,log2_tabsize);
     for (i=0; i<log2_tabsize; i++) {
         double log2val = log2( 1.0 + ((double)i)/((double)log2_tabsize) );
-        q32_t frac_val = q32_float_to_fixed(log2val);
 
-        printf("0x%.8x", frac_val);
+        printf("0x%.8x", qtype_float_to_fixed(log2val,intbits,fracbits));
         if ( i == (log2_tabsize-1) )
             printf("\n};\n");
-        else if ( ((i+1)%n) == 0 )
+        else if ( ((i+1)%values_per_line) == 0 )
             printf(",\n    ");
         else
             printf(", ");
