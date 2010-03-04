@@ -30,30 +30,30 @@
 #endif
 
 // generic conversion
-static inline float qtype_fixed_to_float(int64_t _x,
+static inline float qtype_fixed_to_float(int _x,
                                          unsigned int _intbits,
                                          unsigned int _fracbits)
 {
     return (float) (_x) / (float)(1 << _fracbits);
 };
 
-static inline int64_t qtype_float_to_fixed(float _x,
-                                           unsigned int _intbits,
-                                           unsigned int _fracbits)
+static inline int qtype_float_to_fixed(float _x,
+                                       unsigned int _intbits,
+                                       unsigned int _fracbits)
 {
-    return (int64_t) (_x * (float)(1 << _fracbits) + 0.5f);
+    return (int) (_x * (float)(1 << _fracbits) + 0.5f);
 };
 
-static inline float qtype_angle_fixed_to_float(int32_t _x,
+static inline float qtype_angle_fixed_to_float(int _x,
                                                unsigned int _intbits,
                                                unsigned int _fracbits)
 {
     return qtype_fixed_to_float(_x,_intbits,_fracbits) * (M_PI / (float)(1<<(_intbits-2)));
 };
 
-static inline int64_t qtype64_angle_float_to_fixed(float _x,
-                                                   unsigned int _intbits,
-                                                   unsigned int _fracbits)
+static inline int qtype64_angle_float_to_fixed(float _x,
+                                               unsigned int _intbits,
+                                               unsigned int _fracbits)
 {
     return qtype_float_to_fixed(_x,_intbits,_fracbits) / (M_PI / (float)(1<<(_intbits-2)));
 };
