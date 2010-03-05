@@ -151,6 +151,10 @@ clean-gentab :
 # Additional auto-generated sources
 #
 
+genlib_programs	:= genlib/qtype.s.gen
+genlib_sources	:= @MLIBS@
+genlib_objects	:= $(patsubst %.s,%.o,$(genlib_objects))
+
 # qtype.s.gen
 #
 # Program to generate assembly code which defines
@@ -160,6 +164,7 @@ clean-gentab :
 # certain functions (e.g. q32_mul).
 genlib/qtype.s.gen : genlib/qtype.s.gen.c
 	$(CC) $(CFLAGS) $< -o $@
+
 
 # TODO : summarize the assembly routines below
 
@@ -175,6 +180,10 @@ genlib/$(qtype).x86.s : genlib/qtype.s.gen
 genlib/$(qtype).intelmac.s : genlib/qtype.s.gen
 	./$< -a intelmac -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
 
+clean-genlib:
+	$(RM) $(genlib_programs)
+	$(RM) $(genlib_sources)
+	$(RM) $(genlib_objects)
 
 # 
 # Dependencies
@@ -183,7 +192,7 @@ genlib/$(qtype).intelmac.s : genlib/qtype.s.gen
 $(objects) : ./include/liquidfpm.h ./include/liquidfpm.internal.h ./config.h
 
 # add target-specific libraries
-objects += @MLIBS@
+objects += $(genlib_sources)
 
 # target-specific library definition:
 #   libliquidfpm.dylib    (darwin)
@@ -301,7 +310,7 @@ clean-autotest:
 #
 # clean
 #
-clean: clean-bench clean-autotest clean-gentab
+clean: clean-bench clean-autotest clean-gentab clean-genlib
 	$(RM) $(objects)
 	$(RM) $(dependencies)
 	$(RM) $(SHARED_LIB)
