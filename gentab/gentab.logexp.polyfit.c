@@ -28,14 +28,50 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include <getopt.h>
 
-#include "liquidfpm.h"
+#include "liquidfpm.internal.h"
 
-#define Q(name)     LIQUIDFPM_CONCAT(q32,name)
+void usage(void)
+{
+    printf("gentab.logexp.polyfit usage:\n");
+    printf("  u/h   :   print this help file\n");
+    printf("    n   :   name (e.g. q32b16)\n");
+    printf("    i   :   intbits (including sign bit)\n");
+    printf("    f   :   fracbits\n");
+    //printf("    o   :   output filename [default: standard output]\n");
+}
 
-int main() {
+int main(int argc, char*argv[]) {
+    // options
     FILE * fid = stdout;
-    char qtype[] = "q32";
+    char qtype[64] = "q32";
+    unsigned int intbits = 7;
+    unsigned int fracbits = 25;
+
+    // read options
+    int dopt;
+    while ((dopt = getopt(argc,argv,"uhn:i:f:")) != EOF) {
+        switch (dopt) {
+        case 'u':
+        case 'h':   usage();                    return 0;
+        case 'n':   strncpy(qtype,optarg,64);   break;
+        case 'i':   intbits = atoi(optarg);     break;
+        case 'f':   fracbits = atoi(optarg);    break;
+        default:
+            fprintf(stderr,"error: %s, unknown option\n", argv[0]);
+            usage();
+            return 1;
+        }
+    }
+
+    // validate length
+    unsigned int totalbits = intbits + fracbits;
+    if (totalbits != 8 && totalbits != 16 && totalbits != 32) {
+        fprintf(stderr,"error: %s, invalid total bits (%u), must be 8,16,32\n", argv[0], totalbits);
+        exit(-1);
+    }
 
     fprintf(fid,"// auto-generated file : do not edit\n");
     fprintf(fid,"\n");
@@ -49,9 +85,9 @@ int main() {
     float log2_poly_p1 =  2.028812209786359;
     float log2_poly_p2 = -0.342937403262120;
     fprintf(fid,"// %s_log2_polyfit\n",qtype);
-    fprintf(fid,"const %s_t %s_log2_poly_p0 = 0x%.8x;\n", qtype,qtype, Q(_float_to_fixed)(log2_poly_p0));
-    fprintf(fid,"const %s_t %s_log2_poly_p1 = 0x%.8x;\n", qtype,qtype, Q(_float_to_fixed)(log2_poly_p1));
-    fprintf(fid,"const %s_t %s_log2_poly_p2 = 0x%.8x;\n", qtype,qtype, Q(_float_to_fixed)(log2_poly_p2));
+    fprintf(fid,"const %s_t %s_log2_poly_p0 = 0x%.8x;\n", qtype,qtype, qtype_float_to_fixed(log2_poly_p0,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_log2_poly_p1 = 0x%.8x;\n", qtype,qtype, qtype_float_to_fixed(log2_poly_p1,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_log2_poly_p2 = 0x%.8x;\n", qtype,qtype, qtype_float_to_fixed(log2_poly_p2,intbits,fracbits));
     fprintf(fid,"\n\n");
 
     return 0;
