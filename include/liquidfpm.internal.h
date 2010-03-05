@@ -58,16 +58,6 @@ static inline int qtype64_angle_float_to_fixed(float _x,
     return qtype_float_to_fixed(_x,_intbits,_fracbits) / (M_PI / (float)(1<<(_intbits-2)));
 };
 
-// fractional portion, \f$ f \f$ of log2, \f$ log2(x) = b + f/256 \f$
-//extern const unsigned int log2_fraction_table_256[256];
-extern const unsigned int log2_fraction_table_32[32];
-
-//
-extern const q32_t atan_table_q32_32_8[32][8];
-
-// computes quadrant/index of q32_t angle
-void angle_quadrant_index_q32(q32_t _theta, unsigned int *_quadrant, unsigned int *_index);
-
 //
 // Bit manipulation functions
 //
