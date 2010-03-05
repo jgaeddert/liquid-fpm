@@ -25,6 +25,7 @@
 
 # paths
 srcdir = 	@srcdir@
+libdir = 	@libdir@
 prefix = 	@prefix@
 exec_prefix = 	@exec_prefix@
 VPATH = 	@srcdir@
@@ -115,26 +116,25 @@ gentabs := 				\
 	logexp.polyfit
 
 # Examples:
+#   gentab_scripts  : gentab/gentab.math.transcendentals.c
 #   gentab_programs : gentab/gentab.math.transcendentals
-#   gentab_sources  : gentab/gentab.math.transcendentals.c
 #   gentab_targets  : gentab/math.transcendentals.qtype.c
+#   gentab_objects  : gentab/math.transcendentals.qtype.o
 
-gentab_programs	= $(patsubst %,gentab/gentab.%,$(gentabs))
-gentab_sources	= $(patsubst %,%.c,$(gentab_programs))
+gentab_scripts	= $(patsubst %,gentab/gentab.%.c,$(gentabs))
+gentab_programs	= $(patsubst %.c,%,$(gentab_scripts))
 gentab_targets	= $(patsubst %,gentab/%.$(qtype).c,$(gentabs))
 gentab_objects	= $(patsubst %.c,%.o,$(gentab_targets))
-
-sources  += $(gentab_targets)
 
 # Build the gentab program.  This is done natively as the
 # result is a program that generates a source file to be
 # built for the target system.
-gentab/gentab.% : gentab/gentab.%.c ./include/liquidfpm.h
+$(gentab_programs) : % : %.c ./include/liquidfpm.h
 	$(CC) $(INCLUDE_CFLAGS) -lm $< -o $@
 
 # Run the natively-built program to generate the source
 # file.  This file is to be built for the target system.
-gentab/%.$(qtype).c : gentab/gentab.%
+$(gentab_targets) : gentab/%.$(qtype).c : gentab/gentab.%
 	./$< -n $(qtype) -i $(qtype_intbits) -f $(qtype_fracbits) > $@
 
 # Label the programs and targets as 'precious' so that
@@ -164,9 +164,8 @@ genlib_sources	:= $(patsubst %.o,%.s,$(genlib_objects))
 # target assembly language, and then includes the
 # architecture-specific assembly routines for
 # certain functions (e.g. q32_mul).
-genlib/qtype.s.gen : genlib/qtype.s.gen.c
+$(genlib_programs) : % : %.c
 	$(CC) $(CFLAGS) $< -o $@
-
 
 # TODO : summarize the assembly routines below
 
@@ -197,14 +196,14 @@ portlib_sources := $(patsubst %.o,%.c,$(portlib_objects))
 clean-portlib:
 	$(RM) $(portlib_objects)
 
+# accumulate target-specific libraries
+objects += $(gentab_objects) $(genlib_objects) $(portlib_objects)
+
 # 
 # Dependencies
 #
 # Force objects to be dependent upon headers
 $(objects) : ./include/liquidfpm.h ./include/liquidfpm.internal.h ./config.h
-
-# add target-specific libraries
-objects += $(genlib_objects) $(portlib_objects)
 
 # target-specific library definition:
 #   libliquidfpm.dylib    (darwin)
@@ -220,8 +219,8 @@ all: libliquidfpm.a $(SHARED_LIB)
 
 install:
 	@echo "installing..."
-	mkdir -p @libdir@
-	install -m 644 -p $(SHARED_LIB) libliquidfpm.a @libdir@
+	mkdir -p $(libdir)
+	install -m 644 -p $(SHARED_LIB) libliquidfpm.a $(libdir)
 	$(REBIND)
 	mkdir -p $(prefix)/include
 	mkdir -p $(prefix)/include/liquid
@@ -251,15 +250,9 @@ fpmtest.o: fpmtest.c include/liquidfpm.h
 fpmtest: fpmtest.o libliquidfpm.a
 	$(CC) $(CFLAGS) -lm $^ $(LDFLAGS) -o $@
 
-#q32_mul.port.o: q32_mul.port.c
-
-#q32_mul.ppc.o: q32_mul.ppc.s
-
-#q32_mul.x86.o: q32_mul.x86.s
-
-#q32_mul.intelmac.o: q32_mul.intelmac.s
-
+# 
 # Benchmark
+#
 .PHONY: bench
 benchmark_headers = 				\
 	bench/q32_atan2_benchmark.h		\
@@ -332,5 +325,5 @@ clean: clean-bench clean-autotest clean-gentab clean-genlib
 
 distclean: clean
 	$(RM) config.log config.cache config.status config.h makefile
-	$(RM) autom4te.cache
+	$(RM) -f autom4te.cache
 
