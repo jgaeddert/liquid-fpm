@@ -73,3 +73,33 @@ CQ(_t) CQ(_csin)(CQ(_t) _x)
     return y;
 }
 
+// compute complex cos(x) = (exp(j*x) + exp(-j*x))/2
+CQ(_t) CQ(_ccos)(CQ(_t) _x)
+{
+    unsigned int _n=20; // number of iterations (precision)
+
+    // compute exp(j*_x.real) = cos(_x.real) + j*sin(_x.real)
+    // convert angle to qtype format (multiply by scaling factor)
+    //      theta = _x.real * 2^(intbits-2) / pi
+    // TODO : put this as external constant
+    Q(_t) qtype_angle_scalar = Q(_float_to_fixed)(1./Q(_angle_scalar));
+    Q(_t) theta = Q(_mul)(_x.real, qtype_angle_scalar);
+    Q(_t) qsin;
+    Q(_t) qcos;
+    Q(_sincos_cordic)(theta, &qsin, &qcos, _n);
+
+    // compute exp(imag(_x)), exp(-imag(_x))
+    Q(_t) qexp      = Q(_exp_shiftadd)(_x.imag, _n);
+    Q(_t) qexp_inv  = Q(_inv_newton)(qexp, _n);
+
+    // y = cos(_x) = (exp(j*x) + exp(-j*x))/2
+    //
+    // y.real = 0.5*cos(x.real)*[exp(-x.imag) + exp(x.imag)]
+    // y.imag = 0.5*sin(x.real)*[exp(-x.imag) - exp(x.imag)]
+    CQ(_t) y;
+    y.real =  Q(_mul)(qcos>>1, qexp_inv + qexp);
+    y.imag =  Q(_mul)(qsin>>1, qexp_inv - qexp);
+
+    return y;
+}
+
