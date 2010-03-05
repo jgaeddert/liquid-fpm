@@ -103,3 +103,25 @@ CQ(_t) CQ(_ccos)(CQ(_t) _x)
     return y;
 }
 
+
+// compute complex tan(x) = (exp(j*2*x) - 1) / j*(exp(j*2*x + 1 )
+CQ(_t) CQ(_ctan)(CQ(_t) _x)
+{
+    unsigned int _n=20; // number of iterations (precision)
+
+    // compute exp(j*2*_x)
+    CQ(_t) j2x = {-(_x.imag<<1), _x.real<<1}; // j*2*x
+    CQ(_t) expj2x = CQ(_cexp)(j2x);
+
+    // compute numerator: b = exp(j*2*x) - 1
+    CQ(_t) b = {  expj2x.real - Q(_one), expj2x.imag};
+
+    // compute denominator : a = j*(exp(j*2*x) + 1)
+    CQ(_t) a = { -expj2x.imag, expj2x.real + Q(_one)};
+
+    // y = tan(_x) = b / a
+    CQ(_t) y = CQ(_div)(b,a);
+
+    return y;
+}
+

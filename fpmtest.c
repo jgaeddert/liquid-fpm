@@ -60,8 +60,10 @@ void fpmtest_kaiser();
 
 // complex math
 void fpmtest_cq32_arithmetic();
+void fpmtest_cq32_cexp();
 void fpmtest_cq32_csin();
 void fpmtest_cq32_ccos();
+void fpmtest_cq32_ctan();
 
 // fixed|float
 void fpmtest_q32f_add();
@@ -73,6 +75,10 @@ void fpmtest_q32_dotprod();
 
 int main() {
     fpmtest_cq32_arithmetic();
+    fpmtest_cq32_cexp();
+    fpmtest_cq32_csin();
+    fpmtest_cq32_ccos();
+    fpmtest_cq32_ctan();
     return 0;
     /*
     fpmtest_q32_conversion();
@@ -985,19 +991,37 @@ void fpmtest_cq32_arithmetic() {
 
 }
 
+void fpmtest_cq32_cexp() {
+    cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
+    cq32_t y = cq32_cexp(x);
+    printf("q32_cexp(%12.8f + j*%12.8f) = %12.8f + j*%12.8f\n",
+        q32_fixed_to_float(x.real), q32_fixed_to_float(x.imag),
+        q32_fixed_to_float(y.real), q32_fixed_to_float(y.imag));
+}
+
 void fpmtest_cq32_csin() {
     printf("angle scalar        : 0x%.8x\n", q32_float_to_fixed(q32_angle_scalar));
     printf("angle scalar (inv)  : 0x%.8x\n", q32_float_to_fixed(1./q32_angle_scalar));
     cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
     cq32_t y = cq32_csin(x);
-    printf("y.real : %12.8f\n", q32_fixed_to_float(y.real));
-    printf("y.imag : %12.8f\n", q32_fixed_to_float(y.imag));
+    printf("q32_csin(%12.8f + j*%12.8f) = %12.8f + j*%12.8f\n",
+        q32_fixed_to_float(x.real), q32_fixed_to_float(x.imag),
+        q32_fixed_to_float(y.real), q32_fixed_to_float(y.imag));
 }
 
 void fpmtest_cq32_ccos() {
     cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
     cq32_t y = cq32_ccos(x);
-    printf("y.real : %12.8f\n", q32_fixed_to_float(y.real));
-    printf("y.imag : %12.8f\n", q32_fixed_to_float(y.imag));
+    printf("q32_ccos(%12.8f + j*%12.8f) = %12.8f + j*%12.8f\n",
+        q32_fixed_to_float(x.real), q32_fixed_to_float(x.imag),
+        q32_fixed_to_float(y.real), q32_fixed_to_float(y.imag));
+}
+
+void fpmtest_cq32_ctan() {
+    cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
+    cq32_t y = cq32_ctan(x);
+    printf("q32_ctan(%12.8f + j*%12.8f) = %12.8f + j*%12.8f\n",
+        q32_fixed_to_float(x.real), q32_fixed_to_float(x.imag),
+        q32_fixed_to_float(y.real), q32_fixed_to_float(y.imag));
 }
 
