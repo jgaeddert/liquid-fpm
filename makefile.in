@@ -122,6 +122,7 @@ gentabs := 				\
 gentab_programs	= $(patsubst %,gentab/gentab.%,$(gentabs))
 gentab_sources	= $(patsubst %,%.c,$(gentab_programs))
 gentab_targets	= $(patsubst %,gentab/%.$(qtype).c,$(gentabs))
+gentab_objects	= $(patsubst %.c,%.o,$(gentab_targets))
 
 sources  += $(gentab_targets)
 
@@ -134,7 +135,7 @@ gentab/gentab.% : gentab/gentab.%.c ./include/liquidfpm.h
 # Run the natively-built program to generate the source
 # file.  This file is to be built for the target system.
 gentab/%.$(qtype).c : gentab/gentab.%
-	./$< > $@
+	./$< -n $(qtype) -i $(qtype_intbits) -f $(qtype_fracbits) > $@
 
 # Label the programs and targets as 'precious' so that
 # make won't delete them after they have been created.
@@ -146,6 +147,7 @@ gentab/%.$(qtype).c : gentab/gentab.%
 clean-gentab :
 	$(RM) $(gentab_programs)
 	$(RM) $(gentab_targets)
+	$(RM) $(gentab_objects)
 
 # 
 # genlib : additional auto-generated sources

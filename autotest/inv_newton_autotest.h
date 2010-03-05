@@ -35,7 +35,7 @@ void inv_newton_autotest()
     unsigned int n=32;  // precision
     unsigned int num_steps = 32;
     float xmin = 1.0f / Q(_fixed_to_float)(Q(_max));
-    float xmax = Q(_fixed_to_float)(Q(_max));
+    float xmax = Q(_fixed_to_float)(Q(_max))*0.95f;
     float dx = (xmax - xmin)/((float)(num_steps-1));
     float tol = 1e-5f;
 

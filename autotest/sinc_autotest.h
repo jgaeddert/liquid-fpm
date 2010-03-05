@@ -31,8 +31,10 @@ void sinc_autotest()
 {
     unsigned int n=32;  // precision
     unsigned int num_steps = 32;
-    float xmin = -Q(_fixed_to_float)(Q(_max))*0.95f;
-    float xmax =  Q(_fixed_to_float)(Q(_max))*0.95f;
+    float qmax = Q(_fixed_to_float)(Q(_max))*0.95f;
+    float vmax = 8.0;
+    float xmax = qmax < vmax ? qmax : vmax;
+    float xmin = -xmax;
     float dx = (xmax - xmin)/((float)(num_steps-1));
     float tol = 1e-4f;
 

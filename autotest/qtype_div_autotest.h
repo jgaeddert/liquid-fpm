@@ -47,8 +47,8 @@ void Q(_test_div)(float _xf,
     CONTEND_DELTA(zf,ztest,_tol);
 
     if (_autotest_verbose) {
-        printf("%12.8f / %12.8f = %12.8f (%12.8f)\n",
-                _xf,     _yf,     ztest,  zf);
+        printf("%12.8f / %12.8f = %12.8f (error: %12.4e)\n",
+                _xf,     _yf,     ztest,  zf-ztest);
     }
 }
 
@@ -72,14 +72,14 @@ void Q(_test_div_qtype)(Q(_t) _x,
     CONTEND_DELTA(zf,ztest,_tol);
 
     if (_autotest_verbose) {
-        printf("%12.8f / %12.8f = %12.8f (%12.8f)\n",
-                xf,      yf,      ztest,  zf);
+        printf("%12.8f / %12.8f = %12.8f (error: %12.4e)\n",
+                xf,      yf,      ztest,  zf-ztest);
     }
 }
 
 void qtype_div_autotest()
 {
-    float tol = Q(_fixed_to_float)(Q(_min)<<4);
+    float tol = Q(_fixed_to_float)(1<<Q(_intbits));
 
     // basic tests
     Q(_test_div)( 0.25f, 2.25f, tol);

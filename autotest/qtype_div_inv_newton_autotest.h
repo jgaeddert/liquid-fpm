@@ -50,8 +50,8 @@ void Q(_test_div_inv_newton)(float _xf,
     CONTEND_DELTA(zf,ztest,_tol);
 
     if (_autotest_verbose) {
-        printf("%12.8f / %12.8f = %12.8f (%12.8f)\n",
-                _xf,     _yf,     ztest,  zf);
+        printf("%12.8f / %12.8f = %12.8f (error: %12.4e)\n",
+                _xf,     _yf,     ztest,  zf-ztest);
     }
 }
 
@@ -76,8 +76,8 @@ void Q(_test_div_inv_newton_qtype)(Q(_t) _x,
     CONTEND_DELTA(zf,ztest,_tol);
 
     if (_autotest_verbose) {
-        printf("%12.8f / %12.8f = %12.8f (%12.8f)\n",
-                xf,      yf,      ztest,  zf);
+        printf("%12.8f / %12.8f = %12.8f (error: %12.4e)\n",
+                xf,      yf,      ztest,  zf-ztest);
     }
 }
 

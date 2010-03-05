@@ -57,6 +57,7 @@ void fpmtest_lngamma();
 void fpmtest_sinc();
 void fpmtest_ratio();
 void fpmtest_kaiser();
+void fpmtest_constants();
 
 // complex math
 void fpmtest_cq32_arithmetic();
@@ -74,11 +75,14 @@ void fpmtest_q32f_div();
 void fpmtest_q32_dotprod();
 
 int main() {
+    /*
     fpmtest_cq32_arithmetic();
     fpmtest_cq32_cexp();
     fpmtest_cq32_csin();
     fpmtest_cq32_ccos();
     fpmtest_cq32_ctan();
+    */
+    fpmtest_constants();
     return 0;
     /*
     fpmtest_q32_conversion();
@@ -962,6 +966,22 @@ void fpmtest_kaiser()
         printf("w(%3u) = %12.8f;\n", k+1, q32_fixed_to_float(wk));
     }
 }
+
+void fpmtest_constants()
+{
+    printf("1           : %12.8f (expected %12.8f)\n",
+            q32_fixed_to_float(q32_one), 1.0);
+
+    printf("1/pi        : %12.8f (expected %12.8f)\n",
+            q32_fixed_to_float(q32_inv_pi),
+            1 / M_PI);
+
+    printf("log(2pi)    : %12.8f (expected %12.8f)\n",
+            q32_fixed_to_float(q32_log2pi),
+            logf(2*M_PI));
+
+}
+
 //
 // complex math
 //
