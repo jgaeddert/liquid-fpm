@@ -109,6 +109,12 @@ CQ(_t) CQ(_ctan)(CQ(_t) _x)
 {
     unsigned int _n=20; // number of iterations (precision)
 
+    // Check for overflow condition: when imag(_x) < 0, exp(j*2*x) can
+    // explode.  To compensate, take advantage of the fact that
+    //      tan(conj(x)) = conj(tan(x))
+    int conj = _x.imag < 0;
+    if (conj) _x = CQ(_conj)(_x);
+
     // compute exp(j*2*_x)
     CQ(_t) j2x = {-(_x.imag<<1), _x.real<<1}; // j*2*x
     CQ(_t) expj2x = CQ(_cexp)(j2x);
@@ -121,6 +127,9 @@ CQ(_t) CQ(_ctan)(CQ(_t) _x)
 
     // y = tan(_x) = b / a
     CQ(_t) y = CQ(_div)(b,a);
+
+    // take conjugate of output if we conjugated input
+    if (conj) y = CQ(_conj)(y);
 
     return y;
 }
