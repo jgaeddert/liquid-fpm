@@ -67,9 +67,6 @@ all:
 
 
 sources  +=				\
-	q32_dotprod.port.c		\
-	q32_div.port.c			\
-	q32_div.inv.newton.c		\
 	libliquidfpm.c			\
 	src/qfloat.c			\
 	src/inv.newton.c		\
@@ -79,6 +76,9 @@ sources  +=				\
 	src/log2.shiftadd.c		\
 	src/exp2.polyfit.c		\
 	src/exp2.shiftadd.c		\
+	src/qtype_div.port.c		\
+	src/qtype_div.inv.newton.c	\
+	src/qtype_dotprod.port.c	\
 	src/sqrt.newton.c		\
 	src/sincos.pwpolyfit.c		\
 	src/sincos.cordic.c		\
@@ -90,6 +90,8 @@ sources  +=				\
 	src/math.transcendentals.c	\
 	src/loglogbesseli0.pwpoly.c	\
 	src/ratio.c
+
+# src/qtype_mul.port.c
 
 extra_clean		+=
 

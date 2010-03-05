@@ -88,11 +88,13 @@ LIQUIDFPM_DEFINE_COMPLEX(float, liquidfpm_float_complex);
  *
  * Q        :   name-mangling macro
  * T        :   primitive data type
+ * TA       :   primitive data type (accumulator)
  * INTBITS  :   number of integer bits
  * FRACBITS :   number of fractional bits
  */
-#define LIQUIDFPM_DEFINE_API(Q,T,INTBITS,FRACBITS)                  \
-typedef T Q(_t);                                                    \
+#define LIQUIDFPM_DEFINE_API(Q,T,TA,INTBITS,FRACBITS)               \
+typedef T  Q(_t);                                                   \
+typedef TA Q(_at);                                                  \
 const static unsigned int Q(_bits) = INTBITS + FRACBITS;            \
 const static unsigned int Q(_intbits) = INTBITS;                    \
 const static unsigned int Q(_fracbits) = FRACBITS;                  \
@@ -169,7 +171,7 @@ Q(_t) Q(_kaiser)(unsigned int _n, unsigned int _N, Q(_t) _beta);    \
 Q(_t) Q(_dotprod)(Q(_t) * _x, Q(_t) * _v, unsigned int _n);
 
 
-LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, 7, 25)
+LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, int64_t, 7, 25)
 
 /* API definition macro (complex types)
  *
