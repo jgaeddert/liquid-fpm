@@ -47,8 +47,8 @@ void log2_shiftadd_autotest()
     // testing variables
     float xf;
     float yf;
-    q32_t x;
-    q32_t y;
+    Q(_t) x;
+    Q(_t) y;
     float ytest;
 
     unsigned int i;

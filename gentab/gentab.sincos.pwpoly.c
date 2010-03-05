@@ -106,6 +106,10 @@ int main(int argc, char * argv[]) {
     unsigned int j;
 
     fprintf(fid,"// auto-generated file (do not edit)\n\n");
+    fprintf(fid,"// invoked as : ");
+    for (i=0; i<argc; i++)
+        fprintf(fid,"%s ", argv[i]);
+    fprintf(fid,"\n\n");
 
     fprintf(fid,"#include \"liquidfpm.internal.h\"\n\n");
 

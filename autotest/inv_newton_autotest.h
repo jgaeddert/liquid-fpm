@@ -34,16 +34,17 @@ void inv_newton_autotest()
 
     unsigned int n=32;  // precision
     unsigned int num_steps = 32;
-    float xmin = 1.0f / Q(_fixed_to_float)(Q(_max));
-    float xmax = Q(_fixed_to_float)(Q(_max))*0.95f;
-    float dx = (xmax - xmin)/((float)(num_steps-1));
-    float tol = 1e-5f;
+    float xmin = 1.01f / Q(_fixed_to_float)(Q(_max));
+    float xmax = Q(_fixed_to_float)(Q(_max))*0.99f;
+    //float dx = (xmax - xmin)/((float)(num_steps-1));
+    float sigma = powf(xmin/xmax,-1.0f/(float)(num_steps-1));
+    float tol = Q(_fixed_to_float)(1<<(Q(_intbits)+2));
 
     // testing variables
     float xf;
     float yf;
-    q32_t x;
-    q32_t y;
+    Q(_t) x;
+    Q(_t) y;
     float ytest;
 
     unsigned int i;
@@ -61,13 +62,14 @@ void inv_newton_autotest()
         CONTEND_DELTA(yf,ytest,tol);
 
         if (_autotest_verbose) {
-            printf("inv(%12.8f) = %12.8f (%12.8f)\n", xf,
-                                                      q32_fixed_to_float(y),
-                                                      yf);
+            printf("inv(%12.8f) = %12.8f (error: %12.4e)\n",
+                xf,
+                ytest,
+                yf-ytest);
         }
 
         // increment input parameter
-        xf += dx;
+        xf *= sigma;
     }
 
 }

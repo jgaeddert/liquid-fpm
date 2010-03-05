@@ -71,10 +71,15 @@ int main(int argc, char*argv[]) {
         exit(-1);
     }
 
+    unsigned int i;
     unsigned int n = 32;
 
     fprintf(fid,"// auto-generated file : do not edit\n");
-    fprintf(fid,"\n");
+    fprintf(fid,"// invoked as : ");
+    for (i=0; i<argc; i++)
+        fprintf(fid,"%s ", argv[i]);
+    fprintf(fid,"\n\n");
+
     fprintf(fid,"#include \"liquidfpm.internal.h\"\n");
     fprintf(fid,"\n");
 
@@ -88,7 +93,6 @@ int main(int argc, char*argv[]) {
     // generate table
     double inv_2_n   = 1.0;
     double Ak;
-    unsigned int i;
     float qtype_angle_scalar = M_PI / (float)(1<<(intbits-2));
     fprintf(fid,"// cordic coefficients: A[k] = arctan(2^-k)\n");
     fprintf(fid,"const %s_t %s_cordic_Ak_tab[%u] = {\n", qtype,qtype,n);

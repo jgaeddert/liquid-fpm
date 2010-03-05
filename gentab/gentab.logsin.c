@@ -53,6 +53,8 @@ int main(int argc, char * argv[]) {
     unsigned int sine_tabsize = 256;
     unsigned int log2_tabsize = 256;
 
+    unsigned int values_per_line=4;
+
     // read options
     int dopt;
     while ((dopt = getopt(argc,argv,"uhn:i:f:")) != EOF) {
@@ -77,48 +79,50 @@ int main(int argc, char * argv[]) {
     }
 
     unsigned int i;
-    unsigned int values_per_line=8;
 
     // generate header
 
-    printf("// auto-generated file (do not edit)\n\n");
+    fprintf(fid,"// auto-generated file (do not edit)\n");
+    fprintf(fid,"// invoked as : ");
+    for (i=0; i<argc; i++)
+        fprintf(fid,"%s ", argv[i]);
+    fprintf(fid,"\n\n");
 
-    printf("\n");
-    printf("#include \"liquidfpm.internal.h\"\n\n");
+    fprintf(fid,"#include \"liquidfpm.internal.h\"\n\n");
 
     // generate sine table
-    printf("// sine table\n");
-    printf("const %s_t %s_sin_table[%u] = {\n    ", qtype,qtype,sine_tabsize);
+    fprintf(fid,"// sine table\n");
+    fprintf(fid,"const %s_t %s_sin_table[%u] = {\n    ", qtype,qtype,sine_tabsize);
     for (i=0; i<sine_tabsize; i++) {
         float sine = sin( (M_PI/2.0) * ((double)i) / (double)(sine_tabsize-1));
         //printf("%4u: %12.8f\n",i,sine);
 
-        printf("0x%.8x", qtype_float_to_fixed(sine,intbits,fracbits));
+        fprintf(fid,"0x%.8x", qtype_float_to_fixed(sine,intbits,fracbits));
         if ( i == (sine_tabsize-1) )
-            printf("\n};\n");
+            fprintf(fid,"\n};\n");
         else if ( ((i+1)%values_per_line) == 0 )
-            printf(",\n    ");
+            fprintf(fid,",\n    ");
         else
-            printf(", ");
+            fprintf(fid,", ");
     }
 
     // generate log2 fraction table
-    printf("\n");
-    printf("// log2 fraction table\n");
-    printf("const %s_t %s_log2_fraction_table[%d] = {\n    ", qtype,qtype,log2_tabsize);
+    fprintf(fid,"\n");
+    fprintf(fid,"// log2 fraction table\n");
+    fprintf(fid,"const %s_t %s_log2_fraction_table[%d] = {\n    ", qtype,qtype,log2_tabsize);
     for (i=0; i<log2_tabsize; i++) {
         double log2val = log2( 1.0 + ((double)i)/((double)log2_tabsize) );
 
-        printf("0x%.8x", qtype_float_to_fixed(log2val,intbits,fracbits));
+        fprintf(fid,"0x%.8x", qtype_float_to_fixed(log2val,intbits,fracbits));
         if ( i == (log2_tabsize-1) )
-            printf("\n};\n");
+            fprintf(fid,"\n};\n");
         else if ( ((i+1)%values_per_line) == 0 )
-            printf(",\n    ");
+            fprintf(fid,",\n    ");
         else
-            printf(", ");
+            fprintf(fid,", ");
     }
 
-    printf("\n\n");
+    fprintf(fid,"\n\n");
 
     return 0;
 }

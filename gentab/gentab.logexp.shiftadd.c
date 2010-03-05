@@ -86,10 +86,13 @@ int main(int argc, char*argv[]) {
         inv_2_n *= 0.5;
     }
 
-    printf("// auto-generated file : do not edit\n");
-    printf("\n");
-    printf("#include \"liquidfpm.internal.h\"\n");
-    printf("\n");
+    fprintf(fid,"// auto-generated file : do not edit\n");
+    fprintf(fid,"// invoked as : ");
+    for (i=0; i<argc; i++)
+        fprintf(fid,"%s ", argv[i]);
+    fprintf(fid,"\n\n");
+    fprintf(fid,"#include \"liquidfpm.internal.h\"\n");
+    fprintf(fid,"\n");
 
     // Find maximum number of iterations (look for first zero
     // in the log table)
@@ -98,29 +101,29 @@ int main(int argc, char*argv[]) {
         if (logtab[i] == 0) break;
     nmax = i-1;
 
-    printf("// Pre-computed look-up table: A[k] = log2( 1 + 2^-k )\n");
-    printf("const %s_t %s_log2_shiftadd_Ak_tab[%u] = {\n", qtype,qtype,n);
+    fprintf(fid,"// Pre-computed look-up table: A[k] = log2( 1 + 2^-k )\n");
+    fprintf(fid,"const %s_t %s_log2_shiftadd_Ak_tab[%u] = {\n", qtype,qtype,n);
     for (i=0; i<n; i++)
-        printf("    0x%.8x%s",logtab[i], (i<n-1) ? ",\n" : "};\n\n");
+        fprintf(fid,"    0x%.8x%s",logtab[i], (i<n-1) ? ",\n" : "};\n\n");
 
 
-    printf("// Maximum number of iterations, given the shiftadd_Ak_table\n");
-    printf("// above.  The shift|add algorithm will hit an infinite loop\n");
-    printf("// condition for values in the table equal to zero, hence this\n");
-    printf("// limitation.\n");
-    printf("const unsigned int %s_log2_shiftadd_nmax = %u;\n\n", qtype, nmax);
+    fprintf(fid,"// Maximum number of iterations, given the shiftadd_Ak_table\n");
+    fprintf(fid,"// above.  The shift|add algorithm will hit an infinite loop\n");
+    fprintf(fid,"// condition for values in the table equal to zero, hence this\n");
+    fprintf(fid,"// limitation.\n");
+    fprintf(fid,"const unsigned int %s_log2_shiftadd_nmax = %u;\n\n", qtype, nmax);
 
     // compute base conversion constants
     float ln2     = logf(2.0f);
     float log10_2 = log10f(2.0f);
     float log2_e  = log2f(expf(1));
     float log2_10 = log2f(10.0f);
-    printf("// constants for logarithm base conversions\n");
-    printf("const %s_t %s_ln2     = 0x%.8x; // log(2)\n",   qtype,qtype, qtype_float_to_fixed(ln2,intbits,fracbits));
-    printf("const %s_t %s_log10_2 = 0x%.8x; // log(10)\n",  qtype,qtype, qtype_float_to_fixed(log10_2,intbits,fracbits));
-    printf("const %s_t %s_log2_e  = 0x%.8x; // log2(e)\n",  qtype,qtype, qtype_float_to_fixed(log2_e,intbits,fracbits));
-    printf("const %s_t %s_log2_10 = 0x%.8x; // log2(10)\n", qtype,qtype, qtype_float_to_fixed(log2_10,intbits,fracbits));
-    printf("\n");
+    fprintf(fid,"// constants for logarithm base conversions\n");
+    fprintf(fid,"const %s_t %s_ln2     = 0x%.8x; // log(2)\n",   qtype,qtype, qtype_float_to_fixed(ln2,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_log10_2 = 0x%.8x; // log(10)\n",  qtype,qtype, qtype_float_to_fixed(log10_2,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_log2_e  = 0x%.8x; // log2(e)\n",  qtype,qtype, qtype_float_to_fixed(log2_e,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_log2_10 = 0x%.8x; // log2(10)\n", qtype,qtype, qtype_float_to_fixed(log2_10,intbits,fracbits));
+    fprintf(fid,"\n");
 
     return 0;
 }
