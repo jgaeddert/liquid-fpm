@@ -94,13 +94,37 @@ sources  +=				\
 
 # src/qtype_mul.port.c (portlibs)
 
+autotest_headers =				\
+	autotest/atan2_cordic_autotest.h	\
+	autotest/cqtype_add_autotest.h		\
+	autotest/cqtype_mul_autotest.h		\
+	autotest/cqtype_trig_autotest.h		\
+	autotest/exp2_shiftadd_autotest.h	\
+	autotest/inv_newton_autotest.h		\
+	autotest/libversion_autotest.h		\
+	autotest/log2_shiftadd_autotest.h	\
+	autotest/qtype_add_autotest.h		\
+	autotest/qtype_sub_autotest.h		\
+	autotest/qtype_mul_autotest.h		\
+	autotest/qtype_div_autotest.h		\
+	autotest/qtype_div_inv_newton_autotest.h\
+	autotest/sinc_autotest.h		\
+	autotest/sincos_cordic_autotest.h	\
+	autotest/sqrt_newton_autotest.h
+
+#	autotest/sinhcosh_cordic_autotest.h
+
 extra_clean		+=
 
 #
 # Dependencies
 #
 
+# complex data types
 src/cq32.o : src/cq32.c src/complex_arithmetic.c src/complex_conversion.c src/complex_trig.c src/complex_log.c
+
+# Force objects to be dependent upon headers
+$(objects) : ./include/liquidfpm.h ./include/liquidfpm.internal.h ./config.h
 
 
 #
@@ -199,12 +223,6 @@ clean-portlib:
 # accumulate target-specific libraries
 objects += $(gentab_objects) $(genlib_objects) $(portlib_objects)
 
-# 
-# Dependencies
-#
-# Force objects to be dependent upon headers
-$(objects) : ./include/liquidfpm.h ./include/liquidfpm.internal.h ./config.h
-
 # target-specific library definition:
 #   libliquidfpm.dylib    (darwin)
 #   libliquidfpm.so       (linux, et al.)
@@ -287,9 +305,6 @@ clean-bench:
 # autotest
 #
 .PHONY: autotest
-
-# include autotest makefile which defines autotest_headers
-include autotest/autotest.mk
 
 autotestgen_prog	= autotestgen
 autotest_prog		= xautotest
