@@ -36,11 +36,6 @@
 #   include <math.h>
 #endif
 
-// externally-defined constants (gentab/gentab.math.transcendentals.c)
-extern const Q(_t) Q(_log2pi);  // log(2*pi)
-extern const Q(_t) Q(_inv_12);  // 1/12
-extern const Q(_t) Q(_inv_pi);  // 1/pi
-
 // log(gamma(z))
 Q(_t) Q(_lngamma)(Q(_t) _z)
 {

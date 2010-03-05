@@ -57,6 +57,7 @@ void fpmtest_lngamma();
 void fpmtest_sinc();
 void fpmtest_ratio();
 void fpmtest_kaiser();
+void fpmtest_csin();
 
 // fixed|float
 void fpmtest_q32f_add();
@@ -67,6 +68,8 @@ void fpmtest_q32f_div();
 void fpmtest_q32_dotprod();
 
 int main() {
+    fpmtest_csin();
+    return 0;
     /*
     fpmtest_q32_conversion();
     fpmtest_q32_intpart();
@@ -945,5 +948,14 @@ void fpmtest_kaiser()
         wk = q32_kaiser(k,n,beta);
         printf("w(%3u) = %12.8f;\n", k+1, q32_fixed_to_float(wk));
     }
+}
+
+void fpmtest_csin() {
+    printf("angle scalar        : 0x%.8x\n", q32_float_to_fixed(q32_angle_scalar));
+    printf("angle scalar (inv)  : 0x%.8x\n", q32_float_to_fixed(1./q32_angle_scalar));
+    cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
+    cq32_t y = cq32_csin(x);
+    printf("y.real : %12.8f\n", q32_fixed_to_float(y.real));
+    printf("y.imag : %12.8f\n", q32_fixed_to_float(y.imag));
 }
 
