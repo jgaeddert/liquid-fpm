@@ -57,8 +57,11 @@ void fpmtest_lngamma();
 void fpmtest_sinc();
 void fpmtest_ratio();
 void fpmtest_kaiser();
-void fpmtest_csin();
-void fpmtest_ccos();
+
+// complex math
+void fpmtest_cq32_arithmetic();
+void fpmtest_cq32_csin();
+void fpmtest_cq32_ccos();
 
 // fixed|float
 void fpmtest_q32f_add();
@@ -69,8 +72,7 @@ void fpmtest_q32f_div();
 void fpmtest_q32_dotprod();
 
 int main() {
-    fpmtest_csin();
-    fpmtest_ccos();
+    fpmtest_cq32_arithmetic();
     return 0;
     /*
     fpmtest_q32_conversion();
@@ -86,6 +88,9 @@ int main() {
     fpmtest_q32_exp2();
     fpmtest_q32_sqrt_newton();
     fpmtest_angle();
+
+    fpmtest_cq32_csin();
+    fpmtest_cq32_ccos();
     */
     fpmtest_sincos_pwpoly();
     return 0;
@@ -951,8 +956,36 @@ void fpmtest_kaiser()
         printf("w(%3u) = %12.8f;\n", k+1, q32_fixed_to_float(wk));
     }
 }
+//
+// complex math
+//
 
-void fpmtest_csin() {
+void fpmtest_cq32_arithmetic() {
+    cq32_t a = {q32_float_to_fixed(1.0),q32_float_to_fixed( 2.0)};
+    cq32_t b = {q32_float_to_fixed(0.5),q32_float_to_fixed(-1.5)};
+    printf("a =     %12.8f + j*%12.8f\n", q32_fixed_to_float(a.real), q32_fixed_to_float(a.imag));
+    printf("b =     %12.8f + j*%12.8f\n", q32_fixed_to_float(b.real), q32_fixed_to_float(b.imag));
+    printf("\n");
+
+    // sum
+    cq32_t sum = cq32_add(a,b);
+    printf("a+b =   %12.8f + j*%12.8f\n", q32_fixed_to_float(sum.real), q32_fixed_to_float(sum.imag));
+
+    // difference
+    cq32_t diff = cq32_sub(a,b);
+    printf("a-b =   %12.8f + j*%12.8f\n", q32_fixed_to_float(diff.real), q32_fixed_to_float(diff.imag));
+
+    // product
+    cq32_t prod = cq32_mul(a,b);
+    printf("a*b =   %12.8f + j*%12.8f\n", q32_fixed_to_float(prod.real), q32_fixed_to_float(prod.imag));
+
+    // quotient
+    cq32_t quot = cq32_div(a,b);
+    printf("a/b =   %12.8f + j*%12.8f\n", q32_fixed_to_float(quot.real), q32_fixed_to_float(quot.imag));
+
+}
+
+void fpmtest_cq32_csin() {
     printf("angle scalar        : 0x%.8x\n", q32_float_to_fixed(q32_angle_scalar));
     printf("angle scalar (inv)  : 0x%.8x\n", q32_float_to_fixed(1./q32_angle_scalar));
     cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
@@ -961,7 +994,7 @@ void fpmtest_csin() {
     printf("y.imag : %12.8f\n", q32_fixed_to_float(y.imag));
 }
 
-void fpmtest_ccos() {
+void fpmtest_cq32_ccos() {
     cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
     cq32_t y = cq32_ccos(x);
     printf("y.real : %12.8f\n", q32_fixed_to_float(y.real));

@@ -195,6 +195,7 @@ CQ(_t) CQ(_mul)(CQ(_t) _a, CQ(_t) _b);                              \
 CQ(_t) CQ(_mul_scalar)(CQ(_t) _a, Q(_t) _b);                        \
 CQ(_t) CQ(_div)(CQ(_t) _a, CQ(_t) _b);                              \
 CQ(_t) CQ(_div_scalar)(CQ(_t) _a, Q(_t) _b);                        \
+CQ(_t) CQ(_inv)(CQ(_t) _x); /* compute 1/_x */                      \
                                                                     \
 /* trig */                                                          \
 CQ(_t) CQ(_csin) (CQ(_t) _x);                                       \

@@ -104,3 +104,26 @@ CQ(_t) CQ(_div_scalar)(CQ(_t) _a, Q(_t) _b)
     return quot;
 }
 
+// invert a complex number
+// x = a + j*b
+// 1/x  = 1/(a+j*b)
+//      = (a-j*b) / (a^2 + b^2)
+CQ(_t) CQ(_inv)(CQ(_t) _x)
+{
+    unsigned int _n=32; // number of iterations (precision)
+
+    // compute the raw inverse
+    CQ(_t) inverse = CQ(_conj)(_x);
+
+    // compute scaling factor (and its inverse)
+    Q(_t) scale = Q(_mul)(_x.real,_x.real) + Q(_mul)(_x.imag,_x.imag);
+    Q(_t) scale_inv = Q(_inv_newton)(scale,_n);
+
+    // multiply the raw inverse by the inverse of the scaling factor
+    inverse.real = Q(_mul)(inverse.real,scale_inv);
+    inverse.imag = Q(_mul)(inverse.imag,scale_inv);
+
+    return inverse;
+}
+
+
