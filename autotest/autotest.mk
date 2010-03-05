@@ -9,6 +9,7 @@ autotest_headers =				\
 	autotest/atan2_cordic_autotest.h	\
 	autotest/cqtype_add_autotest.h		\
 	autotest/cqtype_mul_autotest.h		\
+	autotest/cqtype_trig_autotest.h		\
 	autotest/exp2_shiftadd_autotest.h	\
 	autotest/inv_newton_autotest.h		\
 	autotest/libversion_autotest.h		\
