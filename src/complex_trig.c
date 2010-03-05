@@ -47,9 +47,7 @@ CQ(_t) CQ(_csin)(CQ(_t) _x)
     // compute exp(j*_x.real) = cos(_x.real) + j*sin(_x.real)
     // convert angle to qtype format (multiply by scaling factor)
     //      theta = _x.real * 2^(intbits-2) / pi
-    // TODO : put this as external constant
-    Q(_t) qtype_angle_scalar = Q(_float_to_fixed)(1./Q(_angle_scalar));
-    Q(_t) theta = Q(_mul)(_x.real, qtype_angle_scalar);
+    Q(_t) theta = Q(_mul)(_x.real, Q(_angle_scalar));
     Q(_t) qsin;
     Q(_t) qcos;
     Q(_sincos_cordic)(theta, &qsin, &qcos, _n);
@@ -81,9 +79,7 @@ CQ(_t) CQ(_ccos)(CQ(_t) _x)
     // compute exp(j*_x.real) = cos(_x.real) + j*sin(_x.real)
     // convert angle to qtype format (multiply by scaling factor)
     //      theta = _x.real * 2^(intbits-2) / pi
-    // TODO : put this as external constant
-    Q(_t) qtype_angle_scalar = Q(_float_to_fixed)(1./Q(_angle_scalar));
-    Q(_t) theta = Q(_mul)(_x.real, qtype_angle_scalar);
+    Q(_t) theta = Q(_mul)(_x.real, Q(_angle_scalar));
     Q(_t) qsin;
     Q(_t) qcos;
     Q(_sincos_cordic)(theta, &qsin, &qcos, _n);
@@ -107,7 +103,7 @@ CQ(_t) CQ(_ccos)(CQ(_t) _x)
 // compute complex tan(x) = (exp(j*2*x) - 1) / j*(exp(j*2*x + 1 )
 CQ(_t) CQ(_ctan)(CQ(_t) _x)
 {
-    unsigned int _n=20; // number of iterations (precision)
+    //unsigned int _n=20; // number of iterations (precision)
 
     // Check for overflow condition: when imag(_x) < 0, exp(j*2*x) can
     // explode.  To compensate, take advantage of the fact that

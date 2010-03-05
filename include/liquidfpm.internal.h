@@ -81,6 +81,22 @@ unsigned int msb_index(unsigned int _x);
  */
 #define LIQUIDFPM_DEFINE_INTERNAL_API(Q,T,INTBITS,FRACBITS)         \
                                                                     \
+/* constants */                                                     \
+extern const Q(_t) Q(_angle_scalar);                                \
+extern const Q(_t) Q(_E);           /* e                */          \
+extern const Q(_t) Q(_LOG2E);       /* log2(e)          */          \
+extern const Q(_t) Q(_LOG10E);      /* log10(e)         */          \
+extern const Q(_t) Q(_LN2);         /* log(2)           */          \
+extern const Q(_t) Q(_LN10);        /* log(10)          */          \
+extern const Q(_t) Q(_PI);          /* pi (true value)  */          \
+extern const Q(_t) Q(_PI_2);        /* pi/2             */          \
+extern const Q(_t) Q(_PI_4);        /* pi/4             */          \
+extern const Q(_t) Q(_1_PI);        /* 1/pi             */          \
+extern const Q(_t) Q(_2_PI);        /* 2/pi             */          \
+extern const Q(_t) Q(_2_SQRTPI);    /* 2/sqrt(pi)       */          \
+extern const Q(_t) Q(_SQRT2);       /* sqrt(2)          */          \
+extern const Q(_t) Q(_SQRT1_2);     /* 1/sqrt(2)        */          \
+                                                                    \
 /* auto-generated look-up tables */                                 \
 extern const Q(_t) Q(_sin_table)[256];                              \
                                                                     \

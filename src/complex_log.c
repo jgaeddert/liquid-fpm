@@ -33,9 +33,7 @@ CQ(_t) CQ(_cexp)(CQ(_t) _x)
     // run CORDIC to compute sin|cos from angle
     // convert angle to qtype format (multiply by scaling factor)
     //      theta = _x.real * 2^(intbits-2) / pi
-    // TODO : put this as external constant
-    Q(_t) qtype_angle_scalar = Q(_float_to_fixed)(1./Q(_angle_scalar));
-    Q(_t) theta = Q(_mul)(_x.imag, qtype_angle_scalar);
+    Q(_t) theta = Q(_mul)(_x.imag, Q(_angle_scalar));
     Q(_t) qsin;     // pure in-phase component
     Q(_t) qcos;     // pure quadrature component
     Q(_sincos_cordic)(theta, &qsin, &qcos, _n);

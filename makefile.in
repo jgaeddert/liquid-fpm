@@ -131,6 +131,7 @@ $(objects) : ./include/liquidfpm.h ./include/liquidfpm.internal.h ./config.h
 # gentab : auto-generated tables
 #
 gentabs := 				\
+	constants			\
 	math.transcendentals 		\
 	logsin				\
 	sincos.cordic			\

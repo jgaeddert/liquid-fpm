@@ -20,7 +20,14 @@
  */
 
 //
-// 
+// constant generation
+//
+// conversion:
+//      qtype_angle_scalar      :   (1 << (intbits-2)) / pi
+//
+// regular constants
+//      qtype_PI                :   pi (actual)
+//      qtype_2_PI              :   2*pi (actual)
 //
 
 #include <math.h>
@@ -33,7 +40,7 @@
 
 void usage(void)
 {
-    printf("gentab.logexp.shiftadd usage:\n");
+    printf("gentab.constants usage:\n");
     printf("  u/h   :   print this help file\n");
     printf("    n   :   name (e.g. q32b16)\n");
     printf("    i   :   intbits (including sign bit)\n");
@@ -71,60 +78,38 @@ int main(int argc, char*argv[]) {
         exit(-1);
     }
 
-    unsigned int n=32;  // number of elements in the table
-    float b=2.0f;       // base of logarithm
-
-    // generate table: Ak = log_b( 1 + 2^-k )
-    int logtab[n];
-    double inv_log_b = 1.0 / log(b);
-    double inv_2_n   = 1.0;
-    double tabval;
     unsigned int i;
-    for (i=0; i<n; i++) {
-        tabval = log(1.0 + inv_2_n) * inv_log_b;
-        logtab[i] = qtype_float_to_fixed(tabval,intbits,fracbits);
-        inv_2_n *= 0.5;
-    }
 
     fprintf(fid,"// auto-generated file : do not edit\n");
     fprintf(fid,"// invoked as : ");
     for (i=0; i<argc; i++)
         fprintf(fid,"%s ", argv[i]);
     fprintf(fid,"\n\n");
+
     fprintf(fid,"#include \"liquidfpm.internal.h\"\n");
     fprintf(fid,"\n");
 
-    // Find maximum number of iterations (look for first zero
-    // in the log table)
-    unsigned int nmax=0;
-    for (i=0; i<n; i++)
-        if (logtab[i] == 0) break;
-    nmax = i-1;
-
-    fprintf(fid,"// Pre-computed look-up table: A[k] = log2( 1 + 2^-k )\n");
-    fprintf(fid,"const %s_t %s_log2_shiftadd_Ak_tab[%u] = {\n", qtype,qtype,n);
-    for (i=0; i<n; i++)
-        fprintf(fid,"    0x%.8x%s",logtab[i], (i<n-1) ? ",\n" : "};\n\n");
-
-
-    fprintf(fid,"// Maximum number of iterations, given the shiftadd_Ak_table\n");
-    fprintf(fid,"// above.  The shift|add algorithm will hit an infinite loop\n");
-    fprintf(fid,"// condition for values in the table equal to zero, hence this\n");
-    fprintf(fid,"// limitation.\n");
-    fprintf(fid,"const unsigned int %s_log2_shiftadd_nmax = %u;\n\n", qtype, nmax);
-
-    // compute base conversion constants
-    // TODO : remove as these values are redundant with those in gentab.constants.c
-    float ln2     = logf(2.0f);
-    float log10_2 = log10f(2.0f);
-    float log2_e  = log2f(expf(1));
-    float log2_10 = log2f(10.0f);
-    fprintf(fid,"// constants for logarithm base conversions\n");
-    fprintf(fid,"const %s_t %s_ln2     = 0x%.8x; // log(2)\n",   qtype,qtype, qtype_float_to_fixed(ln2,intbits,fracbits));
-    fprintf(fid,"const %s_t %s_log10_2 = 0x%.8x; // log(10)\n",  qtype,qtype, qtype_float_to_fixed(log10_2,intbits,fracbits));
-    fprintf(fid,"const %s_t %s_log2_e  = 0x%.8x; // log2(e)\n",  qtype,qtype, qtype_float_to_fixed(log2_e,intbits,fracbits));
-    fprintf(fid,"const %s_t %s_log2_10 = 0x%.8x; // log2(10)\n", qtype,qtype, qtype_float_to_fixed(log2_10,intbits,fracbits));
+    fprintf(fid,"// conversion\n");
+    float angle_scalar = (1<<(intbits-2)) / M_PI;
+    fprintf(fid,"const %s_t %s_angle_scalar = 0x%.8x; // (1<<(intbits-2))/pi\n",
+            qtype, qtype, qtype_float_to_fixed(angle_scalar,intbits,fracbits));
     fprintf(fid,"\n");
+
+    fprintf(fid,"// math constants\n");
+    fprintf(fid,"const %s_t %s_E        = 0x%.8x; // e\n",          qtype, qtype, qtype_float_to_fixed(M_E,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_LOG2E    = 0x%.8x; // log2(e)\n",    qtype, qtype, qtype_float_to_fixed(M_LOG2E,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_LOG10E   = 0x%.8x; // log10(e)\n",   qtype, qtype, qtype_float_to_fixed(M_LOG10E,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_LN2      = 0x%.8x; // log(2)\n",     qtype, qtype, qtype_float_to_fixed(M_LN2,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_LN10     = 0x%.8x; // log(10)\n",    qtype, qtype, qtype_float_to_fixed(M_LN10,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_PI       = 0x%.8x; // pi\n",         qtype, qtype, qtype_float_to_fixed(M_PI,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_PI_2     = 0x%.8x; // pi/2\n",       qtype, qtype, qtype_float_to_fixed(M_PI_2,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_PI_4     = 0x%.8x; // pi/4\n",       qtype, qtype, qtype_float_to_fixed(M_PI_4,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_1_PI     = 0x%.8x; // 1/pi\n",       qtype, qtype, qtype_float_to_fixed(M_1_PI,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_2_PI     = 0x%.8x; // 2/pi\n",       qtype, qtype, qtype_float_to_fixed(M_2_PI,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_2_SQRTPI = 0x%.8x; // 2/sqrt(pi)\n", qtype, qtype, qtype_float_to_fixed(M_2_SQRTPI,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_SQRT2    = 0x%.8x; // sqrt(2)\n",    qtype, qtype, qtype_float_to_fixed(M_SQRT2,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_SQRT1_2  = 0x%.8x; // 1/sqrt(2)\n",  qtype, qtype, qtype_float_to_fixed(M_SQRT1_2,intbits,fracbits));
 
     return 0;
 }
+
