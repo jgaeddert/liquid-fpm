@@ -87,11 +87,12 @@ i386|i486|i586|i686)
 
     case $target_os in
     darwin*)
-        MLIBS="genlib/q32.intelmac.o"
+        GENLIBS="genlib/q32.intelmac.o"
+        PORTLIBS=""
         ;;
     *)
-        # MLIBS="q32_mul.x86.o"
-        MLIBS="genlib/q32.x86.o"
+        GENLIBS="genlib/q32.x86.o"
+        PORTLIBS=""
         ;;
     esac
 
@@ -99,27 +100,33 @@ i386|i486|i586|i686)
     ;;
 ppc|powerpc*)
     ARCH_OPTION="-fno-common -faltivec"
-    MLIBS="genlib/q32.ppc.o"
+    GENLIBS="genlib/q32.ppc.o"
+    PORTLIBS=""
     AC_DEFINE(FPM_PPC, 1, [Power PC])
     ;;
 arm)
-    MLIBS="q32_mul.port.o"
+    GENLIBS=""
+    PORTLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_ARM, 1, [ARM])
     ;;
 mips)
-    MLIBS="q32_mul.port.o"
+    GENLIBS=""
+    PORTLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_MIPS, 1, [MIPS])
     ;;
 sparc)
-    MLIBS="q32_mul.port.o"
+    GENLIBS=""
+    PORTLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_SPARC, 1, [SPARC])
     ;;
 64bit)
-    MLIBS="q32_mul.port.o"
+    GENLIBS=""
+    PORTLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_64BIT, 1, [64-bit])
     ;;
 *)
-    MLIBS="q32_mul.port.o"
+    GENLIBS=""
+    PORTLIBS="q32_mul.port.o"
     AC_DEFINE(FPM_DEFAULT, 1, [Default])
     ;;
 esac
@@ -138,9 +145,10 @@ AC_SUBST(SH_LIB)
 AC_SUBST(REBIND)
 AC_SUBST(ARCH_OPTION)
 
-# MLIBS defined the additional architecture-specific library objects to
-# build.
-AC_SUBST(MLIBS)
+# GENLIBS defines the additional architecture-specific library objects to build.
+# PORTLIBS defines the portable library objects to build
+AC_SUBST(GENLIBS)
+AC_SUBST(PORTLIBS)
 
 # 
 AC_SUBST(QTYPE)

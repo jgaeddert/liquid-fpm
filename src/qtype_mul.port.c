@@ -27,11 +27,25 @@
 
 #include "liquidfpm.internal.h"
 
-// This method loses significant precision by pre-shifting
-// out the least significant bits of each argument
+#define Q(name)     LIQUIDFPM_CONCAT(q32,name)
+
 Q(_t) Q(_mul)(Q(_t) _x, Q(_t) _y)
 {
+#if 0
+    // This method loses significant precision by pre-shifting
+    // out the least significant bits of each argument
+
     unsigned int s0 = Q(_fracbits) >> 1;
     unsigned int s1 = Q(_fracbits) - s0;
+
     return (_x >> s0) * (_y >> s1);
+#else
+    // compute multiplication using high-order accumulator,
+    // then post-shift the result and return
+
+    Q(_at) z = (Q(_at))(_x) * (Q(_at))(_y);
+
+    return Q(_t) (z >> Q(_fracbits));
+#endif
 }
+

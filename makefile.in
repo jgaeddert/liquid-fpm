@@ -91,7 +91,7 @@ sources  +=				\
 	src/loglogbesseli0.pwpoly.c	\
 	src/ratio.c
 
-# src/qtype_mul.port.c
+# src/qtype_mul.port.c (portlibs)
 
 extra_clean		+=
 
@@ -103,7 +103,7 @@ src/cq32.o : src/cq32.c src/complex_arithmetic.c src/complex_conversion.c src/co
 
 
 #
-# Auto-generated tables
+# gentab : auto-generated tables
 #
 gentabs := 				\
 	math.transcendentals 		\
@@ -148,12 +148,12 @@ clean-gentab :
 	$(RM) $(gentab_targets)
 
 # 
-# Additional auto-generated sources
+# genlib : additional auto-generated sources
 #
 
 genlib_programs	:= genlib/qtype.s.gen
-genlib_sources	:= @MLIBS@
-genlib_objects	:= $(patsubst %.s,%.o,$(genlib_objects))
+genlib_objects	:= @GENLIBS@
+genlib_sources	:= $(patsubst %.o,%.s,$(genlib_objects))
 
 # qtype.s.gen
 #
@@ -186,13 +186,23 @@ clean-genlib:
 	$(RM) $(genlib_objects)
 
 # 
+# portlib : porable sources
+#
+
+portlib_objects	:= @PORTLIBS@
+portlib_sources := $(patsubst %.o,%.c,$(portlib_objects))
+
+clean-portlib:
+	$(RM) $(portlib_objects)
+
+# 
 # Dependencies
 #
 # Force objects to be dependent upon headers
 $(objects) : ./include/liquidfpm.h ./include/liquidfpm.internal.h ./config.h
 
 # add target-specific libraries
-objects += $(genlib_sources)
+objects += $(genlib_objects) $(portlib_objects)
 
 # target-specific library definition:
 #   libliquidfpm.dylib    (darwin)
