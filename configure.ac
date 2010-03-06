@@ -81,7 +81,7 @@ QTYPE_FRACBITS="25"
 # Check canonical system
 AC_CANONICAL_TARGET
 case $target_cpu in
-i386|i486|i586|i686)
+i386|i486|i586|i686|x86|x86_64)
     # ARCH_OPTION="-march=$target_cpu"
     ARCH_OPTION=""
 
@@ -106,27 +106,27 @@ ppc|powerpc*)
     ;;
 arm)
     GENLIBS=""
-    PORTLIBS="q32_mul.port.o"
+    PORTLIBS="src/qtype_mul.port.o"
     AC_DEFINE(FPM_ARM, 1, [ARM])
     ;;
 mips)
     GENLIBS=""
-    PORTLIBS="q32_mul.port.o"
+    PORTLIBS="src/qtype_mul.port.o"
     AC_DEFINE(FPM_MIPS, 1, [MIPS])
     ;;
 sparc)
     GENLIBS=""
-    PORTLIBS="q32_mul.port.o"
+    PORTLIBS="src/qtype_mul.port.o"
     AC_DEFINE(FPM_SPARC, 1, [SPARC])
     ;;
 64bit)
     GENLIBS=""
-    PORTLIBS="q32_mul.port.o"
+    PORTLIBS="src/qtype_mul.port.o"
     AC_DEFINE(FPM_64BIT, 1, [64-bit])
     ;;
 *)
     GENLIBS=""
-    PORTLIBS="q32_mul.port.o"
+    PORTLIBS="src/qtype_mul.port.o"
     AC_DEFINE(FPM_DEFAULT, 1, [Default])
     ;;
 esac
