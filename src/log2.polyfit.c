@@ -48,7 +48,7 @@ Q(_t) Q(_log2)( Q(_t) _x )
     }
 
     // base index
-    int b = msb_index(_x) - 1;
+    int b = liquidfpm_msb_index(_x) - 1;
 
     // compute fractional portion
     Q(_t) x = _x ^ (1<<b);  // clear most significant bit

@@ -102,8 +102,8 @@ Q(_t) Q(_atan2)( Q(_t) _y, Q(_t) _x )
     // operations on them will be computed very quickly
 
     // scale values by max msb_index
-    unsigned int msb_index_x = msb_index(_x);
-    unsigned int msb_index_y = msb_index(_y);
+    unsigned int msb_index_x = liquidfpm_msb_index(_x);
+    unsigned int msb_index_y = liquidfpm_msb_index(_y);
 
 #if DEBUG_ATAN_PWPOLY
     printf("msb_index_x: %u\n", msb_index_x);

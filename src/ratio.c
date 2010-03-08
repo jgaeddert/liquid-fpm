@@ -50,11 +50,11 @@ Q(_t) Q(_ratio)(int _a, int _b, unsigned int _n)
     _a = abs(_a);
     _b = abs(_b);
 
-    int base_a = msb_index(_a) - 1;
+    int base_a = liquidfpm_msb_index(_a) - 1;
     int shift_a = (int)(Q(_fracbits)) - base_a;
     Q(_t) a_hat = shift_a > 0 ? _a<<shift_a : _a>>(-shift_a);
 
-    int base_b = msb_index(_b) - 1;
+    int base_b = liquidfpm_msb_index(_b) - 1;
     int shift_b = (int)(Q(_fracbits)) - base_b;
     Q(_t) b_hat = shift_b > 0 ? _b<<shift_b : _b>>(-shift_b);
 
