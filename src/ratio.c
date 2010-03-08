@@ -32,7 +32,7 @@
 
 #define Q(name)         LIQUIDFPM_CONCAT(q32,name)
 
-// compute ratio
+// compute ratio of integers
 Q(_t) Q(_ratio)(int _a, int _b, unsigned int _n)
 {
     if (_b == 0) {
@@ -64,8 +64,8 @@ Q(_t) Q(_ratio)(int _a, int _b, unsigned int _n)
     ratio = shift > 0 ? ratio<<shift : ratio>>(-shift);
 
 #if DEBUG_RATIO
-    printf("|a| : %6u (%12.8f * 2^%4d)\n", abs(_a), q32_fixed_to_float(a_hat), q32_fracbits-shift_a);
-    printf("|b| : %6u (%12.8f * 2^%4d)\n", abs(_b), q32_fixed_to_float(b_hat), q32_fracbits-shift_b);
+    printf("|a| : %6u (%12.8f * 2^%4d)\n", abs(_a), Q(_fixed_to_float)(a_hat), Q(_fracbits)-shift_a);
+    printf("|b| : %6u (%12.8f * 2^%4d)\n", abs(_b), Q(_fixed_to_float)(b_hat), Q(_fracbits)-shift_b);
 #endif
 
     return negate ? -ratio : ratio;
