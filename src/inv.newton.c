@@ -40,7 +40,7 @@ Q(_t) Q(_inv_newton)( Q(_t) _x, unsigned int _n )
     _x = Q(_abs)(_x);
 
     // initial guess: x0 = 2^-floor(log2(|_x|))
-    int b = msb_index(_x) - 1;          // base index
+    int b = liquidfpm_msb_index(_x) - 1;          // base index
     int s = (int)Q(_fracbits) - b - 1;  // shift amount
     Q(_t) x0 = s>0 ? Q(_one)<<s : Q(_one)>>(-s);
 

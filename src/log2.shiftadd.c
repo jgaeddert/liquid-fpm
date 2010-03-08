@@ -57,7 +57,7 @@ Q(_t) Q(_log2_shiftadd)(Q(_t) _x,
                         unsigned int _n)
 {
     // base index
-    int b = msb_index(_x) - 1;
+    int b = liquidfpm_msb_index(_x) - 1;
 
     // compute shift amount
     int s = (int)Q(_fracbits) - b;

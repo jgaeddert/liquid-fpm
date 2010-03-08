@@ -59,18 +59,18 @@ static inline int qtype64_angle_float_to_fixed(float _x,
 };
 
 //
-// Bit manipulation functions
+// bit-wise utilities
 //
 
 // leading zeros (8-bit)
-extern const unsigned char lz8[256];
+extern const unsigned char liquidfpm_lz8[256];
 
 // count leading zeros
 #define clz8(_byte) (lz8[_byte])
-unsigned int clz(unsigned int _x);
+unsigned int liquidfpm_clz(unsigned int _x);
 
 // index of most significant bit
-unsigned int msb_index(unsigned int _x);
+unsigned int liquidfpm_msb_index(unsigned int _x);
 
 /* Internal API definition macro
  *

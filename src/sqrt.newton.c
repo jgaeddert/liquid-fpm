@@ -47,7 +47,7 @@ Q(_t) Q(_sqrt_newton)( Q(_t) _x, unsigned int _n)
 
     // initial guess: set x0 to 2^floor(msb_index/2)
     // NOTE: we need to compensate for the decimal position of q32
-    Q(_t) x0 = 1 << (((msb_index(_x)-Q(_fracbits))/2)+Q(_fracbits));
+    Q(_t) x0 = 1 << (((liquidfpm_msb_index(_x)-Q(_fracbits))/2)+Q(_fracbits));
 
     Q(_t) x1=0;
 

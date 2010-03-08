@@ -19,6 +19,33 @@
  * along with liquid.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "liquidfpm.internal.h"
+
+//
+// bit-wise utilities
+//
+
+// Leading zeros
+const unsigned char liquidfpm_lz8[256] = {
+    8, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4,
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
+
+
 //
 // Index of most-significant bit
 //
@@ -33,10 +60,7 @@
 //  ...
 //  0x80000000  :   32
 //
-
-#include "liquidfpm.internal.h"
-
-unsigned int msb_index(unsigned int _x)
+unsigned int liquidfpm_msb_index(unsigned int _x)
 {
     unsigned int bits;
 
@@ -59,7 +83,7 @@ unsigned int msb_index(unsigned int _x)
     for (i=SIZEOF_INT*8; i>0; i-=8) {
         b = (_x >> (i-8)) & 0xFF;
         if ( b )
-            return bits - lz8[b];
+            return bits - liquidfpm_lz8[b];
         else
             bits -= 8;
     }

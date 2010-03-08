@@ -72,7 +72,6 @@ sources  +=				\
 	src/qfloat.c			\
 	src/inv.newton.c		\
 	src/kaiser.c			\
-	src/clz.c			\
 	src/log2.polyfit.c		\
 	src/log2.shiftadd.c		\
 	src/exp2.polyfit.c		\
@@ -87,10 +86,10 @@ sources  +=				\
 	src/atan.pwpolyfit.c		\
 	src/atan.cordic.c		\
 	src/cq32.c			\
-	src/msb_index.c			\
 	src/math.transcendentals.c	\
 	src/loglogbesseli0.pwpoly.c	\
-	src/ratio.c
+	src/ratio.c			\
+	src/utility.c
 
 # src/qtype_mul.port.c (portlibs)
 
