@@ -30,16 +30,16 @@
 
 void usage(void)
 {
-    printf("autotestgen usage:\n");
-    printf("  This program outputs a header file to be included by the\n");
-    printf("  autotest program to run unit tests.  Invoke autotestgen with\n");
-    printf("  a list of autotest header files. whose names end in the token\n");
-    printf("  \"_autotest.h\" and include the method preceding the token.\n");
-    printf("  For example:\n\n");
-    printf("    autotestgen /path/to/mytest1_autotest.h /path/to/mytest2_autotest.h\n\n");
-    printf("  creates the header for the autotest files with methods\n\n");
-    printf("    \"void mytest1_autotest() { ... }\"\n");
-    printf("    \"void mytest2_autotest() { ... }\"\n");
+    fprintf(stderr,"autotestgen usage:\n");
+    fprintf(stderr,"  This program outputs a header file to be included by the\n");
+    fprintf(stderr,"  autotest program to run unit tests.  Invoke autotestgen with\n");
+    fprintf(stderr,"  a list of autotest header files. whose names end in the token\n");
+    fprintf(stderr,"  \"_autotest.h\" and include the method preceding the token.\n");
+    fprintf(stderr,"  For example:\n\n");
+    fprintf(stderr,"    autotestgen /path/to/mytest1_autotest.h /path/to/mytest2_autotest.h\n\n");
+    fprintf(stderr,"  creates the header for the autotest files with methods\n\n");
+    fprintf(stderr,"    \"void mytest1_autotest() { ... }\"\n");
+    fprintf(stderr,"    \"void mytest2_autotest() { ... }\"\n");
 }
 
 bool parse_filename(char * _filename, char * _basename);
