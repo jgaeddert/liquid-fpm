@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2008, 2009, 2010 Joseph Gaeddert
+ * Copyright (c) 2008, 2009, 2010 Virginia Polytechnic
+ *                                Institute & State University
+ *
+ * This file is part of liquid.
+ *
+ * liquid is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * liquid is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with liquid.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 // autotestgen.c
 // 
 // Autotest generator script
@@ -7,6 +28,20 @@
 #include <string.h>
 #include <stdbool.h>
 
+void usage(void)
+{
+    printf("autotestgen usage:\n");
+    printf("  This program outputs a header file to be included by the\n");
+    printf("  autotest program to run unit tests.  Invoke autotestgen with\n");
+    printf("  a list of autotest header files. whose names end in the token\n");
+    printf("  \"_autotest.h\" and include the method preceding the token.\n");
+    printf("  For example:\n\n");
+    printf("    autotestgen /path/to/mytest1_autotest.h /path/to/mytest2_autotest.h\n\n");
+    printf("  creates the header for the autotest files with methods\n\n");
+    printf("    \"void mytest1_autotest() { ... }\"\n");
+    printf("    \"void mytest2_autotest() { ... }\"\n");
+}
+
 bool parse_filename(char * _filename, char * _basename);
 
 typedef struct {
@@ -15,6 +50,13 @@ typedef struct {
 } autotest_t;
 
 int main(int argc, char*argv[]) {
+
+    if (argc == 1) {
+        fprintf(stderr,"error: %s, needs a list of header files\n", argv[0]);
+        usage();
+        return -1;
+    }
+
     // allocate memory for all possible autotests
     autotest_t autotests[argc-1];
 
@@ -97,7 +139,9 @@ bool parse_filename(char * _filename, char * _basename)
     // try to strip out tag: "_autotest.h"
     subptr = strrchr( _filename, tag[0] );
     if (subptr == NULL) {
-        //printf("  tag not found\n");
+        fprintf(stderr,"error: autotestgen, tag not found in \"%s\"\n", _filename);
+        usage();
+        exit(1);
         return false;
     } else {
         i1 = subptr - _filename;
@@ -106,7 +150,9 @@ bool parse_filename(char * _filename, char * _basename)
 
     // ensure the last occurrence of tag is not in the path name
     if (i0 >= i1) {
-        //printf("invalid path name\n");
+        fprintf(stderr,"error: autotestgen, invalid path name in \"%s\"\n", _filename);
+        usage();
+        exit(1);
         return false;
     }
     
@@ -114,7 +160,9 @@ bool parse_filename(char * _filename, char * _basename)
     //strncpy(substr,&_filename[i1],256);
     //printf("  comparing %s with %s\n", tag, substr);
     if (strncmp(tag,&_filename[i1],strlen(tag)) != 0 ) {
-        //printf("  invalid tag (comparison failed)\n");
+        fprintf(stderr,"error: autotestgen, invalid tag (comparison failed) in \"%s\"\n", _filename);
+        usage();
+        exit(1);
         return false;
     } else {
         //printf("  comparison passed!\n");

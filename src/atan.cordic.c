@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2008, 2009, 2010 Joseph Gaeddert
  * Copyright (c) 2008, 2009, 2010 Virginia Polytechnic
