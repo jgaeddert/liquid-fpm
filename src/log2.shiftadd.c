@@ -32,6 +32,10 @@
 
 #define DEBUG_LOG2_SHIFTADD     0
 
+// break infinite loop condition (only an issue for debugging and
+// limit testing)
+#define FAILSAFE_LOG2_SHIFTADD  1
+
 #define Q(name)     LIQUIDFPM_CONCAT(q32,name)
 
 // natural logarithm
@@ -109,6 +113,10 @@ Q(_t) Q(_log2_shiftadd_base)(Q(_t) _x,
             Q(_fixed_to_float)(Q(_log2_shiftadd_Ak_tab)[0]));
 #endif
 
+#if FAILSAFE_LOG2_SHIFTADD
+    unsigned int failsafe = 100;
+#endif
+
     for (i=1; i<n; i++) {
         vn >>= 1;
         while (1) {
@@ -127,6 +135,15 @@ Q(_t) Q(_log2_shiftadd_base)(Q(_t) _x,
             if (dn == 0) break;
             tn += Q(_log2_shiftadd_Ak_tab)[i];
             en = un;
+
+#if FAILSAFE_LOG2_SHIFTADD
+            // failsafe condition
+            failsafe--;
+            if (failsafe == 0) {
+                fprintf(stderr,"warning: qtype_log2_shiftadd_base() failed to converge\n");
+                return 0;
+            }
+#endif
         }
     }
 
