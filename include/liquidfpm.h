@@ -122,7 +122,7 @@ static inline Q(_t) Q(_float_to_fixed)(float _x)                    \
 static inline float Q(_angle_fixed_to_float)(Q(_t) _x)              \
     { return Q(_fixed_to_float(_x)) * Q(_angle_scalarf); };         \
 static inline Q(_t) Q(_angle_float_to_fixed)(float _x)              \
-    { return Q(_float_to_fixed(_x)) / Q(_angle_scalarf); };         \
+    { return Q(_float_to_fixed(_x / Q(_angle_scalarf))); };         \
                                                                     \
 /* arithmetic */                                                    \
 static inline Q(_t) Q(_sign)(Q(_t) _x) {return (_x<0) ? -1 : 1;};   \
