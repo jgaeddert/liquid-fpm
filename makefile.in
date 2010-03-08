@@ -94,6 +94,7 @@ sources  +=				\
 # src/qtype_mul.port.c (portlibs)
 
 autotest_headers =				\
+	autotest/qtype_constants_autotest.h	\
 	autotest/atan2_cordic_autotest.h	\
 	autotest/cqtype_add_autotest.h		\
 	autotest/cqtype_mul_autotest.h		\

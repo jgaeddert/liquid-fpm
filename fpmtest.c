@@ -980,6 +980,21 @@ void fpmtest_constants()
             q32_fixed_to_float(q32_log2pi),
             logf(2*M_PI));
 
+    printf("E        %12.8f (%12.8f) // e\n",          q32_fixed_to_float(q32_E),         M_E);
+    printf("LOG2E    %12.8f (%12.8f) // log2(e)\n",    q32_fixed_to_float(q32_LOG2E),     M_LOG2E);
+    printf("LOG10E   %12.8f (%12.8f) // log10(e)\n",   q32_fixed_to_float(q32_LOG10E),    M_LOG10E);
+    printf("LN2      %12.8f (%12.8f) // log(2)\n",     q32_fixed_to_float(q32_LN2),       M_LN2);
+    printf("LN10     %12.8f (%12.8f) // log(10)\n",    q32_fixed_to_float(q32_LN10),      M_LN10);
+    printf("PI       %12.8f (%12.8f) // pi\n",         q32_fixed_to_float(q32_PI),        M_PI);
+    printf("PI_2     %12.8f (%12.8f) // pi/2\n",       q32_fixed_to_float(q32_PI_2),      M_PI_2);
+    printf("PI_4     %12.8f (%12.8f) // pi/4\n",       q32_fixed_to_float(q32_PI_4),      M_PI_4);
+    printf("1_PI     %12.8f (%12.8f) // 1/pi\n",       q32_fixed_to_float(q32_1_PI),      M_1_PI);
+    printf("2_PI     %12.8f (%12.8f) // 2/pi\n",       q32_fixed_to_float(q32_2_PI),      M_2_PI);
+    printf("2_SQRTPI %12.8f (%12.8f) // 2/sqrt(pi)\n", q32_fixed_to_float(q32_2_SQRTPI),  M_2_SQRTPI);
+    printf("SQRT2    %12.8f (%12.8f) // sqrt(2)\n",    q32_fixed_to_float(q32_SQRT2),     M_SQRT2);
+    printf("SQRT1_2  %12.8f (%12.8f) // 1/sqrt(2)\n",  q32_fixed_to_float(q32_SQRT1_2),   M_SQRT1_2);
+
+
 }
 
 //
