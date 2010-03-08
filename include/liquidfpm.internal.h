@@ -169,6 +169,8 @@ void Q(_sinhcosh_cordic)(Q(_t) _x,                                  \
 extern const Q(_t) Q(_log2pi);  /* log(2*pi)    */                  \
 extern const Q(_t) Q(_inv_12);  /* 1/12         */                  \
 extern const Q(_t) Q(_inv_pi);  /* 1/pi         */                  \
+extern const Q(_t) Q(_pi2_6);   /* pi^2/6       */                  \
+extern const Q(_t) Q(_pi4_120); /* pi^4/120     */                  \
 Q(_t) Q(_loglogbesseli0)(Q(_t) _z);
 
 LIQUIDFPM_DEFINE_INTERNAL_API(LIQUIDFPM_MANGLE_Q32, int32_t, 4, 28)

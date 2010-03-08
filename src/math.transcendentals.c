@@ -129,6 +129,7 @@ Q(_t) Q(_sinc)(Q(_t) _z)
     //    return Q(_exp_shiftadd)( -Q(_lngamma)(1+_z) - Q(_lngamma)(1-_z), _n );
 
     // z ~ 0 approximation
+#if 0
     // sinc(z) = \prod_{k=1}^{\infty}{ cos(\pi z / 2^k) }
     if (Q(_abs)(_z) < zmin ) {
         //return Q(_one);
@@ -144,6 +145,18 @@ Q(_t) Q(_sinc)(Q(_t) _z)
 #endif
         return Q(_mul)(cos_pi_z_by_2, Q(_mul)(cos_pi_z_by_4, cos_pi_z_by_8));
     }
+
+#else
+    // taylor series expansion:
+    //      sinc(z) ~ 1 - (pi*z)^2/6 + (pi*z)^4/120 - (pi*z)^6/5040 + ...
+    // NOTE: this expansion works better than cos(pi*z/2)*cos(pi*z/4)*...
+    if (Q(_abs)(_z) < zmin ) {
+        Q(_t) z2 = Q(_mul)(_z,_z);  // z^2
+        Q(_t) z4 = Q(_mul)(z2,z2);  // z^4
+
+        return Q(_one) - Q(_mul)(z2,Q(_pi2_6)) + Q(_mul(z4,Q(_pi4_120)));
+    }
+#endif
 
     // sin(pi*z)/(pi*z)
 

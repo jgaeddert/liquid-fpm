@@ -35,6 +35,8 @@
 //
 // qtype_sinc:
 //      qtype_inv_pi                :   1/pi
+//      qtype_pi2_6                 :   pi^2 / 6    =   1.64493406684823
+//      qtype_pi4_120               :   pi^4 / 120  =   0.81174242528335
 //
 
 #include <math.h>
@@ -141,8 +143,12 @@ int main(int argc, char*argv[]) {
     // qtype_sinc
     //
     float inv_pi    = 1.0f / M_PI;
+    float pi2_6     = M_PI * M_PI / 6.0f;
+    float pi4_120   = M_PI * M_PI * M_PI * M_PI / 120.0f;
     fprintf(fid,"// %s_sinc\n",qtype);
-    fprintf(fid,"const %s_t %s_inv_pi = 0x%.8x;\n", qtype,qtype, qtype_float_to_fixed(inv_pi,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_inv_pi  = 0x%.8x;\n", qtype,qtype, qtype_float_to_fixed(inv_pi,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_pi2_6   = 0x%.8x;\n", qtype,qtype, qtype_float_to_fixed(pi2_6,intbits,fracbits));
+    fprintf(fid,"const %s_t %s_pi4_120 = 0x%.8x;\n", qtype,qtype, qtype_float_to_fixed(pi4_120,intbits,fracbits));
 
     return 0;
 }
