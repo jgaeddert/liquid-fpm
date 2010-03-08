@@ -82,14 +82,21 @@ void CQ(_test_trig)(float complex _xf,
 
 void cqtype_trig_autotest()
 {
-    float tol = Q(_fixed_to_float)(2<<Q(_intbits));
+    // determine appropriate tolerance
+#if 0
+    unsigned int shift = Q(_intbits) < 6 ? 6 : Q(_intbits);
+    float tol = Q(_fixed_to_float)(1<<shift);
+    if (tol > 0.1) tol = 0.1f;
+#else
+    float tol = 1e-3f;
+#endif
 
     if (_autotest_verbose)
         printf("tol : %12.4e;\n", tol);
 
     // floatint-point tests
-    CQ(_test_trig)(1.0f + _Complex_I*2.0f, tol);
-    CQ(_test_trig)(1.0f - _Complex_I*2.0f, tol);
+    CQ(_test_trig)(0.5f + _Complex_I*1.0f, tol);
+    CQ(_test_trig)(0.5f - _Complex_I*1.0f, tol);
 
     CQ(_test_trig)(1.0f + _Complex_I*0.5f, tol);
     CQ(_test_trig)(1.0f - _Complex_I*0.5f, tol);

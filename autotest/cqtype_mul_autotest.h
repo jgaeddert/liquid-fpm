@@ -89,7 +89,10 @@ void CQ(_test_mul_qtype)(CQ(_t) _x,
 
 void cqtype_mul_autotest()
 {
-    float tol = Q(_fixed_to_float)(1<<Q(_intbits));
+    // determine appropriate tolerance
+    unsigned int shift = Q(_intbits) < 6 ? 6 : Q(_intbits);
+    float tol = Q(_fixed_to_float)(1<<shift);
+    if (tol > 0.1) tol = 0.1f;
 
     // floating-point tests
     float complex xf = 1.0f + _Complex_I*0.5f;

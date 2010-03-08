@@ -29,8 +29,11 @@
 
 void qtype_constants_autotest()
 {
-    float tol = Q(_fixed_to_float)(1<<Q(_intbits));
+    // determine appropriate tolerance
+    unsigned int shift = Q(_intbits) < 6 ? 6 : Q(_intbits);
+    float tol = Q(_fixed_to_float)(1<<shift);
     if (tol > 0.1f) tol = 0.1f;
+    //printf("tol : %16.8e\n", tol);
 
     CONTEND_DELTA( Q(_fixed_to_float)(Q(_E)),        M_E,       tol);
     CONTEND_DELTA( Q(_fixed_to_float)(Q(_LOG2E)),    M_LOG2E,   tol);
