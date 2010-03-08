@@ -38,7 +38,7 @@ void inv_newton_autotest()
     float xmax = Q(_fixed_to_float)(Q(_max))*0.99f;
     //float dx = (xmax - xmin)/((float)(num_steps-1));
     float sigma = powf(xmin/xmax,-1.0f/(float)(num_steps-1));
-    float tol = Q(_fixed_to_float)(1<<(Q(_intbits)+2));
+    float tol = Q(_fixed_to_float)(1<<Q(_intbits));
 
     // testing variables
     float xf;
@@ -59,7 +59,8 @@ void inv_newton_autotest()
 
         ytest = Q(_fixed_to_float)(y);
 
-        CONTEND_DELTA(yf,ytest,tol);
+        // contend inverse has error within relative tolerance
+        CONTEND_DELTA(yf,ytest,tol*yf);
 
         if (_autotest_verbose) {
             printf("inv(%12.8f) = %12.8f (error: %12.4e)\n",
