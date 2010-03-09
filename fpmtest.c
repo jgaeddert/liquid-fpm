@@ -82,8 +82,8 @@ int main() {
     fpmtest_cq32_ccos();
     fpmtest_cq32_ctan();
     */
-    fpmtest_atan2_cordic();
-    fpmtest_constants();
+    fpmtest_atan2();
+    //fpmtest_constants();
     return 0;
     /*
     fpmtest_q32_conversion();
@@ -719,7 +719,7 @@ void fpmtest_q32_inv_newton()
 void fpmtest_atan2()
 {
     printf("testing atan2...\n");
-    float thetaf = 0.234;
+    float thetaf = 1.234;
     float xf = cosf(thetaf);
     float yf = sinf(thetaf);
 
@@ -727,6 +727,8 @@ void fpmtest_atan2()
     q32_t x = q32_float_to_fixed(xf);
     q32_t y = q32_float_to_fixed(yf);
     
+    printf("y = %12.8f\n", yf);
+    printf("x = %12.8f\n", xf);
     theta  = q32_atan2(y,x);
 
     printf("atan2(%12.8f,%12.8f) = %12.8f (%12.8f)\n",

@@ -32,26 +32,6 @@
 
 #define Q(name)     LIQUIDFPM_CONCAT(q32,name)
 
-// polynomial coefficients
-Q(_t) Q(_atan_table_pwpolyfit)[16][3] = {
-    {0xffe5d86c, 0x01c827e0, 0x04000000},
-    {0xffbee1aa, 0x01ed9826, 0x03f7058c},
-    {0xffb22b62, 0x02056ca8, 0x03ebe750},
-    {0xffb87be3, 0x01f1a87a, 0x03fb5878},
-    {0xffc64713, 0x01ba4eb0, 0x0432df48},
-    {0xffd45d49, 0x0173fa14, 0x048aa808},
-    {0xffe0173a, 0x012dcb52, 0x04f3aad0},
-    {0xffe90da5, 0x00ef3892, 0x0560e1d0},
-    {0xffefa300, 0x00baaf77, 0x05c9b088},
-    {0xfff46165, 0x00901731, 0x06294e48},
-    {0xfff7c431, 0x006e4da3, 0x067d9830},
-    {0xfffa2bfb, 0x0053e524, 0x06c61348},
-    {0xfffbe06d, 0x003f792c, 0x07033b08},
-    {0xfffd1566, 0x002fcf29, 0x07360df0},
-    {0xfffdf001, 0x0023df67, 0x075fc490},
-    {0xfffe8aa1, 0x001ad367, 0x0781a508}
-};
-
 Q(_t) Q(_atan_polyval_p2)(Q(_t) _x,
                           Q(_t) _c0,
                           Q(_t) _c1,
@@ -109,7 +89,7 @@ Q(_t) Q(_atan2)( Q(_t) _y, Q(_t) _x )
     printf("msb_index_x: %u\n", msb_index_x);
     printf("msb_index_y: %u\n", msb_index_y);
 #endif
-    if (abs(msb_index_x - msb_index_y) > 7) {
+    if (abs(msb_index_x - msb_index_y) > Q(_fracbits)) {
         // use high ratio approximation
 #if DEBUG_ATAN_PWPOLY
         printf("high ratio approximation\n");
@@ -137,29 +117,51 @@ Q(_t) Q(_atan2)( Q(_t) _y, Q(_t) _x )
 
     unsigned int index = (log2diff >> 27) & 0x000f;
 #if DEBUG_ATAN_PWPOLY
-    printf("  log2diff : %f > %d (index=%u)\n", Q(_fixed_to_float)(log2diff), Q(_intpart)(log2diff), index);
+    //printf("  log2diff : %f > %d (index=%u)\n", Q(_fixed_to_float)(log2diff), Q(_intpart)(log2diff), index);
+    printf("  log2diff : %12.8f\n", Q(_fixed_to_float)(log2diff));
     printf("  log2diff : 0x%.8x\n", log2diff);
 #endif
 
     // if negative, overflow (use high ratio approximation)
     if (log2diff < 0) { return 0; };
 
-    Q(_t) c0 = Q(_atan_table_pwpolyfit)[index][2];
-    Q(_t) c1 = Q(_atan_table_pwpolyfit)[index][1];
-    Q(_t) c2 = Q(_atan_table_pwpolyfit)[index][0];
+    Q(_t) g = Q(_inv_newton)(log2diff + Q(_one), 32);
+#if DEBUG_ATAN_PWPOLY
+    printf("    g = %12.8f\n", Q(_fixed_to_float)(g));
+#endif
+
+    // g is in (0,1], determine which of 16 regions g lies
+    if (g <= 0 || g > Q(_one)) {
+        fprintf(stderr,"error: atan2_pwpolyfit(), g not in (0,1]\n");
+        exit(1);
+    }
+
+    // Q(_t)    :   siiiiiiffffff....fff    s(sign), i(int), f(frac)
+    // Q(_one)  :   00000001111111111111
+    // g        :   0000000gggg.........
+    // iiii : index
+    index = (g >> (Q(_fracbits)-4)) & 0x000f;
+#if DEBUG_ATAN_PWPOLY
+    printf("    g : 0x%.8x (index : %u)\n", g, index );
+#endif
+
+    //index = 5;
+    Q(_t) c0 = Q(_atan2_pwpoly_tab)[index][2];
+    Q(_t) c1 = Q(_atan2_pwpoly_tab)[index][1];
+    Q(_t) c2 = Q(_atan2_pwpoly_tab)[index][0];
 #if DEBUG_ATAN_PWPOLY
     printf("    c0 : %12.8f\n", Q(_fixed_to_float)(c0));
     printf("    c1 : %12.8f\n", Q(_fixed_to_float)(c1));
     printf("    c2 : %12.8f\n", Q(_fixed_to_float)(c2));
 #endif
 
-    Q(_t) phi = Q(_atan_polyval_p2)(log2diff,c0,c1,c2);
+    Q(_t) phi = Q(_atan_polyval_p2)(g,c0,c1,c2);
 
 #if DEBUG_ATAN_PWPOLY
     printf("  polyval   : %f\n", Q(_fixed_to_float)(phi));
 #endif
     // TODO : validate this shift amount
-    phi <<= 2;
+    phi <<= Q(_intbits)-3;
 #if DEBUG_ATAN_PWPOLY
     printf("  angle     : %f\n", Q(_angle_fixed_to_float)(phi));
 #endif

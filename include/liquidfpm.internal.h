@@ -110,6 +110,7 @@ Q(_t) Q(_sqrt_logexp)(Q(_t), unsigned int _n);                      \
 /* trig */                                                          \
 extern const Q(_t) Q(_cordic_Ak_tab)[32];                           \
 extern const Q(_t) Q(_cordic_k_inv);                                \
+extern const Q(_t) Q(_atan2_pwpoly_tab)[16][3];                     \
 Q(_t) Q(_sin_cordic)(Q(_t) _theta, unsigned int _n);                \
 Q(_t) Q(_cos_cordic)(Q(_t) _theta, unsigned int _n);                \
 void Q(_sincos_cordic)(Q(_t) _theta,                                \

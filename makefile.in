@@ -132,6 +132,7 @@ $(objects) : ./include/liquidfpm.h ./include/liquidfpm.internal.h ./config.h
 #
 gentabs := 				\
 	constants			\
+	atan2.pwpolyfit			\
 	math.transcendentals 		\
 	logsin				\
 	sincos.cordic			\

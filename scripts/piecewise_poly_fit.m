@@ -6,8 +6,8 @@ close all;
 clear all;
 
 % options
-func = @liquidfpm_sin;    % approximating function (function handle)
-xmin = 0;       % lower absolute boundary
+func = @liquidfpm_atan_compact;    % approximating function (function handle)
+xmin = 0.01;       % lower absolute boundary
 xmax = 1;    % upper absolute boundary
 n = 16;         % number of pieces
 
