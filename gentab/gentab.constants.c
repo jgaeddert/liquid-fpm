@@ -26,9 +26,19 @@
 //      qtype_angle_scalar      :   (1 << (intbits-2)) / pi
 //
 // regular constants
-//      qtype_PI                :   pi (actual)
-//      qtype_2_PI              :   2*pi (actual)
-//
+//      qtype_E        = 2.71828182845905   : e
+//      qtype_LOG2E    = 1.44269504088896   : log2(e)
+//      qtype_LOG10E   = 0.434294481903252  : log10(e)
+//      qtype_LN2      = 0.693147180559945  : log(2)
+//      qtype_LN10     = 2.30258509299405   : log(10)
+//      qtype_PI       = 3.14159265358979   : pi (actual)
+//      qtype_PI_2     = 1.57079632679490   : pi/2
+//      qtype_PI_4     = 0.785398163397448  : pi/4
+//      qtype_1_PI     = 0.318309886183791  : 1/pi
+//      qtype_2_PI     = 0.636619772367581  : 2/pi
+//      qtype_2_SQRTPI = 1.12837916709551   : 2/sqrt(pi)
+//      qtype_SQRT2    = 1.41421356237310   : sqrt(2)
+//      qtype_SQRT1_2  = 0.707106781186547  : 1/sqrt(2)
 
 #include <math.h>
 #include <stdlib.h>

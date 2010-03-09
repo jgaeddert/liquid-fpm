@@ -30,11 +30,11 @@
 //      qtype_loglogbesseli0_p3[4]  :   polynomial, region 3
 //
 // qtype_lngamma:
-//      qtype_log2pi_by_2           :   log(2*pi)/2
-//      qtype_inv_12                :   1/12
+//      qtype_log2pi_by_2           :   log(2*pi)/2 =   0.918938533204673
+//      qtype_inv_12                :   1/12        =   0.0833333333333333
 //
 // qtype_sinc:
-//      qtype_inv_pi                :   1/pi
+//      qtype_inv_pi                :   1/pi        =   0.318309886183791
 //      qtype_pi2_6                 :   pi^2 / 6    =   1.64493406684823
 //      qtype_pi4_120               :   pi^4 / 120  =   0.81174242528335
 //
@@ -83,7 +83,7 @@ int main(int argc, char*argv[]) {
     // validate length
     unsigned int totalbits = intbits + fracbits;
     if (totalbits != 8 && totalbits != 16 && totalbits != 32) {
-        fprintf(stderr,"error: %s, invalid total bits (%u), must be 8,16,32\n", argv[0], totalbits);
+        fprintf(stderr,"error: %s, invalid total bits (%u), must be 8|16|32\n", argv[0], totalbits);
         exit(-1);
     }
 
