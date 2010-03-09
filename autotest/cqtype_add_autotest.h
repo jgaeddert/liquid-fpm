@@ -90,7 +90,7 @@ void CQ(_test_add_qtype)(CQ(_t) _x,
 
 void cqtype_add_autotest()
 {
-    float tol = Q(_fixed_to_float)(Q(_min));
+    float tol = expf(-sqrtf(Q(_fracbits)));
 
     // floatint-point tests
     float complex xf = 1.0f + _Complex_I*0.5f;

@@ -37,7 +37,7 @@ void sqrt_newton_autotest()
     float xmin = 0.0f;
     float xmax = Q(_fixed_to_float)(Q(_max));
     float dx = (xmax - xmin)/((float)(num_steps-1));
-    float tol = 1e-5f;
+    float tol = expf(-sqrtf(Q(_fracbits)));
 
     // testing variables
     float xf;

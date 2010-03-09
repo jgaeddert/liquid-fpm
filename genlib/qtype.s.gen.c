@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    unsigned int totalbits = intbits + fracbits;
     if ( !arch_set || !typename_set || !intbits_set  || !fracbits_set ) {
         fprintf(stderr,"error: must specify architecture, typename, intbits, and fracbits\n");
         usage();
@@ -105,8 +106,8 @@ int main(int argc, char *argv[])
     } else if ( intbits < 1 ) {
         fprintf(stderr,"error: intbits must be at least 1 (sign bit)\n");
         return -1;
-    } else if ( (intbits + fracbits) != 32 ) {
-        fprintf(stderr,"error: intbits (%u) + fracbits (%u) must equal 32\n",intbits,fracbits);
+    } else if ( totalbits != 8 && totalbits != 16 && totalbits != 32) {
+        fprintf(stderr,"error: intbits (%u) + fracbits (%u) must equal 8|16|32\n",intbits,fracbits);
         return -1;
     }
 

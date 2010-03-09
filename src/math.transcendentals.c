@@ -160,7 +160,7 @@ Q(_t) Q(_sinc)(Q(_t) _z)
 
     // sin(pi*z)/(pi*z)
 
-    Q(_t) sin_z = Q(_sin_cordic)( pi_z, _n );
+    Q(_t) sin_pi_z = Q(_sin_cordic)( pi_z, _n );
 
     // invert z
     Q(_t) z_inv = Q(_inv_newton)(_z,_n);
@@ -168,14 +168,14 @@ Q(_t) Q(_sinc)(Q(_t) _z)
 #if DEBUG_MATH_TRANSCENDENTALS
     float zf        = Q(_fixed_to_float)(_z);
     float pizf      = Q(_angle_fixed_to_float)(pi_z);
-    float sinzf     = Q(_fixed_to_float)(sin_z);
+    float sin_pizf  = Q(_fixed_to_float)(sin_pi_z);
     float z_invf    = Q(_fixed_to_float)(z_inv);
-    printf("  z     :   %12.8f\n", zf);
-    printf("  pizf  :   %12.8f\n", pizf);
-    printf("  sinz  :   %12.8f\n", sinzf);
-    printf("  z_inv :   %12.8f\n", z_invf);
+    printf("  z         :   %12.8f\n", zf);
+    printf("  pizf      :   %12.8f (%12.8f)\n", pizf,       M_PI*zf);
+    printf("  sinpiz    :   %12.8f (%12.8f)\n", sin_pizf,   sinf(M_PI*zf));
+    printf("  z_inv     :   %12.8f (%12.8f)\n", z_invf,     1.0f/zf);
 #endif
 
-    return Q(_mul)(sin_z,Q(_mul)(z_inv,Q(_inv_pi)));
+    return Q(_mul)(sin_pi_z,Q(_mul)(z_inv,Q(_inv_pi)));
 }
 

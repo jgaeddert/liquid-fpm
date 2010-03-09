@@ -34,7 +34,7 @@ void exp2_shiftadd_autotest()
     float xmin = -Q(_fixed_to_float)(Q(_max));
     float xmax = (float)(Q(_intbits)-1)*0.99f;
     float dx = (xmax - xmin)/((float)(num_steps-1));
-    float tol = 1e-4f;
+    float tol = expf(-sqrtf(Q(_fracbits)));
 
     // testing variables
     float xf;

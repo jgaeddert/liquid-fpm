@@ -32,12 +32,6 @@
 
 #define Q(name)     LIQUIDFPM_CONCAT(q32,name)
 
-void Q(_atan2_cordic_base)(Q(_t) _y,
-                           Q(_t) _x,
-                           Q(_t) * _r,
-                           Q(_t) * _theta,
-                           unsigned int _n);
-
 void Q(_atan2_cordic)(Q(_t) _y,
                       Q(_t) _x,
                       Q(_t) * _r,
@@ -99,7 +93,7 @@ void Q(_atan2_cordic_base)(Q(_t) _y,
             i,
             Q(_fixed_to_float)(x),
             Q(_fixed_to_float)(y),
-            Q(_fixed_to_float)(z),
+            Q(_angle_fixed_to_float)(z),
             Q(_fixed_to_float)(Q(_cordic_Ak_tab[i]))*(y>=0?-1.0:1.0));
 #endif
     }

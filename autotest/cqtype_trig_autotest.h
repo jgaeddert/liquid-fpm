@@ -83,13 +83,7 @@ void CQ(_test_trig)(float complex _xf,
 void cqtype_trig_autotest()
 {
     // determine appropriate tolerance
-#if 0
-    unsigned int shift = Q(_intbits) < 6 ? 6 : Q(_intbits);
-    float tol = Q(_fixed_to_float)(1<<shift);
-    if (tol > 0.1) tol = 0.1f;
-#else
-    float tol = 1e-3f;
-#endif
+    float tol = expf(-sqrtf(Q(_fracbits)));
 
     if (_autotest_verbose)
         printf("tol : %12.4e;\n", tol);

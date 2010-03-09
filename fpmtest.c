@@ -82,6 +82,7 @@ int main() {
     fpmtest_cq32_ccos();
     fpmtest_cq32_ctan();
     */
+    fpmtest_atan2_cordic();
     fpmtest_constants();
     return 0;
     /*
@@ -737,6 +738,8 @@ void fpmtest_atan2_cordic()
     printf("testing atan2|cordic...\n");
     float rf = 1.8f;
     float thetaf = M_PI / 2.0f;
+    rf = 0.94999963f;
+    thetaf = -0.69813281f;
     float xf = rf*cosf(thetaf);
     float yf = rf*sinf(thetaf);
     unsigned int n=16;
@@ -748,9 +751,11 @@ void fpmtest_atan2_cordic()
     
     q32_atan2_cordic(y,x,&r,&theta,n);
 
-    printf("atan2(%12.8f,%12.8f) = %12.8f (%12.8f)\n",
+    printf("atan2(%10.6f,%10.6f) r|theta : %10.6f (%10.6f) | %10.6f (%10.6f)\n",
             yf,
             xf,
+            q32_fixed_to_float(r),
+            rf,
             thetaf,
             q32_angle_fixed_to_float(theta));
 }

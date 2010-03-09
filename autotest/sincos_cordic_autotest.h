@@ -34,7 +34,7 @@ void sincos_cordic_autotest()
     float xmin = -2*M_PI;
     float xmax =  2*M_PI;
     float dx = (xmax - xmin)/((float)(num_steps-1));
-    float tol = 1e-4f;
+    float tol = expf(-sqrtf(Q(_fracbits)));
 
     // testing variables
     float xf;

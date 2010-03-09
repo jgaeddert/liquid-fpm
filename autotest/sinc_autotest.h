@@ -36,7 +36,11 @@ void sinc_autotest()
     float xmax = qmax < vmax ? qmax : vmax;
     float xmin = -xmax;
     float dx = (xmax - xmin)/((float)(num_steps-1));
-    float tol = 1e-4f;
+#if 0
+    float tol = expf(-sqrtf(Q(_fracbits)));
+#else
+    float tol = Q(_bits) <= 16 ? 0.2f : expf(-sqrtf(Q(_fracbits)));
+#endif
 
     // testing variables
     float xf;

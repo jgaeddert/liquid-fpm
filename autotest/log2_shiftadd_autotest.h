@@ -42,7 +42,7 @@ void log2_shiftadd_autotest()
 
     //float dx = (xmax - xmin)/((float)(num_steps-1));
     float sigma = powf(xmin/xmax,-(1.0f - 1e-6f)/(float)(num_steps-1));
-    float tol = 1e-4f;
+    float tol = expf(-sqrtf(Q(_fracbits)));
 
     // testing variables
     float xf;

@@ -39,7 +39,7 @@ void atan2_cordic_autotest()
     float rmin      =  0.1f;
     float rmax      =  1.0f;
     float dr = (rmax - rmin)/((float)(num_steps-1));
-    float tol = 1e-4f;
+    float tol = expf(-sqrtf(Q(_fracbits)));
 
     // testing variables
     float rf, thetaf, thetaf_unwrapped;
