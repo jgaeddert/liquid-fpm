@@ -143,6 +143,7 @@ int main(int argc, char *argv[])
     }
 
     // run the assembly source code generator
+    // TODO : clean up this mess!
 
     fprintf(fid,"%c \n", comment_char);
     fprintf(fid,"%c auto-generated file : do not edit\n", comment_char);
@@ -152,6 +153,7 @@ int main(int argc, char *argv[])
     fprintf(fid,"    .set qint,  %3u   %c intbits\n",intbits,comment_char);
     fprintf(fid,"    .set qfrac, %3u   %c fracbits\n",fracbits,comment_char);
     fprintf(fid,"    .globl %s%s_mul\n", name_mangler,typename);
+    fprintf(fid,"    .type %s%s_mul,@function\n", name_mangler,typename);
     fprintf(fid,"\n");
     fprintf(fid,"%c multiplication\n", comment_char);
     fprintf(fid,"%s%s_mul:\n", name_mangler,typename);

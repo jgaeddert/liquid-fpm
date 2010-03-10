@@ -45,7 +45,7 @@ Q(_t) Q(_mul)(Q(_t) _x, Q(_t) _y)
 
     Q(_at) z = (Q(_at))(_x) * (Q(_at))(_y);
 
-    return Q(_t) (z >> Q(_fracbits));
+    return (Q(_t)) (z >> Q(_fracbits));
 #endif
 }
 

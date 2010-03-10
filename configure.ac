@@ -51,7 +51,7 @@ AC_PROG_RANLIB
 
 # Check for necessary libraries
 # AC_CHECK_LIB(c, malloc)
-# AC_CHECK_LIB(m, sinf)
+AC_CHECK_LIB(m, sinf)
 
 # Check for necessary C specifics
 AC_C_CONST
