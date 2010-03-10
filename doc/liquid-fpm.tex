@@ -1,0 +1,237 @@
+% ------------------------------------------------------------------
+%
+%   TITLE: liquid-fpm documentation
+% AUTHORS: Joseph D. Gaeddert et al.
+% CREATED: March 10, 2010
+% REVISED: 
+%     URL: http://computing.ece.vt.edu/~jgaeddert/
+%          https://ganymede.ece.vt.edu/trac/liquid/
+%
+% ------------------------------------------------------------------
+ 
+\documentclass[11pt,twoside]{report}
+% ------------------- DOCUMENT VARIABLES -------------------
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{8.5in}
+\setlength{\evensidemargin}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\topmargin}{0in}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.1in}
+
+% ------------------- BIBLIOGRAPHY STYLE -------------------
+\usepackage{natbib}
+%\bibliographystyle{plain} % note the change here
+\bibliographystyle{IEEEtran}
+\bibpunct{[}{]}{,}{n}{}{;}  % define bibliography punctuation
+% The six mandatory arguments for \bibpunct are:
+%   1. opening bracket: '(', '[', '{', or '<'
+%   2. closing bracket: ')', ']', '}', or '>'
+%   3. separator between multiple citations: ';' or ','
+%   4. citation style: 'n' for numerical style, 's' for numerical superscript
+%      style, or 'a' for author year style
+%   5. punctuation between the author names and the year
+%   6. punctuation between years or numbers when common author lists are suppressed: ',' or ';' 
+
+% ------------------- GRAPHICS PACKAGES -------------------
+%\usepackage{epsf}
+%\usepackage{graphicx}
+\ifx\pdfoutput\undefined
+\usepackage{graphicx}
+\else
+\usepackage[pdftex]{graphicx}
+\fi
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage{colortbl}
+\usepackage{color}
+
+%\usepackage{tabularx}
+\usepackage{ctable} % \toprule, \midrule, \bottomrule
+\setlength{\heavyrulewidth}{0.1em} % modify thickness of \toprule, \bottomrule
+\newcommand{\otoprule}{\midrule[\heavyrulewidth]}
+\usepackage{subfigure}
+\usepackage{multirow} % for tables
+%\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{fancyvrb}
+\usepackage{acronym}
+
+% tabular: \hline (thin) \hline\hline (thick)
+% from: http://www.faqs.org/faqs/tex-faq/ (see #44)
+\setlength{\doublerulesep}{\arrayrulewidth}
+
+%--------- NEW COMMANDS -------------------
+\newcommand{\NA}{\scriptsize{NA}}
+\newcommand{\E}{\scriptsize{E}}
+\newcommand{\tRMS}{\ensuremath{\tau_{rms}}}
+\newcommand{\tmED}{\ensuremath{\bar{\tau}}}
+\newcommand{\Np}{\ensuremath{N_p}}
+\newcommand{\ua}{\ensuremath{\uparrow}}
+\newcommand{\da}{\ensuremath{\downarrow}}
+\newcommand{\sinc}{\textup{sinc}}
+\newcommand{\etal}{{\it et al.}}
+\newcommand{\wavt}{W@VT}
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\newcommand{\ciren}{C{\sc iren}}
+\newcommand{\liquid}{{\it liquid}}
+\newcommand{\liquidfpm}{{\it liquid-fpm}}
+
+%--------- CAPTION OPTIONS -------------------
+\usepackage[small,bf]{caption}
+\setcaptionwidth{15cm}
+\setlength{\belowcaptionskip}{0.5cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%             MAIN DOCUMENT
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+% ------------------- DEFINE LISTINGS -------------------
+\input{highlight.sty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%             TITLE PAGE
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{empty}
+\pagenumbering{roman}
+\begin{center}
+
+{\huge\it liquid-fpm} \\
+Fixed-point math signal processing library
+
+\vfill
+
+Joseph D. Gaeddert
+
+\vfill
+
+\today \\
+Blacksburg, Virginia
+
+\vfill
+
+{\it Keywords:}
+fixed-point math
+\\
+
+\end{center}
+
+\pagebreak
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%             TABLE OF CONTENTS
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+\pagebreak
+
+%\listoffigures
+%\pagebreak
+
+%\listoftables
+%\pagebreak
+
+\pagenumbering{arabic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%             SECTIONS
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% modem, filter, etc.
+\section{Introduction}
+Key points
+\begin{itemize}
+\item open-source software-defined radio DSP algorithms
+\item minimal dependence on external libraries
+\item portable to embedded platforms
+\item flexible configuration
+\item targets cognitive radios and enabling technologies through
+      flexible algorithmic development
+\end{itemize}
+
+\subsection{Features}
+\begin{itemize}
+\item automatic test scripts for validation and accuracy
+\item benchmark tool for estimating computational speed on your machine
+\end{itemize}
+
+
+\section{Quick Start Guide}
+To build:
+\begin{verbatim}
+cd /path/to/liquid/
+./reconf
+./configure
+make
+sudo make install
+\end{verbatim}
+You may also want to build and run the optional validation program via
+\begin{verbatim}
+make check
+\end{verbatim}
+and the benchmarking tool,
+\begin{verbatim}
+make bench
+\end{verbatim}
+
+\input{listings/q32.example.c.tex}
+
+
+\section{Tutorial}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%             Modules
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Modules}
+\label{ch:modules}
+
+
+\input{sections/qtype.arithmetic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%             Installation
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Installation}
+\label{ch:installation}
+The basic installation is as follows:
+\begin{verbatim}
+    $ ./reconf
+    $ ./configure
+    $ make
+    # make install
+\end{verbatim}
+The additional makefile targets are listed here.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%             BIBLIOGRAPHY
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage
+%\bibliography{../IEEEtranBST/IEEEabrv,liquid-fpm}
+
+
+% In LaTeX, each appendix is a "chapter"
+\appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%             APPENDIX A
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
