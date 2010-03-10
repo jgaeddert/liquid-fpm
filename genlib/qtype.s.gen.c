@@ -153,7 +153,8 @@ int main(int argc, char *argv[])
     fprintf(fid,"    .set qint,  %3u   %c intbits\n",intbits,comment_char);
     fprintf(fid,"    .set qfrac, %3u   %c fracbits\n",fracbits,comment_char);
     fprintf(fid,"    .globl %s%s_mul\n", name_mangler,typename);
-    fprintf(fid,"    .type %s%s_mul,@function\n", name_mangler,typename);
+    if (arch == ARCH_X86)
+        fprintf(fid,"    .type %s%s_mul,@function\n", name_mangler,typename);
     fprintf(fid,"\n");
     fprintf(fid,"%c multiplication\n", comment_char);
     fprintf(fid,"%s%s_mul:\n", name_mangler,typename);
