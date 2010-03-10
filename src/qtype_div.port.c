@@ -32,6 +32,7 @@
 // 
 Q(_t) Q(_div)(Q(_t) _x, Q(_t) _y)
 {
+#if 0
     // define data types of double precision
     // (e.g. int64_t for 32-bit fixed-point)
     Q(_at) a = _x;
@@ -41,5 +42,13 @@ Q(_t) Q(_div)(Q(_t) _x, Q(_t) _y)
     a <<= Q(_fracbits);
 
     return (Q(_t))(a / b);
+#else
+    // compute division by pre-shifting numerator using
+    // high-order accumulator, then dividing by denominator
+
+    Q(_at) z = ((Q(_at))(_x)<<Q(_fracbits)) / _y;
+
+    return (Q(_t)) (z);
+#endif
 }
 
