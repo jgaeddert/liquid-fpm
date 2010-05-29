@@ -8,9 +8,6 @@
 *.swp
 autom4te.cache
 autotest_include.h
-autotestgen
-benchmark
-benchmarkgen
 benchmark_include.h
 configure
 config.h
@@ -18,5 +15,11 @@ config.h.in
 config.log
 config.status
 makefile
+
+# ignore all programs
+autotestgen
+benchmark
+benchmarkgen
+fpmtest
 xautotest
 
