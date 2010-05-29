@@ -211,6 +211,13 @@ genlib/$(qtype).x86_64.s : genlib/qtype.s.gen
 genlib/$(qtype).intelmac.s : genlib/qtype.s.gen
 	./$< -a intelmac -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
 
+# genlib target : add specific routine assembly files (e.g. qtype.mul.ppc.s)
+# as dependencies to ensure objects are rebuilt properly
+#
+# example:
+# 	genlib/q32.ppc.o : genlib/q32.ppc.s genlib/qtype.mul.ppc.s
+$(genlib_objects) : genlib/$(qtype).%.o : genlib/$(qtype).%.s genlib/qtype.mul.%.s
+
 clean-genlib:
 	$(RM) $(genlib_programs)
 	$(RM) $(genlib_sources)
