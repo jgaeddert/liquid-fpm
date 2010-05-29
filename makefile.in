@@ -50,7 +50,11 @@ ARFLAGS		= r
 ASFLAGS		+= -g
 #ASFLAGS		+= -arch ppc7400
 
-qtype		= @QTYPE@
+# define constants
+# 	qtype           :   name of fixed-point object, e.g. 'q32'
+# 	qtype_intbits   :   number of integer bits in type
+# 	qtype_fracbits  :   number of fractional bits in type
+qtype			= @QTYPE@
 qtype_intbits	= @QTYPE_INTBITS@
 qtype_fracbits	= @QTYPE_FRACBITS@
 
@@ -224,7 +228,7 @@ clean-genlib:
 	$(RM) $(genlib_objects)
 
 # 
-# portlib : porable sources
+# portlib : porable sources (those not generated automatically by genlib)
 #
 
 portlib_objects	:= @PORTLIBS@
@@ -271,7 +275,7 @@ libliquidfpm.so: libliquidfpm.a
 	$(CC) $(LDFLAGS) -shared -Xlinker -soname=$@ -o $@ -Wl,-whole-archive $^ -Wl,-no-whole-archive
 
 #
-# Tests
+# Tests (mostly for debugging)
 #
 test: fpmtest
 	./fpmtest
@@ -352,6 +356,7 @@ clean: clean-bench clean-autotest clean-gentab clean-genlib
 	$(RM) $(extra_clean)
 
 distclean: clean
-	$(RM) config.log config.cache config.status config.h makefile
+	$(RM) config.log config.cache config.status config.h
 	$(RM) -f autom4te.cache
+	$(RM) makefile
 

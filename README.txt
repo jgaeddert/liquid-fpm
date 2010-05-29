@@ -71,3 +71,21 @@ integer bits representation (not including the sign bit).  As a result, this
 excludes data types such as Q1.31 format from running properly for these
 functions. The library will configure and compile for such precisions, however
 the unit tests might (and probaby will) fail.
+
+======================================================================================
+ SPECIFIC BUILD TARGETS
+======================================================================================
+Here is a list of the specific build targets
+
+    all             :   everything: libliquidfpm shared object library
+    check           :   generate autotest program and execute
+    bench           :   generate benchmark program and execute
+
+    distclean       :   clean everything, including configuration headers, and makefile
+    clean           :   clean all ojbect files and shared library
+    clean-genlib    :   clean only the auto-generated assembly sources and objects
+    clean-gentab    :   clean only the auto-generated table sources and objects
+    clean-bench     :   clean only the benchmark files
+    clean-autotest  :   clean only the autotest files
+
+    test            :   generate debugging test and execute
