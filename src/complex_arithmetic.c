@@ -23,6 +23,11 @@
 // Complex fixed-point arithmetic
 //
 
+#include "liquidfpm.internal.h"
+
+#define CQ(name)            LIQUIDFPM_CONCAT(cq32,name)
+#define Q(name)             LIQUIDFPM_CONCAT(q32, name)
+
 // compute a number's complex conjugate
 CQ(_t) CQ(_conj)(CQ(_t) _x)
 {

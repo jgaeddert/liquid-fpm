@@ -89,7 +89,10 @@ sources +=										\
 	src/sinhcosh.cordic.c						\
 	src/atan.pwpolyfit.c						\
 	src/atan.cordic.c							\
-	src/cq32.c									\
+	src/complex_arithmetic.c					\
+	src/complex_conversion.c					\
+	src/complex_log.c							\
+	src/complex_trig.c							\
 	src/math.transcendentals.c					\
 	src/loglogbesseli0.pwpoly.c					\
 	src/ratio.c									\

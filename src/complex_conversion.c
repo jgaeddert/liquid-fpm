@@ -23,6 +23,11 @@
 // Complex fixed-point / floating-point conversion
 //
 
+#include "liquidfpm.internal.h"
+
+#define CQ(name)            LIQUIDFPM_CONCAT(cq32,name)
+#define Q(name)             LIQUIDFPM_CONCAT(q32, name)
+
 // convert to floating-point precision
 float complex CQ(_fixed_to_float)(CQ(_t) _x)
 {

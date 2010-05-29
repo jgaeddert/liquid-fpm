@@ -23,6 +23,10 @@
 // Complex fixed-point logarithmic functions
 //
 
+#include "liquidfpm.internal.h"
+
+#define CQ(name)            LIQUIDFPM_CONCAT(cq32,name)
+#define Q(name)             LIQUIDFPM_CONCAT(q32, name)
 
 // compute complex exponent
 //      exp(x) = exp(x.real) * [cos(x.imag) + j*sin(x.imag)]

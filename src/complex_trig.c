@@ -23,6 +23,11 @@
 // Complex fixed-point trig functions
 //
 
+#include "liquidfpm.internal.h"
+
+#define CQ(name)            LIQUIDFPM_CONCAT(cq32,name)
+#define Q(name)             LIQUIDFPM_CONCAT(q32, name)
+
 // compute magnitude squared
 Q(_t) CQ(_abs2)(CQ(_t) _x)
 {
