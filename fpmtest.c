@@ -75,6 +75,8 @@ void fpmtest_q32f_div();
 void fpmtest_q32_dotprod();
 
 int main() {
+    fpmtest_q32_mul();
+    return 0;
     /*
     fpmtest_cq32_arithmetic();
     fpmtest_cq32_cexp();
@@ -246,6 +248,9 @@ void fpmtest_q32_mul()
     q32_t a = q32_float_to_fixed(x);
     q32_t b = q32_float_to_fixed(y);
     q32_t r = q32_mul(a,b);
+    printf("a : %16u\n", a);
+    printf("b : %16u\n", b);
+    printf("r : %16u\n", r);
     printf("    0x%.8x * 0x%.8x = 0x%.8x\n", a, b, r);
     printf("    %10.7f * %10.7f = %10.7f\n",
         q32_fixed_to_float(a),

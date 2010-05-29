@@ -1,2 +1,5 @@
+q32.intelmac.s
 q32.ppc.s
+q32.x86.s
+q32.x86_64.s
 qtype.s.gen

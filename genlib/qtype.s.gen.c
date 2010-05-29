@@ -59,6 +59,9 @@ int main(int argc, char *argv[])
             } else if (strcmp(optarg,"x86")==0) {
                 // Building for x86
                 arch = ARCH_X86;
+            } else if (strcmp(optarg,"x86_64")==0) {
+                // Building for x86_64
+                arch = ARCH_X86_64;
             } else if (strcmp(optarg,"intelmac")==0) {
                 // Building for Intel mac
                 arch = ARCH_INTELMAC;
@@ -120,6 +123,10 @@ int main(int argc, char *argv[])
         comment_char = '#';
         strcpy(name_mangler,"");
         strcpy(archname,"x86");
+    } else if (arch == ARCH_X86_64) {
+        comment_char = '#';
+        strcpy(name_mangler,"");
+        strcpy(archname,"x86_64");
     } else if (arch == ARCH_INTELMAC) {
         comment_char = '#';
         strcpy(name_mangler,"_");

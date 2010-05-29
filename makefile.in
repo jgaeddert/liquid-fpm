@@ -203,6 +203,10 @@ genlib/$(qtype).ppc.s : genlib/qtype.s.gen
 genlib/$(qtype).x86.s : genlib/qtype.s.gen
 	./$< -a x86 -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
 
+# x86_64 assembly
+genlib/$(qtype).x86_64.s : genlib/qtype.s.gen
+	./$< -a x86_64 -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
+
 # intelmac assembly
 genlib/$(qtype).intelmac.s : genlib/qtype.s.gen
 	./$< -a intelmac -n$(qtype) -i$(qtype_intbits) -f$(qtype_fracbits) -o $@
