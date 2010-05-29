@@ -1,5 +1,43 @@
+/*
+ * Copyright (c) 2008, 2009, 2010 Joseph Gaeddert
+ * Copyright (c) 2008, 2009, 2010 Virginia Polytechnic
+ *                                Institute & State University
+ *
+ * This file is part of liquid.
+ *
+ * liquid is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * liquid is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with liquid.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 //
+// qtype.s.gen.c : automatic assembly source code generator
 //
+// This script generates assembly routines to help improve the
+// performance of certain low-level arithmetic operations (such
+// as multiplication and division) of fixed-point numbers.  It
+// creates a shell assembly file which defines some global
+// constants and includes the appropriate
+//
+// The constants defined in the .text section are:
+//      qint        the number of integer bits in the fixed-
+//                  point data type (including the sign)
+//
+//      qfrac       the number of fractional bits in the
+//                  fixed-point data type
+//
+//      QTYPE_mul   type-specific multiplication routine,
+//                  where QTYPE represents the name of the
+//                  data type (e.g. 'q32')
 //
 
 #include <stdio.h>
@@ -9,8 +47,9 @@
 
 void usage(void)
 {
+    printf("qtype.s.gen usage:\n");
     printf("  u/h   :   print this help file\n");
-    printf("    a   :   target architecture: ppc, x86, intelmac\n");
+    printf("    a   :   target architecture: ppc, x86, x86_64, intelmac\n");
     printf("    n   :   name (e.g. q32b16)\n");
     printf("    i   :   intbits (including sign bit)\n");
     printf("    f   :   fracbits\n");
@@ -20,8 +59,7 @@ void usage(void)
 int main(int argc, char *argv[])
 {
     // data type name
-    char typename[64];
-    int  typename_set=0;
+    char typename[64] = "";
 
     // target architecture specifics
     char comment_char = '#';    // comment character
@@ -43,8 +81,7 @@ int main(int argc, char *argv[])
     int fracbits_set=0;
 
     // output file
-    char outputfile[64];
-    int outputfile_set=0;
+    char outputfile[64] = "";
 
     int dopt;
     while ((dopt = getopt(argc,argv,"ua:n:i:f:o:")) != EOF) {
@@ -73,11 +110,10 @@ int main(int argc, char *argv[])
             break;
         case 'n':
             if (strlen(optarg) >= 64) {
-                printf("error: typename too long\n");
+                fprintf(stderr,"error: %s, typename too long\n", argv[0]);
                 return -1;
             }
             strcpy(typename,optarg); 
-            typename_set = 1;
             break;
         case 'i':
             intbits = atoi(optarg);
@@ -89,11 +125,10 @@ int main(int argc, char *argv[])
             break;
         case 'o':
             if (strlen(optarg) > 64) {
-                printf("error: output filename too long\n");
+                fprintf(stderr,"error: %s, output filename too long\n", argv[0]);
                 return -1;
             }
             strcpy(outputfile,optarg); 
-            outputfile_set = 1;
             break;
         default:
             usage();
@@ -102,7 +137,11 @@ int main(int argc, char *argv[])
     }
 
     unsigned int totalbits = intbits + fracbits;
-    if ( !arch_set || !typename_set || !intbits_set  || !fracbits_set ) {
+    if ( strcmp(typename,"") == 0 ) {
+        fprintf(stderr,"error: %s, must specify typename\n", argv[0]);
+        usage();
+        return -1;
+    } else if ( !arch_set || !intbits_set  || !fracbits_set ) {
         fprintf(stderr,"error: must specify architecture, typename, intbits, and fracbits\n");
         usage();
         return -1;
@@ -139,7 +178,8 @@ int main(int argc, char *argv[])
 
     // open output file
     FILE * fid;
-    if (outputfile_set) {
+    if ( strcmp(outputfile,"") != 0 ) {
+        // no output file set
         fid = fopen(outputfile,"w");
         if (fid == NULL) {
             printf("error: could not open %s for writing\n",outputfile);
@@ -152,8 +192,12 @@ int main(int argc, char *argv[])
     // run the assembly source code generator
     // TODO : clean up this mess!
 
-    fprintf(fid,"%c \n", comment_char);
     fprintf(fid,"%c auto-generated file : do not edit\n", comment_char);
+    fprintf(fid,"%c invoked as: ", comment_char);
+    unsigned int i;
+    for (i=0; i<argc; i++)
+        fprintf(fid," %s", argv[i]);
+    fprintf(fid,"\n");
     fprintf(fid,"%c \n", comment_char);
     fprintf(fid,"%c   target architecture : %s\n", comment_char, archname);
     fprintf(fid,"    .text\n");
@@ -168,7 +212,7 @@ int main(int argc, char *argv[])
     fprintf(fid,".include \"qtype.mul.%s.s\"\n", archname);
 
     // close the file (if not printing to stdout)
-    if (outputfile_set)
+    if ( strcmp(outputfile,"") != 0 )
         fclose(fid);
 
     return 0;
