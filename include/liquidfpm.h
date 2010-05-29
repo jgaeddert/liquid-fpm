@@ -168,7 +168,23 @@ Q(_t) Q(_sinc)(Q(_t) _z);                                           \
 Q(_t) Q(_kaiser)(unsigned int _n, unsigned int _N, Q(_t) _beta);    \
                                                                     \
 /* vector operations */                                             \
-Q(_t) Q(_dotprod)(Q(_t) * _x, Q(_t) * _v, unsigned int _n);
+Q(_t) Q(_dotprod)(Q(_t) * _x, Q(_t) * _v, unsigned int _n);         \
+                                                                    \
+/* mathematical constants */                                        \
+extern const Q(_t) Q(_angle_scalar);                                \
+extern const Q(_t) Q(_E);           /* e                */          \
+extern const Q(_t) Q(_LOG2E);       /* log2(e)          */          \
+extern const Q(_t) Q(_LOG10E);      /* log10(e)         */          \
+extern const Q(_t) Q(_LN2);         /* log(2)           */          \
+extern const Q(_t) Q(_LN10);        /* log(10)          */          \
+extern const Q(_t) Q(_PI);          /* pi (true value)  */          \
+extern const Q(_t) Q(_PI_2);        /* pi/2             */          \
+extern const Q(_t) Q(_PI_4);        /* pi/4             */          \
+extern const Q(_t) Q(_1_PI);        /* 1/pi             */          \
+extern const Q(_t) Q(_2_PI);        /* 2/pi             */          \
+extern const Q(_t) Q(_2_SQRTPI);    /* 2/sqrt(pi)       */          \
+extern const Q(_t) Q(_SQRT2);       /* sqrt(2)          */          \
+extern const Q(_t) Q(_SQRT1_2);     /* 1/sqrt(2)        */
 
 
 LIQUIDFPM_DEFINE_API(LIQUIDFPM_MANGLE_Q32, int32_t, int64_t, 7, 25)
