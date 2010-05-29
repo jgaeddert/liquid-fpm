@@ -28,19 +28,19 @@
 
 #include "include/liquidfpm.internal.h"
 
-void fpmtest_q32_conversion();
-void fpmtest_q32_intpart();
-void fpmtest_q32_fracpart();
-void fpmtest_q32_abs();
-void fpmtest_q32_add();
-void fpmtest_q32_sub();
-void fpmtest_q32_mul();
-void fpmtest_q32_div();
-void fpmtest_q32_div_inv_newton();
-void fpmtest_q32_log2();
-void fpmtest_q32_exp2();
-void fpmtest_q32_inv_newton();
-void fpmtest_q32_sqrt_newton();
+void fpmtest_conversion();
+void fpmtest_intpart();
+void fpmtest_fracpart();
+void fpmtest_abs();
+void fpmtest_add();
+void fpmtest_sub();
+void fpmtest_mul();
+void fpmtest_div();
+void fpmtest_div_inv_newton();
+void fpmtest_log2();
+void fpmtest_exp2();
+void fpmtest_inv_newton();
+void fpmtest_sqrt_newton();
 void fpmtest_angle();
 void fpmtest_sincos_pwpoly();
 void fpmtest_sin();
@@ -60,50 +60,48 @@ void fpmtest_kaiser();
 void fpmtest_constants();
 
 // complex math
-void fpmtest_cq32_arithmetic();
-void fpmtest_cq32_cexp();
-void fpmtest_cq32_csin();
-void fpmtest_cq32_ccos();
-void fpmtest_cq32_ctan();
+void fpmtest_carithmetic();
+void fpmtest_cexp();
+void fpmtest_csin();
+void fpmtest_ccos();
+void fpmtest_ctan();
 
 // fixed|float
-void fpmtest_q32f_add();
-void fpmtest_q32f_sub();
-void fpmtest_q32f_mul();
-void fpmtest_q32f_div();
+void fpmtest_fadd();
+void fpmtest_fsub();
+void fpmtest_fmul();
+void fpmtest_fdiv();
 
-void fpmtest_q32_dotprod();
+void fpmtest_dotprod();
 
 int main() {
-    fpmtest_q32_mul();
-    return 0;
     /*
-    fpmtest_cq32_arithmetic();
-    fpmtest_cq32_cexp();
-    fpmtest_cq32_csin();
-    fpmtest_cq32_ccos();
-    fpmtest_cq32_ctan();
+    fpmtest_carithmetic();
+    fpmtest_cexp();
+    fpmtest_csin();
+    fpmtest_ccos();
+    fpmtest_ctan();
     */
     fpmtest_atan2();
     //fpmtest_constants();
     return 0;
     /*
-    fpmtest_q32_conversion();
-    fpmtest_q32_intpart();
-    fpmtest_q32_fracpart();
-    fpmtest_q32_abs();
-    fpmtest_q32_add();
-    fpmtest_q32_sub();
-    fpmtest_q32_mul();
-    fpmtest_q32_div();
-    fpmtest_q32_div_inv_newton();
-    fpmtest_q32_log2();
-    fpmtest_q32_exp2();
-    fpmtest_q32_sqrt_newton();
+    fpmtest_conversion();
+    fpmtest_intpart();
+    fpmtest_fracpart();
+    fpmtest_abs();
+    fpmtest_add();
+    fpmtest_sub();
+    fpmtest_mul();
+    fpmtest_div();
+    fpmtest_div_inv_newton();
+    fpmtest_log2();
+    fpmtest_exp2();
+    fpmtest_sqrt_newton();
     fpmtest_angle();
 
-    fpmtest_cq32_csin();
-    fpmtest_cq32_ccos();
+    fpmtest_csin();
+    fpmtest_ccos();
     */
     fpmtest_sincos_pwpoly();
     return 0;
@@ -112,7 +110,7 @@ int main() {
     fpmtest_cos();
     fpmtest_atan2();
 
-    fpmtest_q32_dotprod();
+    fpmtest_dotprod();
 
     printf("testing complex...\n");
     cq32_t y = {3,5};
@@ -132,8 +130,8 @@ int main() {
     // test exp2 shift|add
     fpmtest_exp2_shiftadd();
 
-    fpmtest_q32_inv_newton();
-    fpmtest_q32_div_inv_newton();
+    fpmtest_inv_newton();
+    fpmtest_div_inv_newton();
 
     fpmtest_atan2_cordic();
 
@@ -145,10 +143,10 @@ int main() {
     fpmtest_exp10_shiftadd();
 
     fpmtest_sinhcosh_cordic();
-    fpmtest_q32f_add();
-    fpmtest_q32f_sub();
-    fpmtest_q32f_mul();
-    fpmtest_q32f_div();
+    fpmtest_fadd();
+    fpmtest_fsub();
+    fpmtest_fmul();
+    fpmtest_fdiv();
 
     fpmtest_ratio();
     */
@@ -160,7 +158,7 @@ int main() {
 };
 
 
-void fpmtest_q32_conversion()
+void fpmtest_conversion()
 {
     printf("testing conversion...\n");
     float f = 0.9999f;
@@ -169,7 +167,7 @@ void fpmtest_q32_conversion()
         f, q, q32_fixed_to_float(q));
 }
 
-void fpmtest_q32_fracpart()
+void fpmtest_fracpart()
 {
     printf("testing fracpart...\n");
     float f = 0.9999f;
@@ -178,7 +176,7 @@ void fpmtest_q32_fracpart()
         f, q32_fracpart(q));
 }
 
-void fpmtest_q32_intpart()
+void fpmtest_intpart()
 {
     printf("testing intpart...\n");
     float f = -1.399f;
@@ -187,7 +185,7 @@ void fpmtest_q32_intpart()
         f, q32_intpart(q));
 }
 
-void fpmtest_q32_abs()
+void fpmtest_abs()
 {
     printf("testing abs...\n");
     float x = -2.45f;
@@ -201,7 +199,7 @@ void fpmtest_q32_abs()
         q32_fixed_to_float(b), fabsf(x));
 }
 
-void fpmtest_q32_add()
+void fpmtest_add()
 {
     printf("testing add...\n");
     float x = 0.25f;
@@ -220,7 +218,7 @@ void fpmtest_q32_add()
 
 }
 
-void fpmtest_q32_sub()
+void fpmtest_sub()
 {
     printf("testing sub...\n");
     float x = 0.25f;
@@ -239,7 +237,7 @@ void fpmtest_q32_sub()
 
 }
 
-void fpmtest_q32_mul()
+void fpmtest_mul()
 {
     printf("testing multiplication...\n");
     float x = 1/3.0f;
@@ -260,7 +258,7 @@ void fpmtest_q32_mul()
         q32_fixed_to_float(r), x*y);
 }
 
-void fpmtest_q32_div()
+void fpmtest_div()
 {
     printf("testing div...\n");
     float x = 1/3.0f;
@@ -279,7 +277,7 @@ void fpmtest_q32_div()
 
 }
 
-void fpmtest_q32_div_inv_newton()
+void fpmtest_div_inv_newton()
 {
     printf("testing div [inverse|Newton]...\n");
     float x = 1/3.0f;
@@ -299,7 +297,7 @@ void fpmtest_q32_div_inv_newton()
 
 }
 
-void fpmtest_q32_dotprod()
+void fpmtest_dotprod()
 {
     printf("testing dot product...\n");
     float vf[10] = {0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9};
@@ -325,7 +323,7 @@ void fpmtest_q32_dotprod()
         dpf);
 }
 
-void fpmtest_q32_log2()
+void fpmtest_log2()
 {
     printf("testing log2...\n");
     float x = 0.25f + 0.0001f;
@@ -336,7 +334,7 @@ void fpmtest_q32_log2()
         log2f(x));
 }
 
-void fpmtest_q32_exp2()
+void fpmtest_exp2()
 {
     printf("testing exp2...\n");
     float x = -0.75f;
@@ -347,7 +345,7 @@ void fpmtest_q32_exp2()
         powf(2.0f,x));
 }
 
-void fpmtest_q32_sqrt_newton()
+void fpmtest_sqrt_newton()
 {
     printf("testing sqrt...\n");
     unsigned int n=16;
@@ -703,7 +701,7 @@ void fpmtest_exp10_shiftadd()
 }
 
 
-void fpmtest_q32_inv_newton()
+void fpmtest_inv_newton()
 {
     printf("testing inv() [Newton]...\n");
     float xf, invxf;
@@ -871,9 +869,9 @@ void fpmtest_sinc()
     printf("results written to fpmtest_sinc.m\n");
 }
 
-void fpmtest_q32f_add()
+void fpmtest_fadd()
 {
-    printf("testing add...\n");
+    printf("testing fadd...\n");
     float x =  2.20f;
     float y = -2.25f;
 
@@ -891,9 +889,9 @@ void fpmtest_q32f_add()
 
 }
 
-void fpmtest_q32f_sub()
+void fpmtest_fsub()
 {
-    printf("testing sub...\n");
+    printf("testing fsub...\n");
     float x =  2.20f;
     float y = -2.25f;
 
@@ -911,9 +909,9 @@ void fpmtest_q32f_sub()
 
 }
 
-void fpmtest_q32f_mul()
+void fpmtest_fmul()
 {
-    printf("testing mul...\n");
+    printf("testing fmul...\n");
     float x =  2.20f;
     float y = -2.25f;
 
@@ -931,9 +929,9 @@ void fpmtest_q32f_mul()
 
 }
 
-void fpmtest_q32f_div()
+void fpmtest_fdiv()
 {
-    printf("testing div...\n");
+    printf("testing fdiv...\n");
     float x =  2.20f;
     float y = -2.25f;
 
@@ -1013,7 +1011,7 @@ void fpmtest_constants()
 // complex math
 //
 
-void fpmtest_cq32_arithmetic() {
+void fpmtest_carithmetic() {
     cq32_t a = {q32_float_to_fixed(1.0),q32_float_to_fixed( 2.0)};
     cq32_t b = {q32_float_to_fixed(0.5),q32_float_to_fixed(-1.5)};
     printf("a =     %12.8f + j*%12.8f\n", q32_fixed_to_float(a.real), q32_fixed_to_float(a.imag));
@@ -1038,7 +1036,7 @@ void fpmtest_cq32_arithmetic() {
 
 }
 
-void fpmtest_cq32_cexp() {
+void fpmtest_cexp() {
     cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
     cq32_t y = cq32_cexp(x);
     printf("q32_cexp(%12.8f + j*%12.8f) = %12.8f + j*%12.8f\n",
@@ -1046,7 +1044,7 @@ void fpmtest_cq32_cexp() {
         q32_fixed_to_float(y.real), q32_fixed_to_float(y.imag));
 }
 
-void fpmtest_cq32_csin() {
+void fpmtest_csin() {
     printf("angle scalar        : 0x%.8x\n", q32_float_to_fixed(q32_angle_scalar));
     printf("angle scalar (inv)  : 0x%.8x\n", q32_float_to_fixed(1./q32_angle_scalar));
     cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
@@ -1056,7 +1054,7 @@ void fpmtest_cq32_csin() {
         q32_fixed_to_float(y.real), q32_fixed_to_float(y.imag));
 }
 
-void fpmtest_cq32_ccos() {
+void fpmtest_ccos() {
     cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
     cq32_t y = cq32_ccos(x);
     printf("q32_ccos(%12.8f + j*%12.8f) = %12.8f + j*%12.8f\n",
@@ -1064,7 +1062,7 @@ void fpmtest_cq32_ccos() {
         q32_fixed_to_float(y.real), q32_fixed_to_float(y.imag));
 }
 
-void fpmtest_cq32_ctan() {
+void fpmtest_ctan() {
     cq32_t x = {q32_float_to_fixed(1.0),q32_float_to_fixed(2.0)};
     cq32_t y = cq32_ctan(x);
     printf("q32_ctan(%12.8f + j*%12.8f) = %12.8f + j*%12.8f\n",
