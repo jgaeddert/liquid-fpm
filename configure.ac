@@ -82,26 +82,23 @@ QTYPE_FRACBITS="25"
 AC_CANONICAL_TARGET
 case $target_cpu in
 i386|i486|i586|i686|x86)
-    # ARCH_OPTION="-march=$target_cpu"
     ARCH_OPTION=""
-
+    GENLIBS="genlib/q32.x86.o"
+    PORTLIBS=""
+    AC_DEFINE(FPM_INTEL, 1, [Intel])
+    ;;
+x86_64)
     case $target_os in
     darwin*)
         GENLIBS="genlib/q32.intelmac.o"
         PORTLIBS=""
         ;;
     *)
-        GENLIBS="genlib/q32.x86.o"
+        GENLIBS="genlib/q32.x86_64.o"
         PORTLIBS=""
         ;;
     esac
 
-    AC_DEFINE(FPM_INTEL, 1, [Intel])
-    ;;
-x86_64)
-    ARCH_OPTION=""
-    GENLIBS="genlib/q32.x86_64.o"
-    PORTLIBS=""
     AC_DEFINE(FPM_INTEL, 1, [Intel])
     ;;
 ppc|powerpc*)

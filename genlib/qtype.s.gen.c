@@ -58,37 +58,26 @@ void usage(void)
 
 int main(int argc, char *argv[])
 {
-    // data type name
-    char typename[64] = "";
-
     // target architecture specifics
-    char comment_char = '#';    // comment character
     char name_mangler[8];       // name-mangling string (mainly for darwin)
     enum {  ARCH_UNKNOWN=0,
             ARCH_PPC,
             ARCH_X86,
             ARCH_X86_64,
             ARCH_INTELMAC } arch=0;
-    char archname[64];
-    int arch_set=0;
+    char typename[64] = "";     // data type name
+    int intbits = -1;           // number of integer bits
+    unsigned int fracbits = -1; // number of fractional bits
+    char outputfile[64] = "";   // output filename
 
-    // number of integer bits
-    unsigned int intbits=0;
-    int intbits_set=0;
-
-    // number of fractional bits
-    unsigned int fracbits=0;
-    int fracbits_set=0;
-
-    // output file
-    char outputfile[64] = "";
+    char archname[64];          // architecture name ppc|x86|x86_64
+    char comment_char = '#';    // comment character
 
     int dopt;
     while ((dopt = getopt(argc,argv,"ua:n:i:f:o:")) != EOF) {
         switch (dopt) {
         case 'u':
-        case 'h':
-            usage(); return 0;
+        case 'h':   usage(); return 0;
         case 'a':
             if (strcmp(optarg,"ppc")==0) {
                 // Building for PowerPC
@@ -100,13 +89,12 @@ int main(int argc, char *argv[])
                 // Building for x86_64
                 arch = ARCH_X86_64;
             } else if (strcmp(optarg,"intelmac")==0) {
-                // Building for Intel mac
+                // Building for Intel mac (x86_64 with slightly different syntax)
                 arch = ARCH_INTELMAC;
             } else {
                 fprintf(stderr,"error: unknown architecture: %s\n", optarg);
                 exit(1);
             }
-            arch_set = 1;
             break;
         case 'n':
             if (strlen(optarg) >= 64) {
@@ -115,14 +103,8 @@ int main(int argc, char *argv[])
             }
             strcpy(typename,optarg); 
             break;
-        case 'i':
-            intbits = atoi(optarg);
-            intbits_set = 1;
-            break;
-        case 'f':
-            fracbits = atoi(optarg);
-            fracbits_set = 1;
-            break;
+        case 'i':   intbits = atoi(optarg);     break;
+        case 'f':   fracbits = atoi(optarg);    break;
         case 'o':
             if (strlen(optarg) > 64) {
                 fprintf(stderr,"error: %s, output filename too long\n", argv[0]);
@@ -136,20 +118,28 @@ int main(int argc, char *argv[])
         }
     }
 
-    unsigned int totalbits = intbits + fracbits;
+    int totalbits = intbits + fracbits;
     if ( strcmp(typename,"") == 0 ) {
         fprintf(stderr,"error: %s, must specify typename\n", argv[0]);
         usage();
         return -1;
-    } else if ( !arch_set || !intbits_set  || !fracbits_set ) {
-        fprintf(stderr,"error: must specify architecture, typename, intbits, and fracbits\n");
+    } else if ( arch == ARCH_UNKNOWN ) {
+        fprintf(stderr,"error: %s, must specify architecture type\n", argv[0]);
+        usage();
+        return -1;
+    } else if ( intbits < 0 ) {
+        fprintf(stderr,"error: %s, unspecified or negative intbits \n", argv[0]);
         usage();
         return -1;
     } else if ( intbits < 1 ) {
-        fprintf(stderr,"error: intbits must be at least 1 (sign bit)\n");
+        fprintf(stderr,"error: %s, intbits must be at least 1 (sign bit)\n", argv[0]);
+        return -1;
+    } else if ( fracbits < 0 ) {
+        fprintf(stderr,"error: %s, unspecified or negative fracbits \n", argv[0]);
+        usage();
         return -1;
     } else if ( totalbits != 8 && totalbits != 16 && totalbits != 32) {
-        fprintf(stderr,"error: intbits (%u) + fracbits (%u) must equal 8|16|32\n",intbits,fracbits);
+        fprintf(stderr,"error: intbits (%d) + fracbits (%d) must equal 8|16|32\n",intbits,fracbits);
         return -1;
     }
 
@@ -169,7 +159,8 @@ int main(int argc, char *argv[])
     } else if (arch == ARCH_INTELMAC) {
         comment_char = '#';
         strcpy(name_mangler,"_");
-        strcpy(archname,"intelmac");
+        //strcpy(archname,"intelmac");
+        strcpy(archname,"x86_64");  // intelmac is x86_64
     } else {
         comment_char = '#';
         strcpy(name_mangler,"");
@@ -201,8 +192,8 @@ int main(int argc, char *argv[])
     fprintf(fid,"%c \n", comment_char);
     fprintf(fid,"%c   target architecture : %s\n", comment_char, archname);
     fprintf(fid,"    .text\n");
-    fprintf(fid,"    .set qint,  %3u   %c intbits\n",intbits,comment_char);
-    fprintf(fid,"    .set qfrac, %3u   %c fracbits\n",fracbits,comment_char);
+    fprintf(fid,"    .set qint,  %3d   %c intbits\n",intbits,comment_char);
+    fprintf(fid,"    .set qfrac, %3d   %c fracbits\n",fracbits,comment_char);
     fprintf(fid,"    .globl %s%s_mul\n", name_mangler,typename);
     if (arch == ARCH_X86)
         fprintf(fid,"    .type %s%s_mul,@function\n", name_mangler,typename);
