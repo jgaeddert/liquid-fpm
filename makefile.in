@@ -33,13 +33,14 @@ include_dirs	:= . include
 vpath %.h $(include_dirs)
 
 # programs
-CC 	= @CC@
+CC 	:= @CC@
 MV	:= mv -f
 RM	:= rm -f
-SED	:= sed
+SED	:= @SED@
 AR	:= ar
-RANLIB	:= ranlib
-AS	:= as -I./genlib
+RANLIB	:= @RANLIB@
+AS	:= as
+
 
 # flags
 INCLUDE_CFLAGS	= $(addprefix -I ,$(include_dirs))
@@ -47,7 +48,7 @@ CONFIG_CFLAGS	= @ARCH_OPTION@ @DEBUG_OPTION@
 CFLAGS		+= $(INCLUDE_CFLAGS) -g -O2 -Wall -fPIC $(CONFIG_CFLAGS)
 LDFLAGS		+= @LIBS@
 ARFLAGS		= r
-ASFLAGS		+= -g
+ASFLAGS		+= -g -I./genlib
 #ASFLAGS		+= -arch ppc7400
 
 # define constants

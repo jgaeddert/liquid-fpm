@@ -24,6 +24,7 @@
 # Process with autoconf to generate configure script
 #
 
+AC_PREREQ([2.65])
 AC_INIT([liquid-fpm],[0.1.0],[liquid@vt.edu])
 AC_CONFIG_SRCDIR([libliquidfpm.c])
 
@@ -46,8 +47,15 @@ AC_ARG_ENABLE(debug,
 )
 
 # Check for necessary programs
+AC_PROG_CC
+AC_PROG_SED
 AC_PROG_INSTALL
 AC_PROG_RANLIB
+#AC_PROG_MV
+#AC_PROG_RM
+#AC_PROG_AR
+#AC_PROG_AS
+
 
 # Check for necessary libraries
 # AC_CHECK_LIB(c, malloc)
@@ -65,10 +73,14 @@ AC_TYPE_INT64_T
 # Check for necessary header files
 AC_CHECK_HEADER(stdio.h,    [],[AC_MSG_ERROR([need stdio.h])])
 AC_CHECK_HEADER(stdlib.h,   [],[AC_MSG_ERROR([need stdlib.h])])
+AC_CHECK_HEADER(string.h,   [],[AC_MSG_ERROR([need string.h])])
+AC_CHECK_HEADER(inttypes.h,   [],[AC_MSG_ERROR([need inttypes.h])])
 AC_HEADER_STDBOOL
 
 # Check for necessary library functions
-#AC_CHECK_FUNC(memmove,[],[AC_MSG_ERROR([need floor])])
+AC_CHECK_FUNCS(floor,[],[AC_MSG_ERROR([need floor])])
+AC_CHECK_FUNCS(sqrt,[],[AC_MSG_ERROR([need sqrt])])
+AC_CHECK_FUNCS(strrchr,[],[AC_MSG_ERROR([need strrchr])])
 
 # Check size of certain variables
 AC_CHECK_SIZEOF(int)
@@ -162,3 +174,4 @@ AC_SUBST(DEBUG_OPTION)
 
 AC_CONFIG_FILES([makefile])
 AC_OUTPUT
+

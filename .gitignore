@@ -1,3 +1,4 @@
+# object files, etc.
 *.o
 *.d
 *.dylib
@@ -7,14 +8,20 @@
 *.so
 *.swp
 autom4te.cache
-autotest_include.h
-benchmark_include.h
-configure
+
+# configuration files
+autoscan.log
 config.h
 config.h.in
 config.log
 config.status
+configure
+configure.scan
 makefile
+
+# auto-generated headers
+autotest_include.h
+benchmark_include.h
 
 # ignore all programs
 autotestgen
