@@ -24,7 +24,7 @@
 # Process with autoconf to generate configure script
 #
 
-AC_PREREQ(2.65)
+#AC_PREREQ(2.65)
 AC_INIT([liquid-fpm],[0.1.0],[liquid@vt.edu])
 AC_CONFIG_SRCDIR([libliquidfpm.c])
 
