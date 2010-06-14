@@ -38,8 +38,8 @@
 Q(_t) Q(_sqrt_logexp)( Q(_t) _x, unsigned int _n )
 {
     if (_x <= 0) {
-        perror("error: q[type]_sqrt(), x must be > 0");
-        return 0;
+        fprintf(stderr,"error: qxx_sqrt(), x must be > 0");
+        exit(1);
     }
 
     // TODO : ensure precision is maintained by splitting log2

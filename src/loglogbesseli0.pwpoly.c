@@ -45,8 +45,7 @@ extern Q(_t) Q(_loglogbesseli0_p3)[4];
 Q(_t) Q(_loglogbesseli0)(Q(_t) _z)
 {
     if (_z <= 0) {
-        printf("error: _z must be greater than zero\n");
-        printf("       %12.8f\n", Q(_fixed_to_float)(_z));
+        fprintf(stderr,"error: qxx_loglogbesseli0(), _z must be greater than zero\n");
         exit(0);
     }
 
