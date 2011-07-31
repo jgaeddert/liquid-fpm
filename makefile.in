@@ -361,6 +361,6 @@ clean: clean-bench clean-autotest clean-gentab clean-genlib
 
 distclean: clean
 	$(RM) config.log config.cache config.status config.h
-	$(RM) -f autom4te.cache
+	$(RM) -r autom4te.cache
 	$(RM) makefile
 
