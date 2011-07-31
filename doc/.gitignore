@@ -1,0 +1,29 @@
+# configuration files
+autom4te.cache
+config.status
+config.log
+configure
+
+# ignore all TeX-generated files
+*.aux
+*.bbl
+*.blg
+*.log
+*.m
+*.pdf
+*.toc
+
+# ignore listings style (pygments)
+highlight.sty
+
+# ignore all programs
+
+# ignore all object files
+*.o
+
+# tutorials
+
+# ignore all html files
+
+# miscellany
+.DS_Store
