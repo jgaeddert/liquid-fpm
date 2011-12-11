@@ -146,6 +146,10 @@ sparc)
     ;;
 esac
 
+# override to portable types
+PORTLIBS="src/qtype_mul.port.o"
+GENLIBS=""
+
 case $target_os in
 darwin*)
     SH_LIB=libliquidfpm.dylib

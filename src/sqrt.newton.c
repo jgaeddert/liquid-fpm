@@ -35,7 +35,7 @@
 Q(_t) Q(_sqrt_newton)( Q(_t) _x, unsigned int _n)
 {
     if (_x < 0) {
-        printf("error: qtype_sqrt_newton(), x must be >= 0");
+        fprintf(stderr,"error: qxx_sqrt_newton(), x must be >= 0");
         return 0;
     }
 

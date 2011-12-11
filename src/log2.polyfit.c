@@ -43,8 +43,8 @@ extern const Q(_t) Q(_log2_poly_p2);
 Q(_t) Q(_log2)( Q(_t) _x )
 {
     if (_x <= 0) {
-        perror("error: qtype_log2(), x must be > 0");
-        return 0;
+        fprintf(stderr,"error: qxx_log2(), x must be > 0");
+        exit(1);
     }
 
     // base index

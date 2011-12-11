@@ -73,9 +73,9 @@ extern "C" {
 #elif defined _GLIBCXX_COMPLEX
 #   define LIQUIDFPM_DEFINE_COMPLEX(R,C) typedef std::complex<R> C
 #else
-#   define LIQUIDFPM_DEFINE_COMPLEX(R,C) typedef R C[2]
+#   define LIQUIDFPM_DEFINE_COMPLEX(R,C) typedef struct {R real; R imag;} C;
 #endif
-//#   define LIQUIDFPM_DEFINE_COMPLEX(R,C) typedef C struct {R real; R imag;};
+//#   define LIQUIDFPM_DEFINE_COMPLEX(R,C) typedef R C[2]
 
 LIQUIDFPM_DEFINE_COMPLEX(float, liquidfpm_float_complex);
 

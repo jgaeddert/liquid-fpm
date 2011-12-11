@@ -36,10 +36,10 @@
 Q(_t) Q(_ratio)(int _a, int _b, unsigned int _n)
 {
     if (_b == 0) {
-        fprintf(stderr,"error: qtype_ratio(), divide by zero\n");
+        fprintf(stderr,"error: qxx_ratio(), divide by zero\n");
         exit(1);
     } else if ( abs(_a) > abs(_b) ) {
-        fprintf(stderr,"warning: qtype_ratio(), numerator > denominator; overflow possible\n");
+        fprintf(stderr,"warning: qxx_ratio(), numerator > denominator; overflow possible\n");
     }
 
     if (_a == 0) {

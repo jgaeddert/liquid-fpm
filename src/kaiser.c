@@ -53,7 +53,7 @@ Q(_t) Q(_kaiser)(unsigned int _n, unsigned int _N, Q(_t) _beta)
 
     // validate input
     if (_n > _N) {
-        printf("error: qtype_kaiser(), n > N\n");
+        fprintf(stderr,"error: qxx_kaiser(), n > N\n");
         exit(1);
     }
 

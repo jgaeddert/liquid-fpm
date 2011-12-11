@@ -132,7 +132,7 @@ Q(_t) Q(_atan2)( Q(_t) _y, Q(_t) _x )
 
     // g is in (0,1], determine which of 16 regions g lies
     if (g <= 0 || g > Q(_one)) {
-        fprintf(stderr,"error: atan2_pwpolyfit(), g not in (0,1]\n");
+        fprintf(stderr,"error: qxx_atan2_pwpolyfit(), g not in (0,1]\n");
         exit(1);
     }
 
