@@ -1,42 +1,46 @@
-======================================================================================
 
-  Liquid/FPM : Software-Defined Radio Fixed-Point Math Library
+liquid-fpm : Software-Defined Radio Fixed-Point Math Library
+============================================================
 
-======================================================================================
+*NOTE:* This repository has been incorporated as a branch in the main
+liquid-dsp repository here:
+[https://github.com/jgaeddert/liquid-dsp](https://github.com/jgaeddert/liquid-dsp)
+
 
 liquidfpm is a flexible fixed-point math library developed for efficient
 computational software-defined radio.
 
-BUILD:
+Build:
+
     $ ./reconf
     $ ./configure
     $ make
 
-INSTALL:
+Install:
+
     # make install
 
-TEST:
+Run tests:
+
     $ make test
 
-BENCHMARK:
+Run benchmarks:
+
     $ make bench
 
 
-======================================================================================
- ANGULAR REPRESENTATION
-======================================================================================
-...
+## ANGULAR REPRESENTATION ##
 
-======================================================================================
- INTERFACES
-======================================================================================
+## INTERFACES ##
 
 Reference
+
     N : total number of bits in the data type (e.g. 32)
     I : total number of integer bits, including sign
     F : total number of fractional bits
 
 Regular constants
+
     name                value                   description
     qtype_min                                   minimum representable value
     qtype_max                                   maximum representable value
@@ -47,6 +51,7 @@ Regular constants
     qtype_angle_scalarf 3.14159 / 2^(I-2)       angular <-> scalar relationship
 
 Mathematical constants (genlib/genlib.constants.c)
+
     name                value                   description
     qtype_E             2.71828182845905        e
     qtype_LOG2E         1.44269504088896        log2(e)
@@ -63,12 +68,14 @@ Mathematical constants (genlib/genlib.constants.c)
     qtype_SQRT1_2       0.707106781186547       1/sqrt(2)
 
 Fixed-point/Floating-point conversion
+
     qtype_fixed_to_float            convert fixed-point value to floating-point value
     qtype_float_to_fixed            convert floating-point value to fixed-point value
     qtype_angle_fixed_to_float      convert fixed-point angle to floating-point angle
     qtype_angle_float_to_fixed      convert floating-point value to fixed-point angle
 
 Basic arithmetic functions
+
     qtype_sign(x)       sign of x = x / |x|
     qtype_abs(x)        |x|
     qtype_add(x,y)      x+y
@@ -79,6 +86,7 @@ Basic arithmetic functions
     qtype_ratio(a,b,n)  integer ratio a/b with n iterations
 
 Pre-C99 functions
+
     qtype_acos
     qtype_atan
     qtype_atan2
@@ -102,6 +110,7 @@ Pre-C99 functions
     qtype_tanh
 
 C99 functions
+
     qtype_acosh
     qtype_asinh
     qtype_atanh
@@ -139,6 +148,7 @@ C99 functions
     qtype_trunc
 
 Additional functions
+
     qtype_lngamma
     qtype_besseli0
     qtype_besselj0
@@ -146,6 +156,7 @@ Additional functions
     qtype_kaiser
 
 Complex arithmetic
+
     cqtype_add(x,y)         x+y
     cqtype_sub(x,y)         x-y
     cqtype_mul(x,y)         x*y
@@ -155,6 +166,7 @@ Complex arithmetic
     cqtype_inv(x)           1/x
 
 Complex trig
+
     cqtype_cabs
     cqtype_cacos
     cqtype_cacosh
@@ -180,9 +192,7 @@ Complex trig
 
  * Function declaration exists but no function definition (not yet implemented)
 
-======================================================================================
- BUILD DESCRIPTION
-======================================================================================
+## Build Description ##
 
 gentab (auto-generated tables)
 Some of the algorithms in liquid-fpm (such as the CORDICs) use tables
@@ -190,10 +200,12 @@ which are automatically generated at build-time.
 These are located in the gentab/ subdirectory.
 
 For example,
+
     script:     gentab/gentab.sincos.cordic.c
     program:    gentab/gentab.sincos.cordic
     source:     gentab/sincos.cordic.$(qtype).c
     object:     gentab/sincos.cordic.$(qtype).o
+
 where the makefile key $(qtype) is given by configure.ac (default is "q32")
 
 genlib (auto-generated assembly objects)
@@ -202,9 +214,7 @@ of two fixed-point numbers) can be computed faster by taking advantage
 of architecture-specific hardware instructions.
 These functions are generated automatically given the precision...
 
-======================================================================================
- CONFIGURING PRECISION
-======================================================================================
+## Configuring Precision ##
 
 The bit-precision of the fixed-point type is defined in two places:
 
@@ -230,9 +240,8 @@ excludes data types such as Q1.31 format from running properly for these
 functions. The library will configure and compile for such precisions, however
 the unit tests might (and probaby will) fail.
 
-======================================================================================
- SPECIFIC BUILD TARGETS
-======================================================================================
+## Specific Build Targets ##
+
 Here is a list of the specific build targets
 
     all             :   everything: libliquidfpm shared object library
