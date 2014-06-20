@@ -28,6 +28,7 @@
 #define __LIQUID_AUTOTEST_H__
 
 #include <stdio.h>
+#include <string.h>
 #include <math.h>
 #include <stdbool.h>
 #include <inttypes.h>
