@@ -12,7 +12,7 @@ computational software-defined radio.
 
 Build:
 
-    $ ./reconf
+    $ ./bootstrap.sh
     $ ./configure
     $ make
 
