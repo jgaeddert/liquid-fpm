@@ -28,6 +28,12 @@
 AC_INIT([liquid-fpm],[0.1.0],[support@liquidsdr.org])
 AC_CONFIG_SRCDIR([src/libliquidfpm.c])
 
+# permit auxiliary scripts directory (e.g. config.sub, config.guess, install-sh)
+AC_CONFIG_AUX_DIR(scripts/)
+
+# Specify 'C' language
+AC_LANG(C)
+
 # Autoheader
 AC_CONFIG_HEADER(config.h)
 AH_TOP([
