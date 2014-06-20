@@ -25,8 +25,8 @@
 #
 
 #AC_PREREQ(2.65)
-AC_INIT([liquid-fpm],[0.1.0],[liquid@vt.edu])
-AC_CONFIG_SRCDIR([libliquidfpm.c])
+AC_INIT([liquid-fpm],[0.1.0],[support@liquidsdr.org])
+AC_CONFIG_SRCDIR([src/libliquidfpm.c])
 
 # Autoheader
 AC_CONFIG_HEADER(config.h)
@@ -49,6 +49,7 @@ AC_ARG_ENABLE(debug,
 # Check for necessary programs
 AC_PROG_CC
 AC_PROG_SED
+AC_PROG_GREP
 AC_PROG_INSTALL
 AC_PROG_RANLIB
 #AC_PROG_MV

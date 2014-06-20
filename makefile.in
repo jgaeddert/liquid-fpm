@@ -22,6 +22,21 @@
 # 
 # Makefile for liquid fixed-point math libraries
 #
+# Targets:
+#    all       : dynamic shared-library object (e.g. libliquidfpm.so)
+#    help      : print list of targets
+#    install   : install the dynamic shared library object and header file(s)
+#    uninstall : uninstall the library and header file(s)
+#    bench     : build and run benchmarking program
+#    check     : build and run autotest program
+#    clean     : clean all targets (bench, check, examples, etc)
+#    distclean : removes everything except the originally distributed files
+#
+
+# autoconf initialization macros
+NAME      := @PACKAGE_NAME@
+VERSION   := @PACKAGE_VERSION@
+BUGREPORT := @PACKAGE_BUGREPORT@
 
 # paths
 srcdir = 	@srcdir@
@@ -37,6 +52,7 @@ CC 	:= @CC@
 MV	:= mv -f
 RM	:= rm -f
 SED	:= @SED@
+GREP	:= @GREP@
 AR	:= ar
 RANLIB	:= @RANLIB@
 AS	:= as
@@ -72,36 +88,36 @@ objects		= $(patsubst %.c,%.o,$(sources))
 all:
 
 
-sources +=										\
-	libliquidfpm.c								\
-	src/qfloat.c								\
-	src/inv.newton.c							\
-	src/kaiser.c								\
-	src/log2.polyfit.c							\
-	src/log2.shiftadd.c							\
-	src/exp2.polyfit.c							\
-	src/exp2.shiftadd.c							\
-	src/qtype_div.port.c						\
-	src/qtype_div.inv.newton.c					\
-	src/qtype_dotprod.port.c					\
-	src/sqrt.newton.c							\
-	src/sincos.pwpolyfit.c						\
-	src/sincos.cordic.c							\
-	src/sinhcosh.cordic.c						\
-	src/atan.pwpolyfit.c						\
-	src/atan.cordic.c							\
-	src/complex_arithmetic.c					\
-	src/complex_conversion.c					\
-	src/complex_log.c							\
-	src/complex_trig.c							\
-	src/math.transcendentals.c					\
-	src/loglogbesseli0.pwpoly.c					\
-	src/ratio.c									\
+sources +=							\
+	src/libliquidfpm.c					\
+	src/qfloat.c						\
+	src/inv.newton.c					\
+	src/kaiser.c						\
+	src/log2.polyfit.c					\
+	src/log2.shiftadd.c					\
+	src/exp2.polyfit.c					\
+	src/exp2.shiftadd.c					\
+	src/qtype_div.port.c					\
+	src/qtype_div.inv.newton.c				\
+	src/qtype_dotprod.port.c				\
+	src/sqrt.newton.c					\
+	src/sincos.pwpolyfit.c					\
+	src/sincos.cordic.c					\
+	src/sinhcosh.cordic.c					\
+	src/atan.pwpolyfit.c					\
+	src/atan.cordic.c					\
+	src/complex_arithmetic.c				\
+	src/complex_conversion.c				\
+	src/complex_log.c					\
+	src/complex_trig.c					\
+	src/math.transcendentals.c				\
+	src/loglogbesseli0.pwpoly.c				\
+	src/ratio.c						\
 	src/utility.c
 
 # src/qtype_mul.port.c (portlibs)
 
-autotest_headers =								\
+autotest_headers =						\
 	autotest/qtype_constants_autotest.h			\
 	autotest/atan2_cordic_autotest.h			\
 	autotest/cqtype_add_autotest.h				\
@@ -115,8 +131,8 @@ autotest_headers =								\
 	autotest/qtype_sub_autotest.h				\
 	autotest/qtype_mul_autotest.h				\
 	autotest/qtype_div_autotest.h				\
-	autotest/qtype_div_inv_newton_autotest.h	\
-	autotest/sinc_autotest.h					\
+	autotest/qtype_div_inv_newton_autotest.h		\
+	autotest/sinc_autotest.h				\
 	autotest/sincos_cordic_autotest.h			\
 	autotest/sqrt_newton_autotest.h
 
@@ -138,15 +154,15 @@ $(objects) : ./include/liquidfpm.h ./include/liquidfpm.internal.h ./config.h
 #
 # gentab : auto-generated tables
 #
-gentabs := 										\
-	constants									\
-	atan2.pwpolyfit								\
-	math.transcendentals 						\
-	logsin										\
-	sincos.cordic								\
-	sincos.pwpoly								\
-	sinhcosh.cordic								\
-	logexp.shiftadd								\
+gentabs := 							\
+	constants						\
+	atan2.pwpolyfit						\
+	math.transcendentals 					\
+	logsin							\
+	sincos.cordic						\
+	sincos.pwpoly						\
+	sinhcosh.cordic						\
+	logexp.shiftadd						\
 	logexp.polyfit
 
 # Examples:
@@ -244,6 +260,12 @@ clean-portlib:
 # accumulate target-specific libraries
 objects += $(gentab_objects) $(genlib_objects) $(portlib_objects)
 
+##
+## TARGET : all       - build shared library (default)
+##
+
+.PHONY: all
+
 # target-specific library definition:
 #   libliquidfpm.dylib    (darwin)
 #   libliquidfpm.so       (linux, et al.)
@@ -256,6 +278,19 @@ REBIND = @REBIND@
 
 all: libliquidfpm.a $(SHARED_LIB)
 
+##
+## TARGET : help      - print list of targets
+##
+
+# look for all occurences of '## TARGET : ' and print rest of line to screen
+help:
+	@echo "Targets for liquid-dsp makefile:"
+	@$(GREP) -E "^## TARGET : " [Mm]akefile | $(SED) 's/## TARGET : /  /'
+
+## 
+## TARGET : install   - installs the libraries and header files in the host system
+##
+
 install:
 	@echo "installing..."
 	mkdir -p $(libdir)
@@ -264,7 +299,31 @@ install:
 	mkdir -p $(prefix)/include
 	mkdir -p $(prefix)/include/liquid
 	install -m 644 -p include/liquidfpm.h $(prefix)/include/liquid
+	@echo ""
+	@echo "---------------------------------------------------------"
+	@echo "  liquid-fpm was successfully installed.     "
+	@echo ""
+	@echo "  On some machines (e.g. Linux) you should rebind your"
+	@echo "  libraries by running 'ldconfig' to make the shared"
+	@echo "  object available.  You might also need to modify your"
+	@echo "  LD_LIBRARY_PATH environment variable to include the"
+	@echo "  directory $(exec_prefix)"
+	@echo ""
+	@echo "  Please report bugs to $(BUGREPORT)"
+	@echo "---------------------------------------------------------"
+	@echo ""
 	
+## 
+## TARGET : uninstall - uninstalls the libraries and header files in the host system
+##
+
+uninstall:
+	@echo "uninstalling..."
+	$(RM) $(addprefix $(prefix)/include/liquid/, $(headers_install))
+	$(RM) $(exec_prefix)/lib/libliquidfpm.a
+	$(RM) $(exec_prefix)/lib/$(SHARED_LIB)
+	@echo "done."
+
 # Library definition
 libliquidfpm.a: $(objects)
 	$(AR) $(ARFLAGS) $@ $^
@@ -289,15 +348,16 @@ fpmtest.o: fpmtest.c include/liquidfpm.h
 fpmtest: fpmtest.o libliquidfpm.a
 	$(CC) $(CFLAGS) -lm $^ $(LDFLAGS) -o $@
 
-# 
-# Benchmark
-#
+##
+## TARGET : bench     - build and run all benchmarks
+##
+
 .PHONY: bench
-benchmark_headers = 							\
-	bench/q32_atan2_benchmark.h					\
-	bench/q32_sin_benchmark.h					\
+benchmark_headers = 						\
+	bench/q32_atan2_benchmark.h				\
+	bench/q32_sin_benchmark.h				\
 	bench/q32_sqrt_newton_benchmark.h			\
-	bench/q32_log2_benchmark.h					\
+	bench/q32_log2_benchmark.h				\
 	bench/q32_log2_shiftadd_benchmark.h
 
 benchmarkgen_prog	= benchmarkgen
@@ -322,9 +382,10 @@ clean-bench:
 	$(RM) $(benchmarkgen_prog) $(benchmark_prog) $(benchmark_include)
 
 
-# 
-# autotest
-#
+##
+## TARGET : check     - build and run autotest scripts
+##
+
 .PHONY: autotest
 
 autotestgen_prog	= autotestgen
@@ -348,9 +409,10 @@ check: $(autotest_prog)
 clean-autotest:
 	$(RM) $(autotestgen_prog) $(autotest_prog) $(autotest_include)
 
-#
-# clean
-#
+##
+## TARGET : clean     - clean build (objects, dependencies, libraries, etc.)
+##
+
 clean: clean-bench clean-autotest clean-gentab clean-genlib
 	$(RM) $(objects)
 	$(RM) $(dependencies)
@@ -358,6 +420,10 @@ clean: clean-bench clean-autotest clean-gentab clean-genlib
 	$(RM) libliquidfpm.a
 	$(RM) fpmtest fpmtest.o
 	$(RM) $(extra_clean)
+
+##
+## TARGET : distclean - removes everything except the originally distributed files
+##
 
 distclean: clean
 	$(RM) config.log config.cache config.status config.h
